@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>İstanbul Rota</title>
+<meta name="description" content="İstanbul için hazır gezi rotaları, ulaşım ücreti hesaplayıcı ve semt pazarları.">
+<meta name="theme-color" content="#1F48A8">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="İstanbul Rota">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<style>
+:root {
+  --bg: #F3F6F9; --card: #FFFFFF; --ink: #12233D; --muted: #5A6779;
+  --cobalt: #1F48A8; --cobalt-ink: #FFFFFF; --simit: #C77D1E;
+  --line: #DCE3EC; --soft: #E7EEF8; --warn-bg: #FFF4E0; --warn-ink: #7A4A06;
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0C1424; --card: #142036; --ink: #EAF0F8; --muted: #9DAABD;
+    --cobalt: #6E95F0; --cobalt-ink: #0C1424; --simit: #E9A54A;
+    --line: #24324C; --soft: #1B2A46; --warn-bg: #3A2A10; --warn-ink: #F5D29A;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--font); padding-top: env(safe-area-inset-top, 0px); padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+.app { max-width: 620px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px 24px; }
+h1, h2, h3 { margin: 0; line-height: 1.2; text-wrap: balance; }
+p { margin: 0; }
+button, select, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--simit); outline-offset: 2px; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+[hidden] { display: none !important; }
+
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 6px 14px; }
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand img { width: 36px; height: 36px; border-radius: 10px; }
+.brand h1 { font-size: 20px; font-weight: 800; }
+.brand small { display: block; color: var(--muted); font-size: 12.5px; font-weight: 400; }
+.lang { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--card); flex: none; }
+.lang button { border: 0; background: transparent; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--muted); }
+.lang button[aria-pressed="true"] { background: var(--cobalt); color: var(--cobalt-ink); }
+
+.status { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; font-size: 13px; }
+.pill { border-radius: 999px; padding: 4px 10px; background: var(--soft); color: var(--muted); }
+.pill.off { background: var(--warn-bg); color: var(--warn-ink); font-weight: 600; }
+.install { border: 0; border-radius: 999px; padding: 4px 12px; background: var(--cobalt); color: var(--cobalt-ink); font-weight: 600; cursor: pointer; }
+.hint { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+
+nav.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000; background: var(--card); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
+nav.tabbar .inner { max-width: 620px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); padding-left: max(8px, env(safe-area-inset-left, 0px)); padding-right: max(8px, env(safe-area-inset-right, 0px)); }
+nav.tabbar a { text-align: center; text-decoration: none; padding: 10px 4px 12px; font-size: 13px; font-weight: 600; color: var(--muted); display: grid; gap: 2px; justify-items: center; }
+nav.tabbar a svg { width: 22px; height: 22px; }
+nav.tabbar a[aria-current="page"] { color: var(--cobalt); }
+
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; }
+.chip { flex: none; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 8px 14px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.chip[aria-pressed="true"] { border-color: var(--cobalt); background: var(--cobalt); color: var(--cobalt-ink); }
+
+.route-head { margin-bottom: 16px; }
+.route-head h2 { font-size: 24px; font-weight: 800; }
+.route-head p { color: var(--muted); margin-top: 6px; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
+.meta span { font-size: 13px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; }
+.link-btn { border: 0; background: transparent; color: var(--cobalt); font-weight: 600; cursor: pointer; padding: 4px 0; font-size: 14px; }
+
+.stops { list-style: none; margin: 0; padding: 0; position: relative; }
+.stops::before { content: ""; position: absolute; left: 13px; top: 14px; bottom: 14px; width: 4px; border-radius: 2px; background: var(--cobalt); opacity: .35; }
+.stop { position: relative; display: grid; grid-template-columns: 30px 1fr; gap: 12px; padding-bottom: 14px; }
+.dot { width: 30px; height: 30px; border-radius: 50%; background: var(--card); border: 4px solid var(--cobalt); display: grid; place-items: center; font: 600 12px var(--mono); color: var(--cobalt); position: relative; z-index: 1; }
+.card { min-width: 0; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.card h3 { font-size: 17px; }
+.when { color: var(--muted); font-size: 13px; }
+.card p { font-size: 14.5px; margin-top: 6px; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.fact { font-size: 12.5px; border-radius: 6px; padding: 3px 8px; background: var(--soft); }
+.fact.check { background: var(--warn-bg); color: var(--warn-ink); }
+.leg { margin: 0 0 14px 42px; font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+.leg::before { content: ""; width: 14px; height: 2px; background: var(--simit); flex: none; }
+
+#map { height: 62vh; min-height: 320px; border-radius: 14px; border: 1px solid var(--line); background: var(--soft); }
+.map-tools { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.map-note { font-size: 13px; color: var(--muted); margin-top: 8px; }
+.maplibregl-popup-content { font: 14px/1.45 var(--font); color: #12233D; }
+.map-save { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+.map-save p { font-size: 14px; min-width: 0; flex: 1 1 200px; }
+.map-save .saved { color: var(--cobalt); font-weight: 600; }
+.btn:disabled { opacity: .6; cursor: default; }
+.legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; font-size: 12.5px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 14px; }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 600; font-size: 14px; }
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+select, input[type=number] { padding: 10px 12px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg); min-width: 0; }
+select { width: 100%; }
+input[type=number] { width: 110px; }
+input[type=range] { width: 100%; accent-color: var(--cobalt); }
+.results { display: grid; gap: 10px; margin-top: 16px; }
+.result { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline; }
+.result strong { font-size: 17px; }
+.result .amt { font: 700 22px var(--mono); text-align: right; }
+.result .how { grid-column: 1 / -1; color: var(--muted); font-size: 13px; }
+.result.main { border: 2px solid var(--cobalt); }
+.src { font-size: 12.5px; color: var(--muted); margin-top: 12px; }
+.src a { color: var(--cobalt); }
+
+.today-line { font-size: 14px; margin-bottom: 12px; color: var(--muted); }
+.market { display: grid; grid-template-columns: 70px 1fr; gap: 12px; margin-bottom: 10px; }
+.day { border-radius: 10px; background: var(--soft); color: var(--cobalt); display: grid; place-items: center; text-align: center; font-weight: 700; font-size: 13px; padding: 8px 4px; }
+.day.today { background: var(--cobalt); color: var(--cobalt-ink); }
+.day.unknown { background: var(--warn-bg); color: var(--warn-ink); }
+.where { color: var(--muted); font-size: 13px; }
+
+.report { margin-top: 24px; }
+.btn { border: 0; cursor: pointer; border-radius: 10px; padding: 11px 16px; font-weight: 600; background: var(--cobalt); color: var(--cobalt-ink); }
+.btn.ghost { background: transparent; color: var(--cobalt); box-shadow: inset 0 0 0 2px var(--cobalt); }
+textarea { width: 100%; padding: 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg); min-height: 80px; resize: vertical; }
+.ok { color: var(--cobalt); font-weight: 600; font-size: 14px; margin-top: 8px; }
+.error { background: var(--warn-bg); color: var(--warn-ink); padding: 14px; border-radius: 12px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <img src="icons/icon-192.png" alt="">
+      <h1>İstanbul Rota<small id="t-sub"></small></h1>
+    </div>
+    <div class="lang" role="group" aria-label="Dil / Language">
+      <button id="lang-tr" type="button" aria-pressed="true">TR</button>
+      <button id="lang-en" type="button" aria-pressed="false">EN</button>
+    </div>
+  </header>
+
+  <div class="status">
+    <span class="pill" id="updated"></span>
+    <span class="pill off" id="offline" hidden></span>
+    <button class="install" id="install" type="button" hidden></button>
+  </div>
+  <p class="hint" id="ios-hint" hidden></p>
+
+  <main>
+    <section id="view-rotalar">
+      <div class="chips" id="route-chips" role="group"></div>
+      <div id="route"></div>
+    </section>
+
+    <section id="view-harita" hidden>
+      <div class="map-save">
+        <p id="map-status"></p>
+        <button class="btn" id="map-download" type="button"></button>
+        <button class="btn ghost" id="map-remove" type="button" hidden></button>
+      </div>
+      <div class="map-tools">
+        <button class="btn ghost" id="locate" type="button"></button>
+        <button class="btn ghost" id="show-all" type="button"></button>
+      </div>
+      <div id="map" role="region" aria-label="Harita"></div>
+      <div class="legend" id="legend"></div>
+      <p class="map-note" id="map-note"></p>
+    </section>
+
+    <section id="view-ulasim" hidden>
+      <div class="panel">
+        <div class="field">
+          <label for="from" id="t-from"></label>
+          <select id="from"></select>
+        </div>
+        <div class="field">
+          <label for="to" id="t-to"></label>
+          <select id="to"></select>
+        </div>
+        <div class="field">
+          <label for="km"><span id="t-km"></span>: <span class="mono" id="km-val"></span> km</label>
+          <input type="range" id="km" min="1" max="80" step="1" value="6">
+        </div>
+        <div class="field">
+          <label for="wait"><span id="t-wait"></span>: <span class="mono" id="wait-val"></span> <span id="t-min"></span></label>
+          <input type="range" id="wait" min="0" max="60" step="5" value="10">
+        </div>
+        <div class="field">
+          <label for="fuel" id="t-fuel"></label>
+          <div class="row"><input type="number" id="fuel" min="1" step="0.5"><span class="mono">TL / L</span><span id="t-fuel-note" class="where"></span></div>
+        </div>
+      </div>
+      <div class="results" id="results"></div>
+      <p class="src" id="fare-src"></p>
+    </section>
+
+    <section id="view-pazarlar" hidden>
+      <div class="field" style="margin-bottom:12px">
+        <label for="district" id="t-district"></label>
+        <select id="district"></select>
+      </div>
+      <p class="today-line" id="today-line"></p>
+      <div id="markets"></div>
+    </section>
+
+    <div id="load-error" class="error" hidden></div>
+
+    <section class="report">
+      <button class="btn ghost" id="report-open" type="button"></button>
+      <form id="report-form" hidden>
+        <label for="report-text" id="t-report-label" style="display:block;font-weight:600;margin:12px 0 6px"></label>
+        <textarea id="report-text"></textarea>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" type="submit" id="t-report-send"></button>
+          <button class="btn ghost" type="button" id="report-copy"></button>
+        </div>
+        <p class="ok" id="report-ok" hidden></p>
+      </form>
+    </section>
+  </main>
+</div>
+
+<nav class="tabbar" aria-label="Bölümler">
+  <div class="inner">
+    <a href="#rotalar" id="tab-rotalar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18h6a3.5 3.5 0 0 0 0-7h-5a3.5 3.5 0 0 1 0-7h6"/></svg><span></span></a>
+    <a href="#harita" id="tab-harita"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14M15 6v14"/></svg><span></span></a>
+    <a href="#ulasim" id="tab-ulasim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M4 11h16M8 19l-1 2M16 19l1 2"/><circle cx="8" cy="14" r=".5"/><circle cx="16" cy="14" r=".5"/></svg><span></span></a>
+    <a href="#pazarlar" id="tab-pazarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9h18l-2-5H5L3 9Z"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg><span></span></a>
+  </div>
+</nav>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/pmtiles@4.4.1/dist/pmtiles.js"></script>
+<script src="https://unpkg.com/@protomaps/basemaps@5.7.2/dist/basemaps.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
