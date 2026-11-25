@@ -41,7 +41,7 @@ Uygulamanın kodu değişmeden, **sadece `data/istanbul.json` dosyası** düzenl
 - Ne satıldığını `sells` alanına yaz.
 - Kendin gördüysen `"verified": true` yap.
 
-`index.html` veya `app.js` dosyasını değiştirirsen `sw.js` içindeki `CACHE = 'rota-v5'` değerini bir artır (`rota-v6`). Böylece telefonlar yeni sürümü alır. Kullanıcının indirdiği harita bu sırada silinmez, ayrı bir yerde (`rota-map-v1`) durur.
+`index.html` veya `app.js` dosyasını değiştirirsen `sw.js` içindeki `CACHE = 'rota-v6'` değerini bir artır (`rota-v7`). Böylece telefonlar yeni sürümü alır. Kullanıcının indirdiği harita bu sırada silinmez, ayrı bir yerde (`rota-map-v1`) durur.
 
 ## Haritayı güncellemek (ayda bir yeterli)
 

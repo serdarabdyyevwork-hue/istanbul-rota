@@ -48,7 +48,8 @@ var UI = {
   car: { tr: 'Kendi araban / kiralık', en: 'Own or rental car' },
   carHow: { tr: '100 km\'de {l} litre varsayımıyla yakıt. Otopark, köprü ve otoyol hariç.', en: 'Fuel only, assuming {l} L per 100 km. Parking, bridge and motorway tolls not included.' },
   transit: { tr: 'Metro, tramvay, otobüs, vapur', en: 'Metro, tram, bus, ferry' },
-  transitHow: { tr: 'İstanbulkart ile. Güncel tarife resmî kaynaktan eklenecek.', en: 'With an Istanbulkart. Current fares will be added from the official source.' },
+  transitHow: { tr: 'İstanbulkart ile tek biniş (tam). Aktarmada daha az ödenir. Tutar haberlerden alındı, resmî duyuruyla doğrulanacak.', en: 'One full-fare ride with an Istanbulkart. Transfers cost less. Amount taken from news reports, to be confirmed with the official notice.' },
+  perRide: { tr: '/ biniş', en: '/ ride' },
   transitAmt: { tr: 'eklenecek', en: 'coming' },
   fareSrc: { tr: 'Taksi tarifesi kaynağı: İBB UKOME ({d} tarihinde kontrol edildi). Mesafe, kuş uçuşu mesafeden tahmin edilir; trafik ve güzergâha göre değişir.', en: 'Taxi fare source: IMM UKOME (checked {d}). Distance is estimated from the straight line and varies with traffic and route.' },
   district: { tr: 'İlçe', en: 'District' },
@@ -368,7 +369,11 @@ function calc() {
     '<div class="result main"><strong>' + esc(t('taxi')) + '</strong><span class="amt">≈ ' + money(taxi) + '</span><span class="how">' +
       esc(t('taxiHow', { s: num(f.taxi.start, 2), k: num(f.taxi.perKm, 2), w: num(f.taxi.perHourWait, 2), m: num(f.taxi.min) })) + '</span></div>' +
     '<div class="result"><strong>' + esc(t('car')) + '</strong><span class="amt">≈ ' + money(car) + '</span><span class="how">' + esc(t('carHow', { l: f.car.litersPer100km })) + '</span></div>' +
-    '<div class="result"><strong>' + esc(t('transit')) + '</strong><span class="amt" style="font-size:15px">' + esc(t('transitAmt')) + '</span><span class="how">' + esc(t('transitHow')) + '</span></div>';
+    '<div class="result"><strong>' + esc(t('transit')) + '</strong>' +
+      (f.transit
+        ? '<span class="amt">' + num(f.transit.fullFare, 2) + ' TL <span style="font-size:13px">' + esc(t('perRide')) + '</span></span>'
+        : '<span class="amt" style="font-size:15px">' + esc(t('transitAmt')) + '</span>') +
+      '<span class="how">' + esc(t('transitHow')) + '</span></div>';
   $('fare-src').innerHTML = esc(t('fareSrc', { d: fmtDate(f.taxi.checked) })) + ' <a href="' + esc(f.taxi.source) + '" target="_blank" rel="noopener">PDF</a>';
 }
 
