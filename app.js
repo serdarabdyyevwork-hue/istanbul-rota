@@ -2,7 +2,7 @@
 // İstanbul Rota: all city content lives in data/istanbul.json. This file only draws it.
 // Layout: full-screen map + bottom sheet. Palettes and theme are user settings.
 
-var TABS = ['rotalar', 'ulasim', 'pazarlar', 'ayarlar'];
+var TABS = ['rotalar', 'plan', 'ulasim', 'pazarlar', 'ayarlar'];
 var DATA = null;
 var lang = 'tr';
 var routeId = null;
@@ -57,6 +57,37 @@ applyTheme();
 // ---------- Text ----------
 var UI = {
   tabRotalar: { tr: 'Rotalar', en: 'Routes' },
+  tabPlan: { tr: 'Planım', en: 'My plan' },
+  modePackages: { tr: 'Hazır rotalar', en: 'Ready routes' },
+  modeExplore: { tr: 'Yerleri keşfet', en: 'Explore places' },
+  onlyFree: { tr: 'Sadece ücretsiz', en: 'Free only' },
+  free: { tr: 'ücretsiz', en: 'free' },
+  noResults: { tr: 'Bu filtrelere uyan yer yok.', en: 'No places match these filters.' },
+  addToPlan: { tr: '+ Plana ekle', en: '+ Add to plan' },
+  inPlanRemove: { tr: '✓ Planımda (çıkar)', en: '✓ In my plan (remove)' },
+  routeToPlan: { tr: 'Bu rotayı planıma ekle', en: 'Add this route to my plan' },
+  planStart: { tr: 'Ne zaman başlıyorsun?', en: 'When do you start?' },
+  startNow: { tr: 'Şimdi', en: 'Now' },
+  startTomorrow: { tr: 'Yarın 09:00', en: 'Tomorrow 09:00' },
+  planEmptyH: { tr: 'Planın henüz boş', en: 'Your plan is empty' },
+  planEmpty: { tr: 'Bir hazır rotayı planına ekle ya da "Yerleri keşfet"ten istediğin yerleri + ile seç. Saatleri, yürüme sürelerini ve ulaşımı ben hesaplarım.', en: 'Add a ready route, or pick places with + in "Explore places". The app works out times, walking and transport.' },
+  planExplore: { tr: 'Yerleri keşfet', en: 'Explore places' },
+  sumStops: { tr: 'durak', en: 'stops' },
+  sumWalk: { tr: 'yürüyüş', en: 'walking' },
+  legWalk: { tr: 'Yürüme {m} dk · {km} km', en: 'Walk {m} min · {km} km' },
+  legRide: { tr: 'Toplu taşıma ya da taksi ~{m} dk · {km} km (taksi ≈ {taxi})', en: 'Transit or taxi ~{m} min · {km} km (taxi ≈ {taxi})' },
+  leave: { tr: 'çıkış {t}', en: 'leave {t}' },
+  stayMin: { tr: '~{m} dk', en: '~{m} min' },
+  closedWarn: { tr: 'Bu yer {d} günleri kapalı. Başka bir güne al ya da plandan çıkar.', en: 'This place is closed on {d}. Move it to another day or remove it.' },
+  moveUp: { tr: 'Yukarı taşı', en: 'Move up' },
+  moveDown: { tr: 'Aşağı taşı', en: 'Move down' },
+  remove: { tr: 'Plandan çıkar', en: 'Remove' },
+  planMap: { tr: 'Haritada göster', en: 'Show on map' },
+  planOptimize: { tr: 'En kısa sıraya diz', en: 'Shortest order' },
+  planCalendar: { tr: 'Takvime ekle', en: 'Add to calendar' },
+  planClear: { tr: 'Planı temizle', en: 'Clear plan' },
+  planClearConfirm: { tr: 'Emin misin? Tekrar dokun', en: 'Sure? Tap again' },
+  planNote: { tr: 'Süreler tahminidir: yürüyüş 4,5 km/sa, şehir içi araç ~18 km/sa. Kapalı günler ve saatler yer kartlarında yazar.', en: 'Times are estimates: walking 4.5 km/h, city traffic ~18 km/h. Closing days and hours are on each place card.' },
   tabUlasim: { tr: 'Ulaşım', en: 'Transport' },
   tabPazarlar: { tr: 'Pazarlar', en: 'Markets' },
   tabAyarlar: { tr: 'Ayarlar', en: 'Settings' },
@@ -167,7 +198,7 @@ function cycleSheet() {
 }
 
 function showView(id) {
-  ['rotalar', 'ulasim', 'pazarlar', 'yer', 'ayarlar'].forEach(function (k) { $('view-' + k).hidden = k !== id; });
+  ['rotalar', 'plan', 'ulasim', 'pazarlar', 'yer', 'ayarlar'].forEach(function (k) { $('view-' + k).hidden = k !== id; });
   TABS.forEach(function (k) {
     var a = $('tab-' + k);
     if (k === id) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
@@ -180,6 +211,12 @@ function show() {
   currentTab = v;
   showView(v);
   if ($('sheet').dataset.size === 'peek') setSheet('half');
+  // The map shows what the open tab is about: your plan, or the chosen ready route.
+  if (v === 'plan') drawPlan();
+  else if (v === 'rotalar') {
+    var r = routeId ? DATA.routes.filter(function (x) { return x.id === routeId; })[0] : null;
+    if (r) drawRoute(r); else clearRoute();
+  }
 }
 
 // ---------- Routes ----------
@@ -204,7 +241,8 @@ function renderRoutes() {
   }
   var r = DATA.routes.filter(function (x) { return x.id === routeId; })[0];
   var html = '<div class="head"><h2>' + esc(tx(r.name)) + '</h2><p>' + esc(tx(r.intro)) + '</p></div><div class="meta">' +
-    tx(r.meta).map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('') + '</div><ol class="stops">';
+    tx(r.meta).map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('') + '</div>' +
+    '<div class="row" style="margin-bottom:14px"><button type="button" class="btn" id="route-to-plan">' + esc(t('routeToPlan')) + '</button></div><ol class="stops">';
   var n = 0;
   r.stops.forEach(function (s) {
     if (s.leg) { html += '<li class="leg">' + esc(tx(s.leg)) + '</li>'; return; }
@@ -215,6 +253,7 @@ function renderRoutes() {
   });
   html += '</ol>';
   $('route').innerHTML = html;
+  $('route-to-plan').addEventListener('click', function () { addRouteToPlan(r); });
   Array.prototype.forEach.call($('route').querySelectorAll('[data-place]'), function (el) {
     el.addEventListener('click', function () { openPlace(el.getAttribute('data-place')); });
   });
@@ -229,7 +268,8 @@ function openPlace(id) {
   var html = '<button type="button" class="back" id="place-back">' + esc(t('back')) + '</button>' +
     '<span class="cat" style="background:' + cat.color + '">' + esc(tx(cat)) + ' · ' + esc(p.district) + '</span>' +
     '<div class="head"><h2>' + esc(tx(p.name)) + '</h2><p>' + esc(tx(p.note)) + '</p></div>' + factsHtml(p) +
-    '<div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng + '">' + esc(t('directions')) + '</a>' +
+    '<div class="actions"><button type="button" class="btn" id="plan-toggle">' + esc(inPlan(id) ? t('inPlanRemove') : t('addToPlan')) + '</button>' +
+    '<a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng + '">' + esc(t('directions')) + '</a>' +
     '<button type="button" class="btn ghost" id="fare-here">' + esc(t('fareHere')) + '</button>' +
     '<button type="button" class="btn ghost" id="report-place">' + esc(t('reportPlace')) + '</button></div>';
   if (inRoutes.length) {
@@ -240,6 +280,10 @@ function openPlace(id) {
   showView('yer');
   if ($('sheet').dataset.size === 'peek') setSheet('half');
   $('place-back').addEventListener('click', function () { showView(currentTab); });
+  $('plan-toggle').addEventListener('click', function () {
+    togglePlan(id);
+    $('plan-toggle').textContent = inPlan(id) ? t('inPlanRemove') : t('addToPlan');
+  });
   $('fare-here').addEventListener('click', function () { $('to').value = id; setDistanceFromSelection(); location.hash = '#ulasim'; show(); });
   $('report-place').addEventListener('click', function () {
     location.hash = '#ayarlar'; show();
@@ -326,7 +370,7 @@ function resetMap() {
     map.remove(); map = null; overlaysReady = false;
     ensureMap();
     if (map) map.jumpTo(view);
-    if (routeId) pendingRoute = DATA.routes.filter(function (r) { return r.id === routeId; })[0];
+    if (drawnStops.length) pendingRoute = { stops: drawnStops.map(function (id) { return { place: id }; }) };
   } else {
     ensureMap();
   }
@@ -370,10 +414,8 @@ function addOverlays() {
     map.on('click', layer, function (e) {
       var f = e.features[0];
       if (layer === 'route-stops') {
-        var r = DATA.routes.filter(function (x) { return x.id === routeId; })[0];
-        var stops = r ? r.stops.filter(function (s) { return s.place; }) : [];
-        var s = stops[f.properties.n - 1];
-        if (s) openPlace(s.place);
+        var stopId = drawnStops[f.properties.n - 1];
+        if (stopId) openPlace(stopId);
         return;
       }
       if (f.properties.kind === 'market') { location.hash = '#pazarlar'; show(); return; }
@@ -386,20 +428,22 @@ function addOverlays() {
   if (myPos) setMe();
 }
 
-function clearRoute() { if (map && overlaysReady) map.getSource('route').setData(emptyFC()); }
+function clearRoute() { drawnStops = []; pendingRoute = null; if (map && overlaysReady) map.getSource('route').setData(emptyFC()); }
 function fitAll() {
   if (!map) return;
   var b = new maplibregl.LngLatBounds([DATA.places[0].lng, DATA.places[0].lat], [DATA.places[0].lng, DATA.places[0].lat]);
   DATA.places.forEach(function (p) { if (p.district !== 'Sarıyer' && p.district !== 'Adalar') b.extend([p.lng, p.lat]); });
   map.fitBounds(b, { padding: mapPadding(), maxZoom: 14 });
 }
+var drawnStops = [];   // place ids of the numbered stops now on the map
 function drawRoute(r) {
-  ensureMap();
-  if (!map) return;
-  if (!overlaysReady) { pendingRoute = r; return; }
-  var pts = r.stops.filter(function (s) { return s.place; }).map(function (s) { var p = place(s.place); return [p.lng, p.lat]; });
-  var feats = [{ type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: pts } }].concat(
-    pts.map(function (c, i) { return { type: 'Feature', properties: { n: i + 1 }, geometry: { type: 'Point', coordinates: c } }; }));
+  // The map is created once at start-up (so it can use the saved offline copy); until then, remember the request.
+  if (!map || !overlaysReady) { pendingRoute = r; return; }
+  drawnStops = r.stops.filter(function (s) { return s.place && place(s.place); }).map(function (s) { return s.place; });
+  if (!drawnStops.length) { clearRoute(); return; }
+  var pts = drawnStops.map(function (id) { var p = place(id); return [p.lng, p.lat]; });
+  var feats = pts.map(function (c, i) { return { type: 'Feature', properties: { n: i + 1 }, geometry: { type: 'Point', coordinates: c } }; });
+  if (pts.length > 1) feats.unshift({ type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: pts } });
   map.getSource('route').setData({ type: 'FeatureCollection', features: feats });
   var b = new maplibregl.LngLatBounds(pts[0], pts[0]);
   pts.forEach(function (c) { b.extend(c); });
@@ -465,6 +509,177 @@ function downloadMap() {
 }
 function removeMap() {
   caches.open(MAP_CACHE).then(function (c) { return c.delete(absUrl(MAP_URL)); }).then(function () { mapFile = null; renderMapStatus(); resetMap(); });
+}
+
+// ---------- Explore: filter places and pick them for the plan ----------
+var exploreMode = 'paket';
+var filt = { cats: [], free: false, district: 'all' };
+function isFree(p) { return (p.fees || []).length > 0 && p.fees.every(function (f) { return /^Ücretsiz/.test(f.tr); }); }
+function renderExplore() {
+  Array.prototype.forEach.call($('explore-seg').querySelectorAll('button'), function (b) {
+    var m = b.getAttribute('data-mode');
+    b.textContent = m === 'paket' ? t('modePackages') : t('modeExplore');
+    b.setAttribute('aria-pressed', exploreMode === m ? 'true' : 'false');
+  });
+  $('mode-paket').hidden = exploreMode !== 'paket';
+  $('mode-kesfet').hidden = exploreMode !== 'kesfet';
+  $('cat-chips').innerHTML = Object.keys(DATA.categories).map(function (k) {
+    return '<button type="button" class="chip small" data-cat="' + k + '" aria-pressed="' + (filt.cats.indexOf(k) >= 0 ? 'true' : 'false') + '">' + esc(tx(DATA.categories[k])) + '</button>';
+  }).join('');
+  $('free-chip').textContent = t('onlyFree');
+  $('free-chip').setAttribute('aria-pressed', filt.free ? 'true' : 'false');
+  var districts = DATA.places.map(function (p) { return p.district; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).sort();
+  $('explore-district').innerHTML = '<option value="all">' + esc(t('allDistricts')) + '</option>' + districts.map(function (x) { return '<option value="' + esc(x) + '">' + esc(x) + '</option>'; }).join('');
+  $('explore-district').value = filt.district;
+  var list = DATA.places.filter(function (p) {
+    return (!filt.cats.length || filt.cats.indexOf(p.cat) >= 0) && (!filt.free || isFree(p)) && (filt.district === 'all' || p.district === filt.district);
+  }).sort(function (a, b) { return tx(a.name).localeCompare(tx(b.name), lang); });
+  $('explore-list').innerHTML = list.length ? list.map(function (p) {
+    var on = inPlan(p.id);
+    return '<div class="pitem"><button type="button" class="open" data-open="' + esc(p.id) + '"><h3>' + esc(tx(p.name)) + (isFree(p) ? '<span class="badge">' + esc(t('free')) + '</span>' : '') + '</h3><span class="where">' +
+      esc(tx(DATA.categories[p.cat])) + ' · ' + esc(p.district) + '</span></button><button type="button" class="add" data-add="' + esc(p.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '" aria-label="' + esc(on ? t('inPlanRemove') : t('addToPlan')) + '">' + (on ? '✓' : '+') + '</button></div>';
+  }).join('') : '<p class="where">' + esc(t('noResults')) + '</p>';
+}
+
+// ---------- Planner ----------
+var VISIT_MIN = { muze: 90, cami: 30, tarihi: 60, carsi: 60, doga: 90, tiyatro: 120, semt: 45, iskele: 15 };
+var plan = { stops: [], start: 'tomorrow' };
+try {
+  var savedPlan = JSON.parse(localStorage.getItem('rota-plan') || 'null');
+  if (savedPlan && Array.isArray(savedPlan.stops)) plan = { stops: savedPlan.stops, start: savedPlan.start || 'tomorrow' };
+} catch (e) {}
+function savePlan() { try { localStorage.setItem('rota-plan', JSON.stringify(plan)); } catch (e) {} }
+function inPlan(id) { return plan.stops.indexOf(id) >= 0; }
+function planChanged() { savePlan(); renderPlan(); renderExplore(); if (currentTab === 'plan' && $('view-plan').hidden === false) drawPlan(); }
+function togglePlan(id) {
+  var i = plan.stops.indexOf(id);
+  if (i >= 0) plan.stops.splice(i, 1); else plan.stops.push(id);
+  planChanged();
+}
+function addRouteToPlan(r) {
+  r.stops.forEach(function (s) { if (s.place && !inPlan(s.place)) plan.stops.push(s.place); });
+  savePlan(); renderPlan(); renderExplore();
+  location.hash = '#plan';
+}
+function visitMin(p) { return p.visitMin || VISIT_MIN[p.cat] || 60; }
+function planStartDate() {
+  var d = new Date();
+  if (plan.start === 'now') { d.setSeconds(0, 0); return d; }
+  if (!plan.start || plan.start === 'tomorrow') { d.setDate(d.getDate() + 1); d.setHours(9, 0, 0, 0); return d; }
+  var c = new Date(plan.start);
+  return isNaN(c.getTime()) ? d : c;
+}
+function legInfo(a, b) {
+  var km = haversineKm(a, b) * DATA.fares.roadFactor;
+  if (km <= 2) return { km: km, min: Math.max(3, Math.round(km / 4.5 * 60)), walk: true };
+  var f = DATA.fares.taxi;
+  return { km: km, min: Math.round(km / 18 * 60 + 8), walk: false, taxi: Math.max(f.min, f.start + km * f.perKm) };
+}
+function hhmm(d) { return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
+function fmtDay(d) { return d.toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }); }
+function schedule() {
+  var start = planStartDate(), cur = new Date(start), items = [], walkKm = 0;
+  plan.stops.forEach(function (id, i) {
+    var p = place(id), leg = null;
+    if (i > 0) {
+      leg = legInfo(place(plan.stops[i - 1]), p);
+      cur = new Date(cur.getTime() + leg.min * 60000);
+      if (leg.walk) walkKm += leg.km;
+    }
+    var arrive = new Date(cur), leave = new Date(cur.getTime() + visitMin(p) * 60000);
+    items.push({ p: p, leg: leg, arrive: arrive, leave: leave, closed: (p.closedDays || []).indexOf(arrive.getDay()) >= 0 });
+    cur = leave;
+  });
+  return { items: items, start: start, end: cur, walkKm: walkKm };
+}
+function renderPlan() {
+  $('t-plan-start').textContent = t('planStart');
+  Array.prototype.forEach.call(document.querySelectorAll('[data-start]'), function (b) {
+    var k = b.getAttribute('data-start');
+    b.textContent = k === 'now' ? t('startNow') : t('startTomorrow');
+    b.setAttribute('aria-pressed', plan.start === k ? 'true' : 'false');
+  });
+  var custom = plan.start && plan.start !== 'now' && plan.start !== 'tomorrow';
+  $('plan-custom').value = custom ? plan.start : '';
+  plan.stops = plan.stops.filter(function (id) { return !!place(id); });
+  if (!plan.stops.length) {
+    $('plan-body').innerHTML = '<div class="panel"><p class="label">' + esc(t('planEmptyH')) + '</p><p class="where">' + esc(t('planEmpty')) + '</p>' +
+      '<div class="row"><button type="button" class="btn" data-goexplore="1">' + esc(t('planExplore')) + '</button></div></div>';
+    return;
+  }
+  var s = schedule();
+  var html = '<div class="summary"><div><b>' + s.items.length + '</b><span>' + esc(t('sumStops')) + '</span></div>' +
+    '<div><b>' + hhmm(s.start) + '–' + hhmm(s.end) + '</b><span>' + esc(fmtDay(s.start)) + '</span></div>' +
+    '<div><b>' + num(s.walkKm, 1) + ' km</b><span>' + esc(t('sumWalk')) + '</span></div></div>';
+  s.items.forEach(function (it, i) {
+    if (it.leg) html += '<p class="pleg">' + esc(it.leg.walk ? t('legWalk', { m: it.leg.min, km: num(it.leg.km, 1) }) : t('legRide', { m: it.leg.min, km: num(it.leg.km, 1), taxi: money(it.leg.taxi) })) + '</p>';
+    html += '<div class="pstop"><div class="time">' + hhmm(it.arrive) + '<small>' + esc(t('leave', { t: hhmm(it.leave) })) + '</small></div>' +
+      '<button type="button" class="open" data-open="' + esc(it.p.id) + '" style="border:0;background:transparent;text-align:left;padding:0;cursor:pointer;min-width:0;color:inherit">' +
+      '<h3>' + esc(tx(it.p.name)) + '</h3><span class="where">' + esc(tx(DATA.categories[it.p.cat])) + ' · ' + esc(it.p.district) + ' · ' + esc(t('stayMin', { m: visitMin(it.p) })) + '</span>' +
+      (it.closed ? '<p class="warn">' + esc(t('closedWarn', { d: DAYS[lang][it.arrive.getDay()] })) + '</p>' : '') + '</button>' +
+      '<div class="tools"><button type="button" class="tool" data-up="' + i + '" aria-label="' + esc(t('moveUp')) + '">↑</button>' +
+      '<button type="button" class="tool" data-down="' + i + '" aria-label="' + esc(t('moveDown')) + '">↓</button>' +
+      '<button type="button" class="tool" data-del="' + i + '" aria-label="' + esc(t('remove')) + '">×</button></div></div>';
+  });
+  html += '<div class="actions"><button type="button" class="btn" data-act="map">' + esc(t('planMap')) + '</button>' +
+    '<button type="button" class="btn ghost" data-act="opt">' + esc(t('planOptimize')) + '</button>' +
+    '<button type="button" class="btn ghost" data-act="ics">' + esc(t('planCalendar')) + '</button>' +
+    '<button type="button" class="btn ghost" data-act="clear">' + esc(t('planClear')) + '</button></div>' +
+    '<p class="where" style="margin-top:10px">' + esc(t('planNote')) + '</p>';
+  $('plan-body').innerHTML = html;
+}
+function drawPlan() {
+  if (!plan.stops.length) { clearRoute(); return; }
+  drawRoute({ stops: plan.stops.map(function (id) { return { place: id }; }) });
+}
+function optimizePlan() {
+  // Keep the first stop, then always go to the nearest remaining place.
+  if (plan.stops.length < 3) return;
+  var rest = plan.stops.slice(1), order = [plan.stops[0]];
+  while (rest.length) {
+    var last = place(order[order.length - 1]), bi = 0, bd = Infinity;
+    rest.forEach(function (id, i) { var dd = haversineKm(last, place(id)); if (dd < bd) { bd = dd; bi = i; } });
+    order.push(rest.splice(bi, 1)[0]);
+  }
+  plan.stops = order;
+  planChanged();
+}
+function icsDate(d) { var p = function (n) { return ('0' + n).slice(-2); }; return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + 'T' + p(d.getHours()) + p(d.getMinutes()) + '00'; }
+function icsText(s) { return String(s).replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/,/g, '\\,').replace(/;/g, '\\;'); }
+function downloadIcs() {
+  var s = schedule(), stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+  var lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Istanbul Rota//TR', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  s.items.forEach(function (it, i) {
+    lines.push('BEGIN:VEVENT', 'UID:' + stamp + '-' + i + '@istanbul-rota', 'DTSTAMP:' + stamp,
+      'DTSTART:' + icsDate(it.arrive), 'DTEND:' + icsDate(it.leave),
+      'SUMMARY:' + icsText(tx(it.p.name)), 'LOCATION:' + icsText(it.p.district + ', İstanbul'),
+      'GEO:' + it.p.lat + ';' + it.p.lng, 'DESCRIPTION:' + icsText(tx(it.p.note)), 'END:VEVENT');
+  });
+  lines.push('END:VCALENDAR');
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' }));
+  a.download = 'istanbul-rota-plan.ics';
+  document.body.appendChild(a); a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+}
+var clearArmed = false;
+function onPlanClick(e) {
+  var b = e.target.closest('button');
+  if (!b) return;
+  if (b.hasAttribute('data-goexplore')) { exploreMode = 'kesfet'; renderExplore(); location.hash = '#rotalar'; return; }
+  if (b.hasAttribute('data-open')) { openPlace(b.getAttribute('data-open')); return; }
+  var i;
+  if (b.hasAttribute('data-up')) { i = +b.getAttribute('data-up'); if (i > 0) { plan.stops.splice(i - 1, 0, plan.stops.splice(i, 1)[0]); planChanged(); } return; }
+  if (b.hasAttribute('data-down')) { i = +b.getAttribute('data-down'); if (i < plan.stops.length - 1) { plan.stops.splice(i + 1, 0, plan.stops.splice(i, 1)[0]); planChanged(); } return; }
+  if (b.hasAttribute('data-del')) { plan.stops.splice(+b.getAttribute('data-del'), 1); planChanged(); return; }
+  var act = b.getAttribute('data-act');
+  if (act === 'map') { drawPlan(); setSheet('peek'); }
+  else if (act === 'opt') optimizePlan();
+  else if (act === 'ics') downloadIcs();
+  else if (act === 'clear') {
+    if (!clearArmed) { clearArmed = true; b.textContent = t('planClearConfirm'); setTimeout(function () { clearArmed = false; if (b.isConnected) b.textContent = t('planClear'); }, 4000); return; }
+    clearArmed = false; plan.stops = []; planChanged();
+  }
 }
 
 // ---------- Transport ----------
@@ -593,7 +808,7 @@ function renderText() {
   $('t-report-send').textContent = t('reportSend'); $('report-copy').textContent = t('reportCopy');
   $('lang-tr').setAttribute('aria-pressed', lang === 'tr' ? 'true' : 'false');
   $('lang-en').setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
-  renderRoutes(); renderTransportOptions(); calc(); renderMarkets(); renderSettings(); renderMapStatus();
+  renderRoutes(); renderExplore(); renderPlan(); renderTransportOptions(); calc(); renderMarkets(); renderSettings(); renderMapStatus();
   if (!$('view-yer').hidden) showView(currentTab);
 }
 function setLang(l) {
@@ -613,6 +828,28 @@ function bind() {
   window.addEventListener('offline', updateOnline);
   if (mq && mq.addEventListener) mq.addEventListener('change', function () { if (prefs.theme === 'auto') onThemeChange(); });
   $('locate').addEventListener('click', locate);
+  // Explore and plan lists are re-rendered often, so their buttons use one delegated listener each.
+  $('explore-seg').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-mode]'); if (!b) return;
+    exploreMode = b.getAttribute('data-mode'); renderExplore();
+  });
+  $('cat-chips').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-cat]'); if (!b) return;
+    var k = b.getAttribute('data-cat'), i = filt.cats.indexOf(k);
+    if (i >= 0) filt.cats.splice(i, 1); else filt.cats.push(k);
+    renderExplore();
+  });
+  $('free-chip').addEventListener('click', function () { filt.free = !filt.free; renderExplore(); });
+  $('explore-district').addEventListener('change', function () { filt.district = $('explore-district').value; renderExplore(); });
+  $('explore-list').addEventListener('click', function (e) {
+    var add = e.target.closest('[data-add]'); if (add) { togglePlan(add.getAttribute('data-add')); return; }
+    var open = e.target.closest('[data-open]'); if (open) openPlace(open.getAttribute('data-open'));
+  });
+  $('plan-body').addEventListener('click', onPlanClick);
+  Array.prototype.forEach.call(document.querySelectorAll('[data-start]'), function (b) {
+    b.addEventListener('click', function () { plan.start = b.getAttribute('data-start'); planChanged(); });
+  });
+  $('plan-custom').addEventListener('change', function () { if ($('plan-custom').value) { plan.start = $('plan-custom').value; planChanged(); } });
   $('from').addEventListener('change', setDistanceFromSelection);
   $('to').addEventListener('change', setDistanceFromSelection);
   ['km', 'wait', 'fuel'].forEach(function (id) { $(id).addEventListener('input', calc); });

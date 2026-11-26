@@ -1,6 +1,6 @@
 // İstanbul Rota service worker: keeps the app and city data working offline.
 // Bump CACHE when you change index.html, app.js or the icons.
-const CACHE = 'rota-v8';
+const CACHE = 'rota-v10';
 // The big map file (maps/istanbul.pmtiles) is NOT in this list. The app saves it in its own
 // cache, 'rota-map-v1', only when the user taps "Download map".
 const MAP_CACHE = 'rota-map-v1';
@@ -51,21 +51,27 @@ self.addEventListener('fetch', (event) => {
   // network; when offline, the app reads the saved copy itself instead of asking for it.
   if (url.pathname.endsWith('.pmtiles')) return;
 
-  // City data: try the network first so updates arrive, fall back to the saved copy.
-  if (url.pathname.endsWith('/data/istanbul.json')) {
+  // The page, the app code and the city data: always from the network when online, so the
+  // page and app.js can never come from two different versions. The saved copy is the offline fallback.
+  const sameOrigin = url.origin === self.location.origin;
+  const isAppFile = req.mode === 'navigate' || (sameOrigin && (url.pathname.endsWith('/') || /\.(html|js|json|webmanifest)$/.test(url.pathname)));
+  if (isAppFile) {
     event.respondWith(
-      fetch(req)
+      fetch(req, { cache: 'no-store' })
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(req, copy));
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put(req, copy));
+          }
           return res;
         })
-        .catch(() => caches.match(req))
+        .catch(() => caches.match(req, { ignoreSearch: true })
+          .then((cached) => cached || (req.mode === 'navigate' ? caches.match('index.html') : undefined)))
     );
     return;
   }
 
-  // Everything else: saved copy first, refreshed in the background.
+  // Libraries, fonts, icons: saved copy first, refreshed in the background.
   event.respondWith(
     caches.match(req, { ignoreSearch: true }).then((cached) => {
       const network = fetch(req)
