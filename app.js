@@ -896,7 +896,19 @@ function start() {
 fetch('data/istanbul.json')
   .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
   .then(function (d) { DATA = d; start(); })
-  .catch(function () { $('load-error').hidden = false; $('load-error').textContent = UI.loadError[lang]; });
+  .catch(function (err) {
+    // Right after an update the phone can briefly mix an old saved page with new code.
+    // If the page is missing something this code needs, reload once to get the matching page.
+    var reloaded = false;
+    try { reloaded = sessionStorage.getItem('rota-reloaded') === '1'; } catch (e) {}
+    if (err instanceof TypeError && !reloaded) {
+      try { sessionStorage.setItem('rota-reloaded', '1'); } catch (e) {}
+      location.reload();
+      return;
+    }
+    $('load-error').hidden = false; $('load-error').textContent = UI.loadError[lang];
+  });
+window.addEventListener('load', function () { setTimeout(function () { try { sessionStorage.removeItem('rota-reloaded'); } catch (e) {} }, 5000); });
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
