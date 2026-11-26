@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>İstanbul Rota</title>
-<meta name="description" content="İstanbul için hazır gezi rotaları, ulaşım ücreti hesaplayıcı ve semt pazarları.">
-<meta name="theme-color" content="#1F48A8">
+<meta name="description" content="İstanbul için hazır gezi rotaları, internetsiz harita, ulaşım ücreti hesaplayıcı ve semt pazarları.">
+<meta name="theme-color" content="#0B5563">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -13,224 +13,236 @@
 <meta name="apple-mobile-web-app-title" content="İstanbul Rota">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <style>
+/* Layout: the map fills the screen; a bottom sheet (peek / half / full) holds routes, transport,
+   markets, place cards and settings. Colours come from the palette tokens that app.js sets on :root;
+   the values below are the Boğaz light palette so the first paint is right. */
 :root {
-  --bg: #F3F6F9; --card: #FFFFFF; --ink: #12233D; --muted: #5A6779;
-  --cobalt: #1F48A8; --cobalt-ink: #FFFFFF; --simit: #C77D1E;
-  --line: #DCE3EC; --soft: #E7EEF8; --warn-bg: #FFF4E0; --warn-ink: #7A4A06;
-  --font: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --bg: #F2F7F6; --surface: #FFFFFF; --ink: #0E2A2F; --muted: #557072;
+  --primary: #0B5563; --on-primary: #FFFFFF; --accent: #E07A5F;
+  --line: #D5E4E1; --soft: #E3F0ED; --warn-bg: #FFF4E0; --warn-ink: #7A4A06;
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
   --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --top: env(safe-area-inset-top, 0px);
+  --bottom: env(safe-area-inset-bottom, 0px);
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0C1424; --card: #142036; --ink: #EAF0F8; --muted: #9DAABD;
-    --cobalt: #6E95F0; --cobalt-ink: #0C1424; --simit: #E9A54A;
-    --line: #24324C; --soft: #1B2A46; --warn-bg: #3A2A10; --warn-ink: #F5D29A;
-    color-scheme: dark;
-  }
-}
 * { box-sizing: border-box; }
-html, body { margin: 0; }
-body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--font); padding-top: env(safe-area-inset-top, 0px); padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
-.app { max-width: 620px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px 24px; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--bg); color: var(--ink); font: 16px/1.5 var(--font); overflow: hidden; }
 h1, h2, h3 { margin: 0; line-height: 1.2; text-wrap: balance; }
 p { margin: 0; }
 button, select, input, textarea { font: inherit; color: inherit; }
-:focus-visible { outline: 3px solid var(--simit); outline-offset: 2px; }
-.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 [hidden] { display: none !important; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 
-.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 6px 14px; }
-.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.brand img { width: 36px; height: 36px; border-radius: 10px; }
-.brand h1 { font-size: 20px; font-weight: 800; }
-.brand small { display: block; color: var(--muted); font-size: 12.5px; font-weight: 400; }
-.lang { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--card); flex: none; }
-.lang button { border: 0; background: transparent; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--muted); }
-.lang button[aria-pressed="true"] { background: var(--cobalt); color: var(--cobalt-ink); }
+#map { position: fixed; inset: 0; background: var(--soft); }
+.maplibregl-ctrl-top-right, .maplibregl-ctrl-top-left { top: calc(var(--top) + 64px); }
+.maplibregl-popup-content { color: #12233D; }
 
-.status { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; font-size: 13px; }
-.pill { border-radius: 999px; padding: 4px 10px; background: var(--soft); color: var(--muted); }
-.pill.off { background: var(--warn-bg); color: var(--warn-ink); font-weight: 600; }
-.install { border: 0; border-radius: 999px; padding: 4px 12px; background: var(--cobalt); color: var(--cobalt-ink); font-weight: 600; cursor: pointer; }
-.hint { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+.topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: calc(var(--top) + 10px) max(12px, env(safe-area-inset-right, 0px)) 10px max(12px, env(safe-area-inset-left, 0px)); pointer-events: none; }
+.topbar > * { pointer-events: auto; }
+.brand { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px 4px 4px; font-weight: 700; font-size: 15px; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.brand img { width: 30px; height: 30px; border-radius: 50%; }
+.top-actions { display: flex; align-items: center; gap: 6px; }
+.icon-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--primary); display: grid; place-items: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.icon-btn svg { width: 20px; height: 20px; }
+.chip-off { background: var(--warn-bg); color: var(--warn-ink); border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
 
-nav.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000; background: var(--card); border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
-nav.tabbar .inner { max-width: 620px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); padding-left: max(8px, env(safe-area-inset-left, 0px)); padding-right: max(8px, env(safe-area-inset-right, 0px)); }
-nav.tabbar a { text-align: center; text-decoration: none; padding: 10px 4px 12px; font-size: 13px; font-weight: 600; color: var(--muted); display: grid; gap: 2px; justify-items: center; }
-nav.tabbar a svg { width: 22px; height: 22px; }
-nav.tabbar a[aria-current="page"] { color: var(--cobalt); }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--surface); color: var(--ink); border-radius: 20px 20px 0 0; box-shadow: 0 -6px 24px rgba(0,0,0,.18);
+  display: flex; flex-direction: column; height: 50vh; height: 50dvh; transition: height .25s ease; padding-bottom: var(--bottom); max-width: 720px; margin: 0 auto; }
+.sheet[data-size="peek"] { height: calc(150px + var(--bottom)); }
+.sheet[data-size="full"] { height: calc(100vh - 72px - var(--top)); height: calc(100dvh - 72px - var(--top)); }
+@media (prefers-reduced-motion: reduce) { .sheet { transition: none; } }
+.handle { border: 0; background: transparent; padding: 10px 0 4px; cursor: pointer; display: grid; place-items: center; }
+.handle span { width: 44px; height: 5px; border-radius: 3px; background: var(--line); display: block; }
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 4px max(12px, env(safe-area-inset-left, 0px)) 8px; border-bottom: 1px solid var(--line); }
+.tabs a { text-align: center; text-decoration: none; color: var(--muted); font-size: 12.5px; font-weight: 600; padding: 6px 2px; border-radius: 10px; display: grid; gap: 2px; justify-items: center; }
+.tabs a svg { width: 22px; height: 22px; }
+.tabs a[aria-current="page"] { color: var(--primary); background: var(--soft); }
+.sheet-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 14px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px)); }
 
-.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; }
-.chip { flex: none; border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 8px 14px; font-size: 14px; font-weight: 600; cursor: pointer; }
-.chip[aria-pressed="true"] { border-color: var(--cobalt); background: var(--cobalt); color: var(--cobalt-ink); }
-
-.route-head { margin-bottom: 16px; }
-.route-head h2 { font-size: 24px; font-weight: 800; }
-.route-head p { color: var(--muted); margin-top: 6px; }
-.meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
-.meta span { font-size: 13px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 4px 10px; }
-.link-btn { border: 0; background: transparent; color: var(--cobalt); font-weight: 600; cursor: pointer; padding: 4px 0; font-size: 14px; }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px; }
+.chip { flex: none; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 13px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.chip[aria-pressed="true"] { border-color: var(--primary); background: var(--primary); color: var(--on-primary); }
+.head h2 { font-size: 22px; font-weight: 800; }
+.head p { color: var(--muted); margin-top: 4px; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 14px; }
+.meta span { font-size: 12.5px; background: var(--soft); border-radius: 8px; padding: 3px 9px; }
 
 .stops { list-style: none; margin: 0; padding: 0; position: relative; }
-.stops::before { content: ""; position: absolute; left: 13px; top: 14px; bottom: 14px; width: 4px; border-radius: 2px; background: var(--cobalt); opacity: .35; }
-.stop { position: relative; display: grid; grid-template-columns: 30px 1fr; gap: 12px; padding-bottom: 14px; }
-.dot { width: 30px; height: 30px; border-radius: 50%; background: var(--card); border: 4px solid var(--cobalt); display: grid; place-items: center; font: 600 12px var(--mono); color: var(--cobalt); position: relative; z-index: 1; }
-.card { min-width: 0; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
-.card h3 { font-size: 17px; }
-.when { color: var(--muted); font-size: 13px; }
-.card p { font-size: 14.5px; margin-top: 6px; }
+.stops::before { content: ""; position: absolute; left: 13px; top: 14px; bottom: 14px; width: 4px; border-radius: 2px; background: var(--primary); opacity: .3; }
+.stop { position: relative; display: grid; grid-template-columns: 30px 1fr; gap: 12px; padding-bottom: 12px; }
+.dot { width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: var(--on-primary); display: grid; place-items: center; font: 700 12px var(--mono); position: relative; z-index: 1; }
+.card { min-width: 0; background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; }
+button.card { width: 100%; text-align: left; cursor: pointer; }
+.card h3 { font-size: 16.5px; }
+.when { color: var(--muted); font-size: 12.5px; }
+.card p { font-size: 14.5px; margin-top: 4px; }
 .facts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .fact { font-size: 12.5px; border-radius: 6px; padding: 3px 8px; background: var(--soft); }
 .fact.check { background: var(--warn-bg); color: var(--warn-ink); }
-.leg { margin: 0 0 14px 42px; font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
-.leg::before { content: ""; width: 14px; height: 2px; background: var(--simit); flex: none; }
+.leg { margin: 0 0 12px 42px; font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+.leg::before { content: ""; width: 14px; height: 2px; background: var(--accent); flex: none; }
 
-#map { height: 62vh; min-height: 320px; border-radius: 14px; border: 1px solid var(--line); background: var(--soft); }
-.map-tools { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-.map-note { font-size: 13px; color: var(--muted); margin-top: 8px; }
-.maplibregl-popup-content { font: 14px/1.45 var(--font); color: #12233D; }
-.map-save { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
-.map-save p { font-size: 14px; min-width: 0; flex: 1 1 200px; }
-.map-save .saved { color: var(--cobalt); font-weight: 600; }
-.btn:disabled { opacity: .6; cursor: default; }
-.legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; font-size: 12.5px; color: var(--muted); }
-.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
-
-.panel { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 14px; }
+.panel { background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 12px; }
 .field { display: grid; gap: 6px; }
-.field label { font-weight: 600; font-size: 14px; }
-.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-select, input[type=number] { padding: 10px 12px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg); min-width: 0; }
+.field label, .label { font-weight: 600; font-size: 14px; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+select, input[type=number] { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); min-width: 0; }
 select { width: 100%; }
 input[type=number] { width: 110px; }
-input[type=range] { width: 100%; accent-color: var(--cobalt); }
-.results { display: grid; gap: 10px; margin-top: 16px; }
-.result { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline; }
-.result strong { font-size: 17px; }
-.result .amt { font: 700 22px var(--mono); text-align: right; }
+input[type=range] { width: 100%; accent-color: var(--primary); }
+.results { display: grid; gap: 10px; margin-top: 14px; }
+.result { background: var(--bg); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: baseline; }
+.result strong { font-size: 16px; }
+.result .amt { font: 700 21px var(--mono); text-align: right; }
 .result .how { grid-column: 1 / -1; color: var(--muted); font-size: 13px; }
-.result.main { border: 2px solid var(--cobalt); }
-.src { font-size: 12.5px; color: var(--muted); margin-top: 12px; }
-.src a { color: var(--cobalt); }
+.result.main { border: 2px solid var(--primary); }
+.src { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+.src a, .link { color: var(--primary); }
 
-.today-line { font-size: 14px; margin-bottom: 12px; color: var(--muted); }
-.market { display: grid; grid-template-columns: 70px 1fr; gap: 12px; margin-bottom: 10px; }
-.day { border-radius: 10px; background: var(--soft); color: var(--cobalt); display: grid; place-items: center; text-align: center; font-weight: 700; font-size: 13px; padding: 8px 4px; }
-.day.today { background: var(--cobalt); color: var(--cobalt-ink); }
+.today-line { font-size: 14px; margin: 10px 0; color: var(--muted); }
+.market { display: grid; grid-template-columns: 70px 1fr; gap: 10px; margin-bottom: 10px; }
+.day { border-radius: 12px; background: var(--soft); color: var(--primary); display: grid; place-items: center; text-align: center; font-weight: 700; font-size: 13px; padding: 8px 4px; }
+.day.today { background: var(--primary); color: var(--on-primary); }
 .day.unknown { background: var(--warn-bg); color: var(--warn-ink); }
 .where { color: var(--muted); font-size: 13px; }
 
-.report { margin-top: 24px; }
-.btn { border: 0; cursor: pointer; border-radius: 10px; padding: 11px 16px; font-weight: 600; background: var(--cobalt); color: var(--cobalt-ink); }
-.btn.ghost { background: transparent; color: var(--cobalt); box-shadow: inset 0 0 0 2px var(--cobalt); }
-textarea { width: 100%; padding: 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg); min-height: 80px; resize: vertical; }
-.ok { color: var(--cobalt); font-weight: 600; font-size: 14px; margin-top: 8px; }
+.btn { border: 0; cursor: pointer; border-radius: 12px; padding: 11px 16px; font-weight: 600; background: var(--primary); color: var(--on-primary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.btn.ghost { background: transparent; color: var(--primary); box-shadow: inset 0 0 0 2px var(--primary); }
+.btn:disabled { opacity: .6; cursor: default; }
+.back { display: block; border: 0; background: transparent; color: var(--primary); font-weight: 600; cursor: pointer; padding: 0 0 10px; }
+.cat { display: inline-block; font-size: 12.5px; font-weight: 600; border-radius: 999px; padding: 3px 10px; color: #fff; margin-bottom: 8px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+
+.section { margin-bottom: 22px; }
+.section > h3 { font-size: 15px; margin-bottom: 10px; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+.swatch { border: 2px solid var(--line); background: var(--surface); border-radius: 14px; padding: 10px 8px; cursor: pointer; display: grid; gap: 6px; justify-items: center; font-size: 13px; font-weight: 600; }
+.swatch[aria-pressed="true"] { border-color: var(--primary); }
+.swatch .dots { display: flex; gap: 3px; }
+.swatch .dots i { width: 16px; height: 16px; border-radius: 50%; display: block; border: 1px solid rgba(0,0,0,.12); }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--soft); border-radius: 12px; padding: 4px; gap: 4px; }
+.seg button { border: 0; background: transparent; border-radius: 9px; padding: 8px 4px; font-weight: 600; font-size: 14px; cursor: pointer; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.package { border: 2px solid var(--primary); border-radius: 16px; padding: 14px; display: grid; gap: 6px; background: var(--bg); }
+.package .price { font: 800 26px var(--font); color: var(--primary); }
+.status { font-size: 14px; }
+.status.saved { color: var(--primary); font-weight: 600; }
+textarea { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); min-height: 80px; resize: vertical; }
+.ok { color: var(--primary); font-weight: 600; font-size: 14px; margin-top: 8px; }
 .error { background: var(--warn-bg); color: var(--warn-ink); padding: 14px; border-radius: 12px; }
+.lang { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.lang button { border: 0; background: transparent; padding: 8px 11px; font-size: 13px; font-weight: 700; cursor: pointer; color: var(--muted); }
+.lang button[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); }
 </style>
 </head>
 <body>
-<div class="app">
-  <header class="top">
-    <div class="brand">
-      <img src="icons/icon-192.png" alt="">
-      <h1>İstanbul Rota<small id="t-sub"></small></h1>
-    </div>
+<div id="map" role="region" aria-label="Harita"></div>
+
+<header class="topbar">
+  <div class="brand"><img src="icons/icon-192.png" alt=""><span>İstanbul Rota</span></div>
+  <div class="top-actions">
+    <span class="chip-off" id="offline" hidden></span>
     <div class="lang" role="group" aria-label="Dil / Language">
       <button id="lang-tr" type="button" aria-pressed="true">TR</button>
       <button id="lang-en" type="button" aria-pressed="false">EN</button>
     </div>
-  </header>
-
-  <div class="status">
-    <span class="pill" id="updated"></span>
-    <span class="pill off" id="offline" hidden></span>
-    <button class="install" id="install" type="button" hidden></button>
+    <button class="icon-btn" id="locate" type="button" aria-label="Konumumu göster">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7.5"/></svg>
+    </button>
   </div>
-  <p class="hint" id="ios-hint" hidden></p>
+</header>
 
-  <main>
+<section class="sheet" id="sheet" data-size="half" aria-label="Bilgi paneli">
+  <button class="handle" id="handle" type="button" aria-label="Paneli büyüt veya küçült"><span></span></button>
+  <nav class="tabs" aria-label="Bölümler">
+    <a href="#rotalar" id="tab-rotalar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18h6a3.5 3.5 0 0 0 0-7h-5a3.5 3.5 0 0 1 0-7h6"/></svg><span></span></a>
+    <a href="#ulasim" id="tab-ulasim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M4 11h16M8 19l-1 2M16 19l1 2"/></svg><span></span></a>
+    <a href="#pazarlar" id="tab-pazarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9h18l-2-5H5L3 9Z"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg><span></span></a>
+    <a href="#ayarlar" id="tab-ayarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg><span></span></a>
+  </nav>
+  <div class="sheet-body" id="sheet-body">
+    <div id="load-error" class="error" hidden></div>
+
     <section id="view-rotalar">
       <div class="chips" id="route-chips" role="group"></div>
       <div id="route"></div>
     </section>
 
-    <section id="view-harita" hidden>
-      <div class="map-save">
-        <p id="map-status"></p>
-        <button class="btn" id="map-download" type="button"></button>
-        <button class="btn ghost" id="map-remove" type="button" hidden></button>
-      </div>
-      <div class="map-tools">
-        <button class="btn ghost" id="locate" type="button"></button>
-        <button class="btn ghost" id="show-all" type="button"></button>
-      </div>
-      <div id="map" role="region" aria-label="Harita"></div>
-      <div class="legend" id="legend"></div>
-      <p class="map-note" id="map-note"></p>
-    </section>
-
     <section id="view-ulasim" hidden>
       <div class="panel">
-        <div class="field">
-          <label for="from" id="t-from"></label>
-          <select id="from"></select>
-        </div>
-        <div class="field">
-          <label for="to" id="t-to"></label>
-          <select id="to"></select>
-        </div>
-        <div class="field">
-          <label for="km"><span id="t-km"></span>: <span class="mono" id="km-val"></span> km</label>
-          <input type="range" id="km" min="1" max="80" step="1" value="6">
-        </div>
-        <div class="field">
-          <label for="wait"><span id="t-wait"></span>: <span class="mono" id="wait-val"></span> <span id="t-min"></span></label>
-          <input type="range" id="wait" min="0" max="60" step="5" value="10">
-        </div>
-        <div class="field">
-          <label for="fuel" id="t-fuel"></label>
-          <div class="row"><input type="number" id="fuel" min="1" step="0.5"><span class="mono">TL / L</span><span id="t-fuel-note" class="where"></span></div>
-        </div>
+        <div class="field"><label for="from" id="t-from"></label><select id="from"></select></div>
+        <div class="field"><label for="to" id="t-to"></label><select id="to"></select></div>
+        <div class="field"><label for="km"><span id="t-km"></span>: <span class="mono" id="km-val"></span> km</label><input type="range" id="km" min="1" max="80" step="1" value="6"></div>
+        <div class="field"><label for="wait"><span id="t-wait"></span>: <span class="mono" id="wait-val"></span> <span id="t-min"></span></label><input type="range" id="wait" min="0" max="60" step="5" value="10"></div>
+        <div class="field"><label for="fuel" id="t-fuel"></label><div class="row"><input type="number" id="fuel" min="1" step="0.5"><span class="mono">TL / L</span><span id="t-fuel-note" class="where"></span></div></div>
       </div>
       <div class="results" id="results"></div>
       <p class="src" id="fare-src"></p>
     </section>
 
     <section id="view-pazarlar" hidden>
-      <div class="field" style="margin-bottom:12px">
-        <label for="district" id="t-district"></label>
-        <select id="district"></select>
-      </div>
+      <div class="field"><label for="district" id="t-district"></label><select id="district"></select></div>
       <p class="today-line" id="today-line"></p>
       <div id="markets"></div>
     </section>
 
-    <div id="load-error" class="error" hidden></div>
+    <section id="view-yer" hidden></section>
 
-    <section class="report">
-      <button class="btn ghost" id="report-open" type="button"></button>
-      <form id="report-form" hidden>
-        <label for="report-text" id="t-report-label" style="display:block;font-weight:600;margin:12px 0 6px"></label>
-        <textarea id="report-text"></textarea>
-        <div class="row" style="margin-top:10px">
-          <button class="btn" type="submit" id="t-report-send"></button>
-          <button class="btn ghost" type="button" id="report-copy"></button>
+    <section id="view-ayarlar" hidden>
+      <div class="section">
+        <h3 id="t-look"></h3>
+        <p class="label" id="t-palette" style="margin-bottom:8px"></p>
+        <div class="swatches" id="swatches"></div>
+        <p class="label" id="t-theme" style="margin:14px 0 8px"></p>
+        <div class="seg" id="theme-seg" role="group">
+          <button type="button" data-theme="auto"></button>
+          <button type="button" data-theme="light"></button>
+          <button type="button" data-theme="dark"></button>
         </div>
-        <p class="ok" id="report-ok" hidden></p>
-      </form>
+      </div>
+      <div class="section">
+        <h3 id="t-offline-map"></h3>
+        <div class="panel">
+          <p class="status" id="map-status"></p>
+          <div class="row">
+            <button class="btn" id="map-download" type="button"></button>
+            <button class="btn ghost" id="map-remove" type="button" hidden></button>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <h3 id="t-package"></h3>
+        <div class="package">
+          <p class="label" id="t-package-name"></p>
+          <p class="price">699 TL</p>
+          <p class="where" id="t-package-note"></p>
+        </div>
+      </div>
+      <div class="section">
+        <h3 id="t-install-h"></h3>
+        <button class="btn" id="install" type="button" hidden></button>
+        <p class="where" id="install-hint"></p>
+      </div>
+      <div class="section" id="report-section">
+        <h3 id="t-report-h"></h3>
+        <form id="report-form">
+          <label for="report-text" id="t-report-label" class="label" style="display:block;margin-bottom:6px"></label>
+          <textarea id="report-text"></textarea>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" type="submit" id="t-report-send"></button>
+            <button class="btn ghost" type="button" id="report-copy"></button>
+          </div>
+          <p class="ok" id="report-ok" hidden></p>
+        </form>
+      </div>
+      <p class="where" id="about"></p>
     </section>
-  </main>
-</div>
-
-<nav class="tabbar" aria-label="Bölümler">
-  <div class="inner">
-    <a href="#rotalar" id="tab-rotalar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18h6a3.5 3.5 0 0 0 0-7h-5a3.5 3.5 0 0 1 0-7h6"/></svg><span></span></a>
-    <a href="#harita" id="tab-harita"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14M15 6v14"/></svg><span></span></a>
-    <a href="#ulasim" id="tab-ulasim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M4 11h16M8 19l-1 2M16 19l1 2"/><circle cx="8" cy="14" r=".5"/><circle cx="16" cy="14" r=".5"/></svg><span></span></a>
-    <a href="#pazarlar" id="tab-pazarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9h18l-2-5H5L3 9Z"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg><span></span></a>
   </div>
-</nav>
+</section>
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://unpkg.com/pmtiles@4.4.1/dist/pmtiles.js"></script>

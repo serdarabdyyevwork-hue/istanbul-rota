@@ -1,199 +1,1469 @@
 {
   "city": "istanbul",
-  "updated": "2026-11-25",
+  "updated": "2026-11-26",
   "fares": {
     "taxi": {
       "start": 71.94,
       "perKm": 47.92,
-      "perHourWait": 598.90,
+      "perHourWait": 598.9,
       "min": 230,
       "source": "https://tuhim.ibb.gov.tr/media/27490/2027ucretler.pdf",
       "checked": "2026-11-25"
     },
     "transit": {
-      "fullFare": 46.20,
-      "note": "İstanbulkart tam biniş, Temmuz 2026 tarifesi (haberlere göre; İETT/Metro İstanbul resmî duyurusuyla doğrulanacak)",
-      "verified": false,
-      "source": "https://www.haberturk.com/tam-ve-ogrenci-akbil-ne-kadar-oldu-aylik-abonman-ucreti-kac-tl-2026-istanbul-da-tam-ve-ogrenci-akbil-ne-kadar-oldu-3899253",
-      "checked": "2026-11-25"
+      "fullFare": 46.2,
+      "studentFare": 22.55,
+      "singleTicket": 65,
+      "cardPrice": 165,
+      "ferryKarakoyKadikoy": 65.21,
+      "ferryAdalar": 151.23,
+      "verified": true,
+      "checked": "2026-11-26",
+      "source": "https://www.metro.istanbul/SeferDurumlari/BiletUcretleri",
+      "ferrySource": "https://sehirhatlari.istanbul/tr/ucret-tarifeleri",
+      "cardSource": "https://www.istanbulkart.istanbul/ucretler-limitler",
+      "note": "Temmuz 2026 tarifesi (yürürlük 20.07.2026). Adalar ücreti resmî sayfada 151,23 TL, bir haberde 171,89 TL; resmî sayfa güncellenmemiş olabilir."
     },
-    "car": { "litersPer100km": 7, "fuelPriceExample": 50 },
+    "car": {
+      "litersPer100km": 7,
+      "fuelPriceExample": 50
+    },
     "roadFactor": 1.35
   },
   "categories": {
-    "muze": { "tr": "Müze", "en": "Museum", "color": "#1F48A8" },
-    "cami": { "tr": "Cami", "en": "Mosque", "color": "#0F7A6C" },
-    "tarihi": { "tr": "Tarihi yer", "en": "Historic site", "color": "#7B3FA0" },
-    "carsi": { "tr": "Çarşı", "en": "Bazaar", "color": "#C77D1E" },
-    "doga": { "tr": "Doğa ve piknik", "en": "Nature and picnic", "color": "#2E8B3A" },
-    "tiyatro": { "tr": "Tiyatro ve sahne", "en": "Theatre and stage", "color": "#B8325A" },
-    "semt": { "tr": "Semt", "en": "Neighbourhood", "color": "#5A6779" },
-    "iskele": { "tr": "İskele", "en": "Ferry pier", "color": "#0E6BA8" }
+    "muze": {
+      "tr": "Müze",
+      "en": "Museum",
+      "color": "#1F48A8"
+    },
+    "cami": {
+      "tr": "Cami",
+      "en": "Mosque",
+      "color": "#0F7A6C"
+    },
+    "tarihi": {
+      "tr": "Tarihi yer",
+      "en": "Historic site",
+      "color": "#7B3FA0"
+    },
+    "carsi": {
+      "tr": "Çarşı",
+      "en": "Bazaar",
+      "color": "#C77D1E"
+    },
+    "doga": {
+      "tr": "Doğa ve piknik",
+      "en": "Nature and picnic",
+      "color": "#2E8B3A"
+    },
+    "tiyatro": {
+      "tr": "Tiyatro ve sahne",
+      "en": "Theatre and stage",
+      "color": "#B8325A"
+    },
+    "semt": {
+      "tr": "Semt",
+      "en": "Neighbourhood",
+      "color": "#5A6779"
+    },
+    "iskele": {
+      "tr": "İskele",
+      "en": "Ferry pier",
+      "color": "#0E6BA8"
+    }
   },
   "places": [
-    { "id": "ayasofya", "cat": "cami", "district": "Fatih", "lat": 41.0086, "lng": 28.9802,
-      "name": { "tr": "Ayasofya", "en": "Hagia Sophia" },
-      "note": { "tr": "Ana alan ibadete açık; galeri katı müze. Sabah erken git.", "en": "Main floor is a mosque; the upper gallery is a museum. Go early." },
-      "fees": [ { "tr": "Yabancı (8 yaş üstü): 25 €", "en": "Foreign adults (over 8): €25", "verified": true, "source": "https://muze.gov.tr/muze-detay?SectionId=YSM01&DistId=MRK", "checked": "2026-11-25" }, { "tr": "T.C. vatandaşı: doğrulanacak", "en": "Turkish citizens: to be verified", "verified": false } ] },
-    { "id": "sultanahmet", "cat": "cami", "district": "Fatih", "lat": 41.0054, "lng": 28.9768,
-      "name": { "tr": "Sultanahmet Camii", "en": "Blue Mosque" },
-      "note": { "tr": "Namaz vakitlerinde ziyarete kapanır. Omuz ve diz kapalı olmalı.", "en": "Closed to visitors during prayer times. Cover shoulders and knees." },
-      "fees": [ { "tr": "Ücretsiz", "en": "Free", "verified": true } ] },
-    { "id": "yerebatan", "cat": "tarihi", "district": "Fatih", "lat": 41.0084, "lng": 28.9779,
-      "name": { "tr": "Yerebatan Sarnıcı", "en": "Basilica Cistern" },
-      "note": { "tr": "Yer altındaki Bizans su deposu, Medusa başları.", "en": "Underground Byzantine reservoir with the Medusa heads." },
-      "fees": [ { "tr": "T.C. vatandaşı: 1 TL (Nisan 2026 kararı, haberlere göre)", "en": "Turkish citizens: 1 TL (April 2026 decision, per news reports)", "verified": false, "source": "https://www.ntv.com.tr/turkiye/yerebatan-sarnicina-giris-1-tl-oldu-1720556" }, { "tr": "Yabancı: doğrulanacak", "en": "Foreigners: to be verified", "verified": false } ] },
-    { "id": "arkeoloji", "cat": "muze", "district": "Fatih", "lat": 41.0117, "lng": 28.9813,
-      "name": { "tr": "İstanbul Arkeoloji Müzeleri", "en": "Istanbul Archaeology Museums" },
-      "note": { "tr": "Topkapı'nın hemen altında, Gülhane Parkı girişinde.", "en": "Just below Topkapı, by the Gülhane Park entrance." },
-      "fees": [ { "tr": "Yabancı: 15 €", "en": "Foreigners: €15", "verified": true, "source": "https://muze.gov.tr/muze-detay?SectionId=IAR01&DistId=IAR", "checked": "2026-11-25" }, { "tr": "T.C. vatandaşı: doğrulanacak", "en": "Turkish citizens: to be verified", "verified": false } ] },
-    { "id": "topkapi", "cat": "muze", "district": "Fatih", "lat": 41.0115, "lng": 28.9834,
-      "name": { "tr": "Topkapı Sarayı", "en": "Topkapı Palace" },
-      "note": { "tr": "Kombine bilet sarayı, Harem'i ve Aya İrini'yi kapsar, 1 gün geçerli. Müzekart Harem ve Aya İrini'de geçmez. En az 2–3 saat ayır.", "en": "The combined ticket covers the palace, the Harem and Hagia Irene, valid for 1 day. The Museum Card is not valid for the Harem and Hagia Irene. Allow 2–3 hours." },
-      "fees": [ { "tr": "Kombine, yerli: 500 TL", "en": "Combined, Turkish visitors: 500 TL", "verified": true, "source": "https://www.millisaraylar.gov.tr/Lokasyon/2/topkapi-sarayi", "checked": "2026-11-25" }, { "tr": "Kombine, yabancı: 2.750 TL", "en": "Combined, foreign visitors: 2,750 TL", "verified": true, "source": "https://www.millisaraylar.gov.tr/Lokasyon/2/topkapi-sarayi", "checked": "2026-11-25" }, { "tr": "İndirimli (öğrenci): 250 TL", "en": "Discounted (students): 250 TL", "verified": true, "source": "https://www.millisaraylar.gov.tr/Lokasyon/2/topkapi-sarayi", "checked": "2026-11-25" } ] },
-    { "id": "kapalicarsi", "cat": "carsi", "district": "Fatih", "lat": 41.0107, "lng": 28.9681,
-      "name": { "tr": "Kapalıçarşı", "en": "Grand Bazaar" },
-      "note": { "tr": "Pazar günü kapalı. Fiyatta pazarlık normaldir.", "en": "Closed on Sundays. Bargaining is normal." },
-      "fees": [ { "tr": "Ücretsiz giriş", "en": "Free entry", "verified": true } ] },
-    { "id": "suleymaniye", "cat": "cami", "district": "Fatih", "lat": 41.0162, "lng": 28.9639,
-      "name": { "tr": "Süleymaniye Camii", "en": "Süleymaniye Mosque" },
-      "note": { "tr": "Gün batımında avludan Haliç manzarası.", "en": "Sunset view over the Golden Horn from the courtyard." },
-      "fees": [ { "tr": "Ücretsiz", "en": "Free", "verified": true } ] },
-    { "id": "eminonu", "cat": "iskele", "district": "Fatih", "lat": 41.0175, "lng": 28.9735,
-      "name": { "tr": "Eminönü İskelesi", "en": "Eminönü ferry pier" },
-      "note": { "tr": "Kadıköy, Üsküdar ve Boğaz vapurları buradan kalkar.", "en": "Ferries to Kadıköy, Üsküdar and the Bosphorus leave from here." },
-      "fees": [ { "tr": "Vapur: İstanbulkart, ücret eklenecek", "en": "Ferry: Istanbulkart, fare coming", "verified": false } ] },
-    { "id": "karakoy", "cat": "semt", "district": "Beyoğlu", "lat": 41.0222, "lng": 28.9770,
-      "name": { "tr": "Karaköy", "en": "Karaköy" },
-      "note": { "tr": "Sahilde çay, ara sokaklarda kahve.", "en": "Tea by the water, coffee in the side streets." },
-      "fees": [ { "tr": "Ücretsiz", "en": "Free", "verified": true } ] },
-    { "id": "galata", "cat": "tarihi", "district": "Beyoğlu", "lat": 41.0256, "lng": 28.9742,
-      "name": { "tr": "Galata Kulesi", "en": "Galata Tower" },
-      "note": { "tr": "Üstten 360° manzara. Kuyruk uzun olabilir. Akşam 18:30–22:00 arası gece ziyareti de var.", "en": "360° view from the top. The queue can be long. Evening visits run 18:30–22:00." },
-      "fees": [ { "tr": "Yabancı: 30 €", "en": "Foreigners: €30", "verified": true, "source": "https://muze.gov.tr/muze-detay?SectionId=GLT04&DistId=MRK", "checked": "2026-11-25" }, { "tr": "T.C. vatandaşı: doğrulanacak", "en": "Turkish citizens: to be verified", "verified": false } ] },
-    { "id": "istiklal", "cat": "semt", "district": "Beyoğlu", "lat": 41.0337, "lng": 28.9779,
-      "name": { "tr": "İstiklal Caddesi", "en": "İstiklal Avenue" },
-      "note": { "tr": "Nostaljik tramvay, pasajlar, kitapçılar.", "en": "Nostalgic tram, arcades, bookshops." },
-      "fees": [ { "tr": "Ücretsiz", "en": "Free", "verified": true } ] },
-    { "id": "taksim", "cat": "semt", "district": "Beyoğlu", "lat": 41.0370, "lng": 28.9850,
-      "name": { "tr": "Taksim Meydanı", "en": "Taksim Square" },
-      "note": { "tr": "Metro ve otobüs bağlantıları burada.", "en": "Metro and bus connections are here." },
-      "fees": [ { "tr": "Ücretsiz", "en": "Free", "verified": true } ] },
-    { "id": "akm", "cat": "tiyatro", "district": "Beyoğlu", "lat": 41.0369, "lng": 28.9873,
-      "name": { "tr": "Atatürk Kültür Merkezi (AKM)", "en": "Atatürk Cultural Center (AKM)" },
-      "note": { "tr": "Opera, bale, konser ve tiyatro. Program ve bilet fiyatları resmî siteden eklenecek.", "en": "Opera, ballet, concerts and theatre. Programme and ticket prices will be added from the official site." },
-      "fees": [ { "tr": "Bilet: etkinliğe göre", "en": "Tickets: per event", "verified": false } ] },
-    { "id": "dolmabahce", "cat": "muze", "district": "Beşiktaş", "lat": 41.0392, "lng": 29.0005,
-      "name": { "tr": "Dolmabahçe Sarayı", "en": "Dolmabahçe Palace" },
-      "note": { "tr": "Boğaz kıyısında 19. yüzyıl sarayı. Bilet Selamlık, Harem ve Resim Müzesi'ni kapsar. Müzekart Selamlık'ta geçmez.", "en": "19th-century palace on the Bosphorus shore. The ticket covers the Selamlık, Harem and Painting Museum. The Museum Card is not valid for the Selamlık." },
-      "fees": [ { "tr": "Yerli: 250 TL", "en": "Turkish visitors: 250 TL", "verified": true, "source": "https://www.millisaraylar.gov.tr/Lokasyon/3/Dolmabahce-Sarayi", "checked": "2026-11-25" }, { "tr": "Yabancı: 2.000 TL", "en": "Foreign visitors: 2,000 TL", "verified": true, "source": "https://www.millisaraylar.gov.tr/Lokasyon/3/Dolmabahce-Sarayi", "checked": "2026-11-25" }, { "tr": "İndirimli (öğrenci): 150 TL", "en": "Discounted (students): 150 TL", "verified": true, "source": "https://www.millisaraylar.gov.tr/Lokasyon/3/Dolmabahce-Sarayi", "checked": "2026-11-25" } ] },
-    { "id": "kadikoy-iskele", "cat": "iskele", "district": "Kadıköy", "lat": 40.9910, "lng": 29.0230,
-      "name": { "tr": "Kadıköy İskelesi", "en": "Kadıköy ferry pier" },
-      "note": { "tr": "Avrupa yakasına vapur bağlantısı.", "en": "Ferry link to the European side." },
-      "fees": [ { "tr": "Vapur: İstanbulkart, ücret eklenecek", "en": "Ferry: Istanbulkart, fare coming", "verified": false } ] },
-    { "id": "kadikoy-carsi", "cat": "carsi", "district": "Kadıköy", "lat": 40.9895, "lng": 29.0260,
-      "name": { "tr": "Kadıköy Çarşısı", "en": "Kadıköy Market" },
-      "note": { "tr": "Balıkçılar, turşucular, meze dükkânları.", "en": "Fishmongers, pickle shops, meze." },
-      "fees": [ { "tr": "Ücretsiz", "en": "Free", "verified": true } ] },
-    { "id": "moda", "cat": "doga", "district": "Kadıköy", "lat": 40.9790, "lng": 29.0250,
-      "name": { "tr": "Moda Sahili", "en": "Moda seafront" },
-      "note": { "tr": "Çimlerde piknik ve gün batımı. Hafta sonu kalabalık.", "en": "Picnic on the grass and sunset. Busy at weekends." },
-      "fees": [ { "tr": "Ücretsiz", "en": "Free", "verified": true } ] },
-    { "id": "kizkulesi", "cat": "tarihi", "district": "Üsküdar", "lat": 41.0211, "lng": 29.0041,
-      "name": { "tr": "Kız Kulesi", "en": "Maiden's Tower" },
-      "note": { "tr": "Salacak sahilinden en güzel manzarası. Kuleye Salacak veya Karaköy'den tekneyle gidilir.", "en": "Best seen from the Salacak shore. Boats leave from Salacak or Karaköy." },
-      "fees": [ { "tr": "Giriş, yabancı: 35 €", "en": "Entry, foreigners: €35", "verified": true, "source": "https://muze.gov.tr/muze-detay?SectionId=KZK02&DistId=MRK", "checked": "2026-11-25" }, { "tr": "Tekne ücreti ve yerli fiyatı: doğrulanacak", "en": "Boat fare and Turkish citizen price: to be verified", "verified": false } ] },
-    { "id": "emirgan", "cat": "doga", "district": "Sarıyer", "lat": 41.1090, "lng": 29.0560,
-      "name": { "tr": "Emirgan Korusu", "en": "Emirgan Park" },
-      "note": { "tr": "Nisan'da lale festivali. Piknik ve kahvaltı köşkleri.", "en": "Tulip festival in April. Picnic spots and breakfast pavilions." },
-      "fees": [ { "tr": "Ücretsiz giriş", "en": "Free entry", "verified": true } ] },
-    { "id": "belgrad", "cat": "doga", "district": "Sarıyer", "lat": 41.1800, "lng": 28.9600, "approx": true,
-      "name": { "tr": "Belgrad Ormanı", "en": "Belgrad Forest" },
-      "note": { "tr": "Yürüyüş parkurları ve piknik alanları. Araç girişi HGS ile ödenir.", "en": "Walking trails and picnic areas. Car entry is paid with an HGS toll tag." },
-      "fees": [ { "tr": "Yaya: ücretsiz (haberlere göre)", "en": "On foot: free (per news reports)", "verified": false }, { "tr": "Araç girişi: ücretli, tutar doğrulanacak", "en": "Car entry: paid, amount to be verified", "verified": false } ] },
-    { "id": "buyukada", "cat": "doga", "district": "Adalar", "lat": 40.8740, "lng": 29.1290,
-      "name": { "tr": "Büyükada", "en": "Büyükada (Princes' Islands)" },
-      "note": { "tr": "Arabasız ada. Vapurla gidilir, bisiklet ve elektrikli araçla gezilir.", "en": "Car-free island. Reached by ferry, explored by bike or electric shuttle." },
-      "fees": [ { "tr": "Vapur: İstanbulkart, ücret eklenecek", "en": "Ferry: Istanbulkart, fare coming", "verified": false } ] },
-    { "id": "kirazli", "cat": "semt", "district": "Bağcılar", "lat": 41.0350, "lng": 28.8420, "approx": true,
-      "name": { "tr": "Kirazlı", "en": "Kirazlı" },
-      "note": { "tr": "Metro aktarma noktası (M1B ve M3).", "en": "Metro transfer point (M1B and M3)." },
-      "fees": [ { "tr": "Ücretsiz", "en": "Free", "verified": true } ] }
+    {
+      "id": "ayasofya",
+      "cat": "cami",
+      "district": "Fatih",
+      "lat": 41.0086,
+      "lng": 28.9802,
+      "name": {
+        "tr": "Ayasofya",
+        "en": "Hagia Sophia"
+      },
+      "note": {
+        "tr": "Ana alan ibadete açık ve ücretsiz; turistik ziyaret galeri katından yapılır (giriş II. Beyazıd minaresi altındaki rampadan). Yakındaki Ayasofya Tarih ve Deneyim Müzesi her gün 09:00–20:00.",
+        "en": "The main floor is a mosque and free for worship; tourist visits go through the upper gallery (entrance by the ramp under the minaret). The nearby Hagia Sophia History and Experience Museum is open daily 09:00–20:00."
+      },
+      "fees": [
+        {
+          "tr": "Galeri, yabancı: 25 €",
+          "en": "Gallery, foreigners: €25",
+          "verified": true,
+          "source": "https://basin.ktb.gov.tr/TR-364045/ayasofya-i-kebir-camiinde-yeni-duzenleme-15-ocakta-basliyor.html",
+          "checked": "2026-11-26"
+        },
+        {
+          "tr": "Galeri, T.C. vatandaşı: 2024'te 25 €; 2026 fiyatı doğrulanacak",
+          "en": "Gallery, Turkish citizens: €25 in 2024; 2026 price to be verified",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "sultanahmet",
+      "cat": "cami",
+      "district": "Fatih",
+      "lat": 41.0054,
+      "lng": 28.9768,
+      "name": {
+        "tr": "Sultanahmet Camii",
+        "en": "Blue Mosque"
+      },
+      "note": {
+        "tr": "Namaz vakitlerinde ziyarete kapanır. Omuz ve diz kapalı olmalı.",
+        "en": "Closed to visitors during prayer times. Cover shoulders and knees."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz",
+          "en": "Free",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "yerebatan",
+      "cat": "tarihi",
+      "district": "Fatih",
+      "lat": 41.0084,
+      "lng": 28.9779,
+      "name": {
+        "tr": "Yerebatan Sarnıcı",
+        "en": "Basilica Cistern"
+      },
+      "note": {
+        "tr": "Yer altındaki Bizans su deposu, Medusa başları. Haziran 2026'da işletme İBB'den Vakıflar Genel Müdürlüğü'ne geçti (hukuki süreç sürüyor). Kış saati (15 Kasım–31 Mart): 09:00–18:00.",
+        "en": "Underground Byzantine reservoir with the Medusa heads. In June 2026 management passed from the city to the General Directorate of Foundations (legal dispute ongoing). Winter hours (15 Nov–31 Mar): 09:00–18:00."
+      },
+      "fees": [
+        {
+          "tr": "Güncel ücret doğrulanacak (yeni işletmenin tarifesi yayınlanmadı)",
+          "en": "Current price to be verified (the new operator has not published a tariff)",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "arkeoloji",
+      "cat": "muze",
+      "district": "Fatih",
+      "lat": 41.0117,
+      "lng": 28.9813,
+      "name": {
+        "tr": "İstanbul Arkeoloji Müzeleri",
+        "en": "Istanbul Archaeology Museums"
+      },
+      "note": {
+        "tr": "Topkapı'nın hemen altında, Gülhane Parkı girişinde. Her gün 09:00–18:30, gişe 17:30'da kapanır.",
+        "en": "Just below Topkapı, by the Gülhane Park entrance. Daily 09:00–18:30, ticket office closes 17:30."
+      },
+      "fees": [
+        {
+          "tr": "Yabancı: 15 €",
+          "en": "Foreigners: €15",
+          "verified": true,
+          "source": "https://muze.gov.tr/muze-detay?SectionId=IAR01&DistId=IAR",
+          "checked": "2026-11-26"
+        },
+        {
+          "tr": "T.C. vatandaşı: Müzekart ile (Müzekart 1 Aralık 2026'dan itibaren yıllık 300 TL)",
+          "en": "Turkish citizens: with the Museum Card (300 TL a year from 1 Dec 2026)",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "topkapi",
+      "cat": "muze",
+      "district": "Fatih",
+      "lat": 41.0115,
+      "lng": 28.9834,
+      "name": {
+        "tr": "Topkapı Sarayı",
+        "en": "Topkapı Palace"
+      },
+      "note": {
+        "tr": "SALI KAPALI. 09:00–17:30, gişe 17:00'de kapanır. Kombine bilet sarayı, Harem'i ve Aya İrini'yi kapsar, 1 gün geçerli. Müzekart Harem ve Aya İrini'de geçmez.",
+        "en": "CLOSED ON TUESDAYS. 09:00–17:30, ticket office closes 17:00. The combined ticket covers the palace, the Harem and Hagia Irene, valid for 1 day. The Museum Card is not valid for the Harem and Hagia Irene."
+      },
+      "fees": [
+        {
+          "tr": "Kombine, yerli: 500 TL",
+          "en": "Combined, Turkish visitors: 500 TL",
+          "verified": true,
+          "source": "https://www.millisaraylar.gov.tr/Lokasyon/2/topkapi-sarayi",
+          "checked": "2026-11-25"
+        },
+        {
+          "tr": "Kombine, yabancı: 2.750 TL",
+          "en": "Combined, foreign visitors: 2,750 TL",
+          "verified": true,
+          "source": "https://www.millisaraylar.gov.tr/Lokasyon/2/topkapi-sarayi",
+          "checked": "2026-11-25"
+        },
+        {
+          "tr": "İndirimli (öğrenci): 250 TL",
+          "en": "Discounted (students): 250 TL",
+          "verified": true,
+          "source": "https://www.millisaraylar.gov.tr/Lokasyon/2/topkapi-sarayi",
+          "checked": "2026-11-25"
+        }
+      ]
+    },
+    {
+      "id": "kapalicarsi",
+      "cat": "carsi",
+      "district": "Fatih",
+      "lat": 41.0107,
+      "lng": 28.9681,
+      "name": {
+        "tr": "Kapalıçarşı",
+        "en": "Grand Bazaar"
+      },
+      "note": {
+        "tr": "Pazar günü kapalı. Fiyatta pazarlık normaldir.",
+        "en": "Closed on Sundays. Bargaining is normal."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz giriş",
+          "en": "Free entry",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "suleymaniye",
+      "cat": "cami",
+      "district": "Fatih",
+      "lat": 41.0162,
+      "lng": 28.9639,
+      "name": {
+        "tr": "Süleymaniye Camii",
+        "en": "Süleymaniye Mosque"
+      },
+      "note": {
+        "tr": "Gün batımında avludan Haliç manzarası.",
+        "en": "Sunset view over the Golden Horn from the courtyard."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz",
+          "en": "Free",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "eminonu",
+      "cat": "iskele",
+      "district": "Fatih",
+      "lat": 41.0175,
+      "lng": 28.9735,
+      "name": {
+        "tr": "Eminönü İskelesi",
+        "en": "Eminönü ferry pier"
+      },
+      "note": {
+        "tr": "Kadıköy, Üsküdar ve Boğaz vapurları buradan kalkar.",
+        "en": "Ferries to Kadıköy, Üsküdar and the Bosphorus leave from here."
+      },
+      "fees": [
+        {
+          "tr": "Karaköy/Eminönü–Kadıköy vapuru: 65,21 TL (İstanbulkart, tam)",
+          "en": "Ferry to Kadıköy: 65.21 TL (Istanbulkart, full fare)",
+          "verified": true,
+          "source": "https://sehirhatlari.istanbul/tr/ucret-tarifeleri",
+          "checked": "2026-11-26"
+        }
+      ]
+    },
+    {
+      "id": "karakoy",
+      "cat": "semt",
+      "district": "Beyoğlu",
+      "lat": 41.0222,
+      "lng": 28.977,
+      "name": {
+        "tr": "Karaköy",
+        "en": "Karaköy"
+      },
+      "note": {
+        "tr": "Sahilde çay, ara sokaklarda kahve.",
+        "en": "Tea by the water, coffee in the side streets."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz",
+          "en": "Free",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "galata",
+      "cat": "tarihi",
+      "district": "Beyoğlu",
+      "lat": 41.0256,
+      "lng": 28.9742,
+      "name": {
+        "tr": "Galata Kulesi",
+        "en": "Galata Tower"
+      },
+      "note": {
+        "tr": "Üstten 360° manzara. Gündüz 08:30–18:30, gece müzesi 18:30–22:00. Kuyruk uzun olabilir.",
+        "en": "360° view from the top. Day 08:30–18:30, night museum 18:30–22:00. The queue can be long."
+      },
+      "fees": [
+        {
+          "tr": "Bilet: 30 € (herkes için aynı)",
+          "en": "Ticket: €30 (same for everyone)",
+          "verified": true,
+          "source": "https://galatakulesi.gov.tr/ziyaret",
+          "checked": "2026-11-26"
+        },
+        {
+          "tr": "Müzekart ile gündüz ücretsiz",
+          "en": "Free by day with the Museum Card",
+          "verified": true,
+          "source": "https://galatakulesi.gov.tr/ziyaret",
+          "checked": "2026-11-26"
+        },
+        {
+          "tr": "Gece, Müzekart sahibi: 200 TL",
+          "en": "Night, Museum Card holders: 200 TL",
+          "verified": true,
+          "source": "https://galatakulesi.gov.tr/ziyaret",
+          "checked": "2026-11-26"
+        }
+      ]
+    },
+    {
+      "id": "istiklal",
+      "cat": "semt",
+      "district": "Beyoğlu",
+      "lat": 41.0337,
+      "lng": 28.9779,
+      "name": {
+        "tr": "İstiklal Caddesi",
+        "en": "İstiklal Avenue"
+      },
+      "note": {
+        "tr": "Nostaljik tramvay, pasajlar, kitapçılar.",
+        "en": "Nostalgic tram, arcades, bookshops."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz",
+          "en": "Free",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "taksim",
+      "cat": "semt",
+      "district": "Beyoğlu",
+      "lat": 41.037,
+      "lng": 28.985,
+      "name": {
+        "tr": "Taksim Meydanı",
+        "en": "Taksim Square"
+      },
+      "note": {
+        "tr": "Metro ve otobüs bağlantıları burada.",
+        "en": "Metro and bus connections are here."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz",
+          "en": "Free",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "akm",
+      "cat": "tiyatro",
+      "district": "Beyoğlu",
+      "lat": 41.0369,
+      "lng": 28.9873,
+      "name": {
+        "tr": "Atatürk Kültür Merkezi (AKM)",
+        "en": "Atatürk Cultural Center (AKM)"
+      },
+      "note": {
+        "tr": "Opera, bale, konser ve tiyatro. Program ve bilet fiyatları resmî siteden eklenecek.",
+        "en": "Opera, ballet, concerts and theatre. Programme and ticket prices will be added from the official site."
+      },
+      "fees": [
+        {
+          "tr": "Bilet: etkinliğe göre",
+          "en": "Tickets: per event",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "dolmabahce",
+      "cat": "muze",
+      "district": "Beşiktaş",
+      "lat": 41.0392,
+      "lng": 29.0005,
+      "name": {
+        "tr": "Dolmabahçe Sarayı",
+        "en": "Dolmabahçe Palace"
+      },
+      "note": {
+        "tr": "PAZARTESİ KAPALI. Gişe 09:00–17:00. Boğaz kıyısında 19. yüzyıl sarayı. Bilet Selamlık, Harem ve Resim Müzesi'ni kapsar. Müzekart Selamlık'ta geçmez.",
+        "en": "CLOSED ON MONDAYS. Ticket office 09:00–17:00. 19th-century palace on the Bosphorus. The ticket covers the Selamlık, Harem and Painting Museum. The Museum Card is not valid for the Selamlık."
+      },
+      "fees": [
+        {
+          "tr": "Yerli: 250 TL",
+          "en": "Turkish visitors: 250 TL",
+          "verified": true,
+          "source": "https://www.millisaraylar.gov.tr/Lokasyon/3/Dolmabahce-Sarayi",
+          "checked": "2026-11-25"
+        },
+        {
+          "tr": "Yabancı: 2.000 TL",
+          "en": "Foreign visitors: 2,000 TL",
+          "verified": true,
+          "source": "https://www.millisaraylar.gov.tr/Lokasyon/3/Dolmabahce-Sarayi",
+          "checked": "2026-11-25"
+        },
+        {
+          "tr": "İndirimli (öğrenci): 150 TL",
+          "en": "Discounted (students): 150 TL",
+          "verified": true,
+          "source": "https://www.millisaraylar.gov.tr/Lokasyon/3/Dolmabahce-Sarayi",
+          "checked": "2026-11-25"
+        }
+      ]
+    },
+    {
+      "id": "kadikoy-iskele",
+      "cat": "iskele",
+      "district": "Kadıköy",
+      "lat": 40.991,
+      "lng": 29.023,
+      "name": {
+        "tr": "Kadıköy İskelesi",
+        "en": "Kadıköy ferry pier"
+      },
+      "note": {
+        "tr": "Avrupa yakasına vapur bağlantısı.",
+        "en": "Ferry link to the European side."
+      },
+      "fees": [
+        {
+          "tr": "Karaköy/Eminönü–Kadıköy vapuru: 65,21 TL (İstanbulkart, tam)",
+          "en": "Ferry to Kadıköy: 65.21 TL (Istanbulkart, full fare)",
+          "verified": true,
+          "source": "https://sehirhatlari.istanbul/tr/ucret-tarifeleri",
+          "checked": "2026-11-26"
+        }
+      ]
+    },
+    {
+      "id": "kadikoy-carsi",
+      "cat": "carsi",
+      "district": "Kadıköy",
+      "lat": 40.9895,
+      "lng": 29.026,
+      "name": {
+        "tr": "Kadıköy Çarşısı",
+        "en": "Kadıköy Market"
+      },
+      "note": {
+        "tr": "Balıkçılar, turşucular, meze dükkânları.",
+        "en": "Fishmongers, pickle shops, meze."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz",
+          "en": "Free",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "moda",
+      "cat": "doga",
+      "district": "Kadıköy",
+      "lat": 40.979,
+      "lng": 29.025,
+      "name": {
+        "tr": "Moda Sahili",
+        "en": "Moda seafront"
+      },
+      "note": {
+        "tr": "Çimlerde piknik ve gün batımı. Hafta sonu kalabalık.",
+        "en": "Picnic on the grass and sunset. Busy at weekends."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz",
+          "en": "Free",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "kizkulesi",
+      "cat": "tarihi",
+      "district": "Üsküdar",
+      "lat": 41.0211,
+      "lng": 29.0041,
+      "name": {
+        "tr": "Kız Kulesi",
+        "en": "Maiden's Tower"
+      },
+      "note": {
+        "tr": "Her gün 09:00–18:00, gişe 17:00. Tekneler Salacak'tan (09:30–17:00 arası) ve Karaköy'den (09:30, 11:00, 12:30, 14:00, 15:30, 17:00) kalkar; hava durumuna göre değişebilir.",
+        "en": "Daily 09:00–18:00, ticket office 17:00. Boats leave from Salacak (09:30–17:00) and Karaköy (09:30, 11:00, 12:30, 14:00, 15:30, 17:00); weather permitting."
+      },
+      "fees": [
+        {
+          "tr": "Giriş: 35 €",
+          "en": "Entry: €35",
+          "verified": true,
+          "source": "https://muze.gov.tr/muze-detay?SectionId=KZK02&DistId=MRK",
+          "checked": "2026-11-26"
+        },
+        {
+          "tr": "Müzekart geçerli (haberlere göre); tekne ücreti ayrı, doğrulanacak",
+          "en": "Museum Card accepted (per news); boat fare extra, to be verified",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "emirgan",
+      "cat": "doga",
+      "district": "Sarıyer",
+      "lat": 41.109,
+      "lng": 29.056,
+      "name": {
+        "tr": "Emirgan Korusu",
+        "en": "Emirgan Park"
+      },
+      "note": {
+        "tr": "Nisan'da lale festivali. Piknik ve kahvaltı köşkleri.",
+        "en": "Tulip festival in April. Picnic spots and breakfast pavilions."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz giriş",
+          "en": "Free entry",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "belgrad",
+      "cat": "doga",
+      "district": "Sarıyer",
+      "lat": 41.18,
+      "lng": 28.96,
+      "approx": true,
+      "name": {
+        "tr": "Belgrad Ormanı",
+        "en": "Belgrad Forest"
+      },
+      "note": {
+        "tr": "Tarım ve Orman Bakanlığı (DKMP) işletiyor. Araç girişi HGS ile ödenir. Ateşli piknik kısıtlı olabilir; mangal için girişte sor.",
+        "en": "Run by the Ministry of Agriculture and Forestry (DKMP). Car entry is paid by HGS toll tag. Open-fire picnics may be restricted; ask about barbecues at the gate."
+      },
+      "fees": [
+        {
+          "tr": "2026 tarifesi: yaya 75 TL",
+          "en": "2026 tariff: on foot 75 TL",
+          "verified": true,
+          "source": "https://www.tarimorman.gov.tr/DKMP/Menu/39/Korunan-Alanlar-Ucret-Tarifesi",
+          "checked": "2026-11-26"
+        },
+        {
+          "tr": "Otomobil 225 TL, motosiklet 150 TL",
+          "en": "Car 225 TL, motorbike 150 TL",
+          "verified": true,
+          "source": "https://www.tarimorman.gov.tr/DKMP/Menu/39/Korunan-Alanlar-Ucret-Tarifesi",
+          "checked": "2026-11-26"
+        },
+        {
+          "tr": "Yayalardan fiilen ücret alınıp alınmadığı doğrulanacak",
+          "en": "Whether walkers are actually charged is to be verified",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "id": "buyukada",
+      "cat": "doga",
+      "district": "Adalar",
+      "lat": 40.874,
+      "lng": 29.129,
+      "name": {
+        "tr": "Büyükada",
+        "en": "Büyükada (Princes' Islands)"
+      },
+      "note": {
+        "tr": "Arabasız ada. Vapurla gidilir, bisiklet ve elektrikli araçla gezilir.",
+        "en": "Car-free island. Reached by ferry, explored by bike or electric shuttle."
+      },
+      "fees": [
+        {
+          "tr": "Bostancı–Adalar vapuru: 151,23 TL (Adakart'sız, tam)",
+          "en": "Bostancı–Islands ferry: 151.23 TL (full fare)",
+          "verified": true,
+          "source": "https://sehirhatlari.istanbul/tr/ucret-tarifeleri",
+          "checked": "2026-11-26"
+        }
+      ]
+    },
+    {
+      "id": "kirazli",
+      "cat": "semt",
+      "district": "Bağcılar",
+      "lat": 41.035,
+      "lng": 28.842,
+      "approx": true,
+      "name": {
+        "tr": "Kirazlı",
+        "en": "Kirazlı"
+      },
+      "note": {
+        "tr": "Metro aktarma noktası (M1B ve M3).",
+        "en": "Metro transfer point (M1B and M3)."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz",
+          "en": "Free",
+          "verified": true
+        }
+      ]
+    }
   ],
   "routes": [
-    { "id": "yarimada",
-      "name": { "tr": "Tarihi Yarımada", "en": "Historic Peninsula" },
-      "intro": { "tr": "Bizans ve Osmanlı İstanbul'u tek günde, yürüyerek.", "en": "Byzantine and Ottoman Istanbul in one day, on foot." },
-      "meta": { "tr": ["1 gün", "Fatih", "~5 km yürüyüş"], "en": ["1 day", "Fatih", "~5 km walking"] },
+    {
+      "id": "yarimada",
+      "name": {
+        "tr": "Tarihi Yarımada",
+        "en": "Historic Peninsula"
+      },
+      "intro": {
+        "tr": "Bizans ve Osmanlı İstanbul'u tek günde, yürüyerek.",
+        "en": "Byzantine and Ottoman Istanbul in one day, on foot."
+      },
+      "meta": {
+        "tr": [
+          "1 gün",
+          "Fatih",
+          "~5 km yürüyüş"
+        ],
+        "en": [
+          "1 day",
+          "Fatih",
+          "~5 km walking"
+        ]
+      },
       "stops": [
-        { "place": "ayasofya", "time": "09:00" },
-        { "leg": { "tr": "3 dk yürüme", "en": "3 min walk" } },
-        { "place": "sultanahmet", "time": "10:30" },
-        { "leg": { "tr": "5 dk yürüme", "en": "5 min walk" } },
-        { "place": "yerebatan", "time": "11:30" },
-        { "leg": { "tr": "10 dk yürüme", "en": "10 min walk" } },
-        { "place": "topkapi", "time": "13:00" },
-        { "leg": { "tr": "Tramvayla 2 durak veya 15 dk yürüme", "en": "Tram 2 stops or 15 min walk" } },
-        { "place": "kapalicarsi", "time": "16:00" },
-        { "leg": { "tr": "12 dk yürüme", "en": "12 min walk" } },
-        { "place": "suleymaniye", "time": "17:30" }
-      ] },
-    { "id": "galata",
-      "name": { "tr": "Galata ve Beyoğlu", "en": "Galata and Beyoğlu" },
-      "intro": { "tr": "Karaköy'den Taksim'e: kafeler, kule, İstiklal ve akşam bir gösteri.", "en": "From Karaköy to Taksim: cafés, the tower, İstiklal and an evening show." },
-      "meta": { "tr": ["Yarım gün", "Beyoğlu", "Yokuş var"], "en": ["Half day", "Beyoğlu", "Steep streets"] },
+        {
+          "place": "ayasofya",
+          "time": "09:00"
+        },
+        {
+          "leg": {
+            "tr": "3 dk yürüme",
+            "en": "3 min walk"
+          }
+        },
+        {
+          "place": "sultanahmet",
+          "time": "10:30"
+        },
+        {
+          "leg": {
+            "tr": "5 dk yürüme",
+            "en": "5 min walk"
+          }
+        },
+        {
+          "place": "yerebatan",
+          "time": "11:30"
+        },
+        {
+          "leg": {
+            "tr": "10 dk yürüme",
+            "en": "10 min walk"
+          }
+        },
+        {
+          "place": "topkapi",
+          "time": "13:00"
+        },
+        {
+          "leg": {
+            "tr": "Tramvayla 2 durak veya 15 dk yürüme",
+            "en": "Tram 2 stops or 15 min walk"
+          }
+        },
+        {
+          "place": "kapalicarsi",
+          "time": "16:00"
+        },
+        {
+          "leg": {
+            "tr": "12 dk yürüme",
+            "en": "12 min walk"
+          }
+        },
+        {
+          "place": "suleymaniye",
+          "time": "17:30"
+        }
+      ]
+    },
+    {
+      "id": "galata",
+      "name": {
+        "tr": "Galata ve Beyoğlu",
+        "en": "Galata and Beyoğlu"
+      },
+      "intro": {
+        "tr": "Karaköy'den Taksim'e: kafeler, kule, İstiklal ve akşam bir gösteri.",
+        "en": "From Karaköy to Taksim: cafés, the tower, İstiklal and an evening show."
+      },
+      "meta": {
+        "tr": [
+          "Yarım gün",
+          "Beyoğlu",
+          "Yokuş var"
+        ],
+        "en": [
+          "Half day",
+          "Beyoğlu",
+          "Steep streets"
+        ]
+      },
       "stops": [
-        { "place": "karakoy", "time": "14:00" },
-        { "leg": { "tr": "Tünel füniküleri veya 15 dk yokuş", "en": "Tünel funicular or 15 min uphill" } },
-        { "place": "galata", "time": "15:00" },
-        { "leg": { "tr": "10 dk yürüme", "en": "10 min walk" } },
-        { "place": "istiklal", "time": "16:30" },
-        { "leg": { "tr": "20 dk yürüme", "en": "20 min walk" } },
-        { "place": "taksim", "time": "18:00" },
-        { "leg": { "tr": "2 dk yürüme", "en": "2 min walk" } },
-        { "place": "akm", "time": "19:30" }
-      ] },
-    { "id": "kadikoy",
-      "name": { "tr": "Asya yakası: Kadıköy ve Moda", "en": "Asian side: Kadıköy and Moda" },
-      "intro": { "tr": "Vapurla karşıya geç, çarşıda ye, Moda'da gün batımı.", "en": "Cross by ferry, eat in the market, sunset in Moda." },
-      "meta": { "tr": ["Yarım gün", "Kadıköy", "Vapur dahil"], "en": ["Half day", "Kadıköy", "Ferry included"] },
+        {
+          "place": "karakoy",
+          "time": "14:00"
+        },
+        {
+          "leg": {
+            "tr": "Tünel füniküleri veya 15 dk yokuş",
+            "en": "Tünel funicular or 15 min uphill"
+          }
+        },
+        {
+          "place": "galata",
+          "time": "15:00"
+        },
+        {
+          "leg": {
+            "tr": "10 dk yürüme",
+            "en": "10 min walk"
+          }
+        },
+        {
+          "place": "istiklal",
+          "time": "16:30"
+        },
+        {
+          "leg": {
+            "tr": "20 dk yürüme",
+            "en": "20 min walk"
+          }
+        },
+        {
+          "place": "taksim",
+          "time": "18:00"
+        },
+        {
+          "leg": {
+            "tr": "2 dk yürüme",
+            "en": "2 min walk"
+          }
+        },
+        {
+          "place": "akm",
+          "time": "19:30"
+        }
+      ]
+    },
+    {
+      "id": "kadikoy",
+      "name": {
+        "tr": "Asya yakası: Kadıköy ve Moda",
+        "en": "Asian side: Kadıköy and Moda"
+      },
+      "intro": {
+        "tr": "Vapurla karşıya geç, çarşıda ye, Moda'da gün batımı.",
+        "en": "Cross by ferry, eat in the market, sunset in Moda."
+      },
+      "meta": {
+        "tr": [
+          "Yarım gün",
+          "Kadıköy",
+          "Vapur dahil"
+        ],
+        "en": [
+          "Half day",
+          "Kadıköy",
+          "Ferry included"
+        ]
+      },
       "stops": [
-        { "place": "eminonu", "time": "13:00" },
-        { "leg": { "tr": "~20 dk vapur", "en": "~20 min ferry" } },
-        { "place": "kadikoy-iskele", "time": "13:30" },
-        { "leg": { "tr": "3 dk yürüme", "en": "3 min walk" } },
-        { "place": "kadikoy-carsi", "time": "13:40" },
-        { "leg": { "tr": "15 dk yürüme", "en": "15 min walk" } },
-        { "place": "moda", "time": "17:00" }
-      ] },
-    { "id": "yesil",
-      "name": { "tr": "Yeşil İstanbul: piknik günü", "en": "Green Istanbul: picnic day" },
-      "intro": { "tr": "Boğaz kıyısında saray, koruda kahvaltı, ormanda yürüyüş. Araba veya taksiyle.", "en": "A palace on the Bosphorus, breakfast in the park, a forest walk. By car or taxi." },
-      "meta": { "tr": ["1 gün", "Beşiktaş · Sarıyer", "Araba önerilir"], "en": ["1 day", "Beşiktaş · Sarıyer", "Car recommended"] },
+        {
+          "place": "eminonu",
+          "time": "13:00"
+        },
+        {
+          "leg": {
+            "tr": "~20 dk vapur",
+            "en": "~20 min ferry"
+          }
+        },
+        {
+          "place": "kadikoy-iskele",
+          "time": "13:30"
+        },
+        {
+          "leg": {
+            "tr": "3 dk yürüme",
+            "en": "3 min walk"
+          }
+        },
+        {
+          "place": "kadikoy-carsi",
+          "time": "13:40"
+        },
+        {
+          "leg": {
+            "tr": "15 dk yürüme",
+            "en": "15 min walk"
+          }
+        },
+        {
+          "place": "moda",
+          "time": "17:00"
+        }
+      ]
+    },
+    {
+      "id": "yesil",
+      "name": {
+        "tr": "Yeşil İstanbul: piknik günü",
+        "en": "Green Istanbul: picnic day"
+      },
+      "intro": {
+        "tr": "Boğaz kıyısında saray, koruda kahvaltı, ormanda yürüyüş. Araba veya taksiyle.",
+        "en": "A palace on the Bosphorus, breakfast in the park, a forest walk. By car or taxi."
+      },
+      "meta": {
+        "tr": [
+          "1 gün",
+          "Beşiktaş · Sarıyer",
+          "Araba önerilir"
+        ],
+        "en": [
+          "1 day",
+          "Beşiktaş · Sarıyer",
+          "Car recommended"
+        ]
+      },
       "stops": [
-        { "place": "dolmabahce", "time": "09:30" },
-        { "leg": { "tr": "Sahil yolundan ~25 dk", "en": "~25 min along the coast road" } },
-        { "place": "emirgan", "time": "12:00" },
-        { "leg": { "tr": "Arabayla ~30 dk", "en": "~30 min by car" } },
-        { "place": "belgrad", "time": "14:30" }
-      ] }
+        {
+          "place": "dolmabahce",
+          "time": "09:30"
+        },
+        {
+          "leg": {
+            "tr": "Sahil yolundan ~25 dk",
+            "en": "~25 min along the coast road"
+          }
+        },
+        {
+          "place": "emirgan",
+          "time": "12:00"
+        },
+        {
+          "leg": {
+            "tr": "Arabayla ~30 dk",
+            "en": "~30 min by car"
+          }
+        },
+        {
+          "place": "belgrad",
+          "time": "14:30"
+        }
+      ]
+    }
   ],
   "markets": [
-    { "id": "kadikoy-sali", "district": "Kadıköy", "day": 2, "lat": 40.9965, "lng": 29.0400, "approx": true, "verified": false,
-      "name": { "tr": "Kadıköy Salı Pazarı", "en": "Kadıköy Tuesday Market" },
-      "where": { "tr": "Hasanpaşa", "en": "Hasanpaşa" },
-      "sells": { "tr": "Sebze-meyve, giyim, kumaş, ev eşyası. Şehrin en büyük pazarlarından. Diğer günler doğrulanacak.", "en": "Produce, clothes, fabric, homeware. One of the city's biggest. Other days to be verified." } },
-    { "id": "fatih-carsamba", "district": "Fatih", "day": 3, "lat": 41.0195, "lng": 28.9495, "approx": true, "verified": false,
-      "name": { "tr": "Fatih Çarşamba Pazarı", "en": "Fatih Wednesday Market" },
-      "where": { "tr": "Fatih Camii çevresi", "en": "Around Fatih Mosque" },
-      "sells": { "tr": "Taze ürün, peynir, zeytin, giyim.", "en": "Fresh produce, cheese, olives, clothes." } },
-    { "id": "besiktas-cumartesi", "district": "Beşiktaş", "day": 6, "lat": 41.0430, "lng": 29.0060, "approx": true, "verified": false,
-      "name": { "tr": "Beşiktaş Cumartesi Pazarı", "en": "Beşiktaş Saturday Market" },
-      "where": { "tr": "Beşiktaş merkez", "en": "Central Beşiktaş" },
-      "sells": { "tr": "Sebze-meyve ve organik tezgâhlar. Erken git.", "en": "Produce and organic stalls. Go early." } },
-    { "id": "kirazli", "district": "Bağcılar", "day": null, "verified": false,
-      "name": { "tr": "Kirazlı Semt Pazarı", "en": "Kirazlı Street Market" },
-      "where": { "tr": "Kirazlı", "en": "Kirazlı" },
-      "sells": { "tr": "Bu bilgi internette yok. Belediyeden ya da yerinde bakılarak eklenecek: hangi gün, hangi saat, neler var.", "en": "Not online anywhere. To be added from the municipality or on site: day, hours, what is sold." } }
+    {
+      "id": "kadikoy-sali",
+      "district": "Kadıköy",
+      "day": 2,
+      "lat": 40.9965,
+      "lng": 29.04,
+      "approx": true,
+      "verified": true,
+      "name": {
+        "tr": "Kadıköy Salı Pazarı",
+        "en": "Kadıköy Tuesday Market"
+      },
+      "where": {
+        "tr": "Hasanpaşa, Uzunçayır Cd. (kapalı pazar)",
+        "en": "Hasanpaşa, Uzunçayır St. (covered market)"
+      },
+      "sells": {
+        "tr": "Salı ve Cuma kurulur. Sebze-meyve, giyim, kumaş, ev eşyası; şehrin en büyük pazarlarından.",
+        "en": "Held on Tuesdays and Fridays. Produce, clothes, fabric, homeware; one of the city's biggest."
+      },
+      "days": [
+        2,
+        5
+      ],
+      "source": "https://webgis.kadikoy.bel.tr/BELNET/GenericClass/Rapor.aspx?RaporAdi=kentrehberi_semt_pazari.semtpazari&guestlogin=true&nomaster=true"
+    },
+    {
+      "id": "fatih-carsamba",
+      "district": "Fatih",
+      "day": 3,
+      "lat": 41.0195,
+      "lng": 28.9495,
+      "approx": true,
+      "verified": true,
+      "name": {
+        "tr": "Fatih Çarşamba Pazarı",
+        "en": "Fatih Wednesday Market"
+      },
+      "where": {
+        "tr": "Ali Kuşçu Mah., Fatih Cd. / Boyacıkapı Sk.",
+        "en": "Ali Kuşçu, Fatih St. / Boyacıkapı St."
+      },
+      "sells": {
+        "tr": "Taze ürün, peynir, zeytin, giyim.",
+        "en": "Fresh produce, cheese, olives, clothes."
+      },
+      "days": [
+        3
+      ],
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari"
+    },
+    {
+      "id": "besiktas-cumartesi",
+      "district": "Beşiktaş",
+      "day": 6,
+      "lat": 41.043,
+      "lng": 29.006,
+      "approx": true,
+      "verified": true,
+      "name": {
+        "tr": "Beşiktaş Cumartesi Pazarı",
+        "en": "Beşiktaş Saturday Market"
+      },
+      "where": {
+        "tr": "Muradiye Mah., Nüzhetiye Cd. (kapalı pazar)",
+        "en": "Muradiye, Nüzhetiye St. (covered market)"
+      },
+      "sells": {
+        "tr": "Sebze-meyve ve organik tezgâhlar. Erken git.",
+        "en": "Produce and organic stalls. Go early."
+      },
+      "days": [
+        6
+      ],
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari"
+    },
+    {
+      "id": "kirazli",
+      "district": "Bağcılar",
+      "day": null,
+      "verified": false,
+      "name": {
+        "tr": "Kirazlı Semt Pazarı",
+        "en": "Kirazlı Street Market"
+      },
+      "where": {
+        "tr": "Kirazlı",
+        "en": "Kirazlı"
+      },
+      "sells": {
+        "tr": "İBB'nin resmî pazar listesinde Kirazlı adına bir pazar yok. Bağcılar'daki diğer pazarlar aşağıda; Kirazlı'daki pazarı yerinde görürsen \"Bilgi yanlış mı?\" ile bildir.",
+        "en": "The city's official list has no market named Kirazlı. Other Bağcılar markets are listed below; if you find one in Kirazlı, report it."
+      },
+      "days": []
+    },
+    {
+      "id": "bagcilar-evren-1",
+      "district": "Bağcılar",
+      "day": 1,
+      "days": [
+        1
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Evren Mahallesi Pazarı",
+        "en": "Evren Street Market"
+      },
+      "where": {
+        "tr": "Evren Mah., Sabia Cd. / Aktaş Sk.",
+        "en": "Evren, Sabia Cd. / Aktaş Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-fevzi-cakmak-1",
+      "district": "Bağcılar",
+      "day": 1,
+      "days": [
+        1
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Fevzi Çakmak Mahallesi Pazarı",
+        "en": "Fevzi Çakmak Street Market"
+      },
+      "where": {
+        "tr": "Fevzi Çakmak Mah., Fatih Cd. (Olimpik Spor Salonu)",
+        "en": "Fevzi Çakmak, Fatih Cd. (Olimpik Spor Salonu)"
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-kemalpasa-1",
+      "district": "Bağcılar",
+      "day": 1,
+      "days": [
+        1
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Kemalpaşa Mahallesi Pazarı",
+        "en": "Kemalpaşa Street Market"
+      },
+      "where": {
+        "tr": "Kemalpaşa Mah., 1966. Sk. / 8/1 Sk.",
+        "en": "Kemalpaşa, 1966. Sk. / 8/1 Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-100-yil-2",
+      "district": "Bağcılar",
+      "day": 2,
+      "days": [
+        2
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "100. Yıl Mahallesi Pazarı",
+        "en": "100. Yıl Street Market"
+      },
+      "where": {
+        "tr": "100. Yıl Mah., Barbaros Cd. 2190. Sk.",
+        "en": "100. Yıl, Barbaros Cd. 2190. Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-yenimahalle-2",
+      "district": "Bağcılar",
+      "day": 2,
+      "days": [
+        2
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Yenimahalle Mahallesi Pazarı",
+        "en": "Yenimahalle Street Market"
+      },
+      "where": {
+        "tr": "Yenimahalle Mah., Mevlana Cd. 1563. Sk.",
+        "en": "Yenimahalle, Mevlana Cd. 1563. Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-merkez-2",
+      "district": "Bağcılar",
+      "day": 2,
+      "days": [
+        2
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Merkez Mahallesi Pazarı",
+        "en": "Merkez Street Market"
+      },
+      "where": {
+        "tr": "Merkez Mah., 8. Sk.",
+        "en": "Merkez, 8. Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-hurriyet-3",
+      "district": "Bağcılar",
+      "day": 3,
+      "days": [
+        3
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Hürriyet Mahallesi Pazarı",
+        "en": "Hürriyet Street Market"
+      },
+      "where": {
+        "tr": "Hürriyet Mah., Yıldırım Beyazıt Cd. (kapalı pazar)",
+        "en": "Hürriyet, Yıldırım Beyazıt Cd. (kapalı pazar)"
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-kazim-karabekir-3",
+      "district": "Bağcılar",
+      "day": 3,
+      "days": [
+        3
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Kazım Karabekir Mahallesi Pazarı",
+        "en": "Kazım Karabekir Street Market"
+      },
+      "where": {
+        "tr": "Kazım Karabekir Mah., Mehmet Akif Bulvarı 324. Sk.",
+        "en": "Kazım Karabekir, Mehmet Akif Bulvarı 324. Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-fevzi-cakmak-3",
+      "district": "Bağcılar",
+      "day": 3,
+      "days": [
+        3
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Fevzi Çakmak Mahallesi Pazarı",
+        "en": "Fevzi Çakmak Street Market"
+      },
+      "where": {
+        "tr": "Fevzi Çakmak Mah., 14. Sk.",
+        "en": "Fevzi Çakmak, 14. Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-fatih-4",
+      "district": "Bağcılar",
+      "day": 4,
+      "days": [
+        4
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Fatih Mahallesi Pazarı",
+        "en": "Fatih Street Market"
+      },
+      "where": {
+        "tr": "Fatih Mah., Maslak Cd. 1823. Sk. / Fidan Sk.",
+        "en": "Fatih, Maslak Cd. 1823. Sk. / Fidan Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-merkez-4",
+      "district": "Bağcılar",
+      "day": 4,
+      "days": [
+        4
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Merkez Mahallesi Pazarı",
+        "en": "Merkez Street Market"
+      },
+      "where": {
+        "tr": "Merkez Mah., Dr. Sadık Ahmet Cd.",
+        "en": "Merkez, Dr. Sadık Ahmet Cd."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-cinar-4",
+      "district": "Bağcılar",
+      "day": 4,
+      "days": [
+        4
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Çınar Mahallesi Pazarı",
+        "en": "Çınar Street Market"
+      },
+      "where": {
+        "tr": "Çınar Mah., 13. Sk.",
+        "en": "Çınar, 13. Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-demirkapi-5",
+      "district": "Bağcılar",
+      "day": 5,
+      "days": [
+        5
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Demirkapı Mahallesi Pazarı",
+        "en": "Demirkapı Street Market"
+      },
+      "where": {
+        "tr": "Demirkapı Mah., İnönü Cd. 1620. Sk. (kapalı pazar)",
+        "en": "Demirkapı, İnönü Cd. 1620. Sk. (kapalı pazar)"
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-i-nonu-5",
+      "district": "Bağcılar",
+      "day": 5,
+      "days": [
+        5
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "İnönü Mahallesi Pazarı",
+        "en": "İnönü Street Market"
+      },
+      "where": {
+        "tr": "İnönü Mah., Şehit Yılmaz Kaan Cd.",
+        "en": "İnönü, Şehit Yılmaz Kaan Cd."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-mahmutbey-5",
+      "district": "Bağcılar",
+      "day": 5,
+      "days": [
+        5
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Mahmutbey Mahallesi Pazarı",
+        "en": "Mahmutbey Street Market"
+      },
+      "where": {
+        "tr": "Mahmutbey Mah., Soğuksu Cd.",
+        "en": "Mahmutbey, Soğuksu Cd."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-barbaros-6",
+      "district": "Bağcılar",
+      "day": 6,
+      "days": [
+        6
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Barbaros Mahallesi Pazarı",
+        "en": "Barbaros Street Market"
+      },
+      "where": {
+        "tr": "Barbaros Mah., Pazaryolu 1. Sk.",
+        "en": "Barbaros, Pazaryolu 1. Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-evren-6",
+      "district": "Bağcılar",
+      "day": 6,
+      "days": [
+        6
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Evren Mahallesi Pazarı",
+        "en": "Evren Street Market"
+      },
+      "where": {
+        "tr": "Evren Mah., İstiklal Cd.",
+        "en": "Evren, İstiklal Cd."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-goztepe-6",
+      "district": "Bağcılar",
+      "day": 6,
+      "days": [
+        6
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Göztepe Mahallesi Pazarı",
+        "en": "Göztepe Street Market"
+      },
+      "where": {
+        "tr": "Göztepe Mah., Vişne / Saadet Sk.",
+        "en": "Göztepe, Vişne / Saadet Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-yavuzselim-6",
+      "district": "Bağcılar",
+      "day": 6,
+      "days": [
+        6
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Yavuzselim Mahallesi Pazarı",
+        "en": "Yavuzselim Street Market"
+      },
+      "where": {
+        "tr": "Yavuzselim Mah., Cahit Sıtkı Tarancı Cd. 5. Sk.",
+        "en": "Yavuzselim, Cahit Sıtkı Tarancı Cd. 5. Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-yuzyil-6",
+      "district": "Bağcılar",
+      "day": 6,
+      "days": [
+        6
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Yüzyıl Mahallesi Pazarı",
+        "en": "Yüzyıl Street Market"
+      },
+      "where": {
+        "tr": "Yüzyıl Mah., 42 Evler, 77. / 79. Sk.",
+        "en": "Yüzyıl, 42 Evler, 77. / 79. Sk."
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    },
+    {
+      "id": "bagcilar-hurriyet-0",
+      "district": "Bağcılar",
+      "day": 0,
+      "days": [
+        0
+      ],
+      "verified": true,
+      "source": "https://data.ibb.gov.tr/dataset/istanbul-ili-semt-pazarlari",
+      "name": {
+        "tr": "Hürriyet Mahallesi Pazarı",
+        "en": "Hürriyet Street Market"
+      },
+      "where": {
+        "tr": "Hürriyet Mah., Yıldırım Beyazıt Cd. (kapalı pazar)",
+        "en": "Hürriyet, Yıldırım Beyazıt Cd. (kapalı pazar)"
+      },
+      "sells": {
+        "tr": "Gün ve yer İBB resmî listesinden. Saat ve ürün bilgisi henüz yok.",
+        "en": "Day and place from the city's official list. Hours and goods not known yet."
+      }
+    }
   ]
 }
