@@ -59,6 +59,35 @@ var UI = {
   tabRotalar: { tr: 'Rotalar', en: 'Routes' },
   tabPlan: { tr: 'Planım', en: 'My plan' },
   tabAnilar: { tr: 'Anılarım', en: 'Memories' },
+  tripH: { tr: 'Gezi modu', en: 'Trip mode' },
+  tripIntro: { tr: 'Konumunu canlı takip eder, sıradaki durağa yolu gösterir, yürüdüğün mesafeyi ve adımlarını tahmin eder. Bir yere yaklaşınca ziyaretini işaretlemeni önerir. Konum sadece bu telefonda kullanılır; uygulama açıkken çalışır.', en: 'Follows your location live, shows the way to your next stop, and estimates distance and steps. When you reach a place it offers to mark it visited. Your location stays on this phone; it works while the app is open.' },
+  tripStart: { tr: 'Gezi modunu başlat', en: 'Start trip mode' },
+  tripStop: { tr: 'Geziyi bitir', en: 'End trip' },
+  tripLive: { tr: 'Gezi sürüyor', en: 'Trip in progress' },
+  tripWaiting: { tr: 'Konum bekleniyor…', en: 'Waiting for location…' },
+  tripTime: { tr: 'süre', en: 'time' },
+  tripKm: { tr: 'yürüyüş', en: 'walked' },
+  tripSteps: { tr: 'adım (tahmini)', en: 'steps (est.)' },
+  tripNext: { tr: 'Sıradaki durak', en: 'Next stop' },
+  tripNextLine: { tr: '{d} · yürüyerek ~{m} dk', en: '{d} · ~{m} min on foot' },
+  tripDone: { tr: 'Planındaki bütün durakları gezdin!', en: 'You visited every stop in your plan!' },
+  follow: { tr: 'Haritada beni takip et', en: 'Keep the map on me' },
+  following: { tr: 'Harita seni takip ediyor', en: 'The map follows you' },
+  noGeo: { tr: 'Bu telefonda konum kullanılamıyor. Konum iznini aç.', en: 'Location is not available on this phone. Allow location access.' },
+  nearbyQ: { tr: 'Buradasın: {name}', en: 'You are at: {name}' },
+  nearbyVisit: { tr: 'Ziyaret ettim (+10)', en: 'I visited (+10)' },
+  later: { tr: 'Sonra', en: 'Later' },
+  metroBtn: { tr: 'Metrodayım / tramvaydayım', en: 'I am on the metro / tram' },
+  metroLine: { tr: 'Hat', en: 'Line' },
+  metroFrom: { tr: 'Bindiğin durak', en: 'Boarded at' },
+  metroTo: { tr: 'İneceğin durak', en: 'Getting off at' },
+  metroGo: { tr: 'Tahmini başlat', en: 'Start estimate' },
+  metroCancel: { tr: 'Metrodan çıktım', en: 'I left the metro' },
+  metroEst: { tr: 'Şu an muhtemelen: {st}', en: 'Probably now at: {st}' },
+  metroLeft: { tr: '{n} durak kaldı · ~{m} dk', en: '{n} stops left · ~{m} min' },
+  metroArrive: { tr: 'İneceğin durak geldi sayılır (tahmini): {st}', en: 'Your stop should be now (estimate): {st}' },
+  metroNote: { tr: 'Yer altında GPS çalışmaz; tahmin durak başına ~2 dakikaya göre yapılır. Durak listeleri doğrulanacak.', en: 'GPS does not work underground; the estimate assumes ~2 minutes per stop. Station lists are to be verified.' },
+  metroExit: { tr: 'Konum geri geldi, metro tahmini kapatıldı.', en: 'Location is back; metro estimate turned off.' },
   visitBtn: { tr: 'Ziyaret ettim (+10)', en: 'I visited (+10)' },
   visitedBtn: { tr: '✓ Ziyaret edildi (geri al)', en: '✓ Visited (undo)' },
   visitedOn: { tr: 'Ziyaret: {d}', en: 'Visited: {d}' },
@@ -395,6 +424,7 @@ function ensureMap() {
   map.addControl(new maplibregl.AttributionControl({ compact: true }), 'top-left');
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
   map.on('error', function (e) { console.warn('map error:', e && e.error ? (e.error.message || e.error) : e); });
+  map.on('dragstart', function () { if (trip.on && trip.follow) { trip.follow = false; renderTrip(); } });
   map.on('load', function () {
     addOverlays();
     if (pendingRoute) { var r = pendingRoute; pendingRoute = null; drawRoute(r); }
@@ -815,6 +845,144 @@ function onMemClick(e) {
 }
 function refreshMapPlaces() { if (map && overlaysReady) map.getSource('places').setData(placesGeoJSON()); }
 
+// ---------- Trip mode: live location, distance, steps, nearby check-in, metro estimate ----------
+var trip = { on: false, watchId: null, start: 0, last: null, meters: 0, motionSteps: 0, motionOK: false, dismissed: {}, wake: null, metro: null, metroForm: false, follow: true, timer: null, fix: false };
+var mot = { avg: 9.8, lastPeak: 0, above: false };
+function onMotion(e) {
+  // Rough step counter: count peaks in the acceleration (only while the app is open).
+  var a = e.accelerationIncludingGravity;
+  if (!a || a.x === null) return;
+  var m = Math.sqrt(a.x * a.x + a.y * a.y + a.z * a.z), now = Date.now();
+  mot.avg = mot.avg * 0.9 + m * 0.1;
+  if (!mot.above && m > mot.avg + 1.2 && now - mot.lastPeak > 300) { mot.above = true; mot.lastPeak = now; trip.motionSteps++; trip.motionOK = true; }
+  else if (mot.above && m < mot.avg) mot.above = false;
+}
+function startTrip() {
+  if (!navigator.geolocation) { toast(t('noGeo')); return; }
+  trip.on = true; trip.start = Date.now(); trip.meters = 0; trip.motionSteps = 0; trip.motionOK = false; trip.last = null; trip.dismissed = {}; trip.fix = false; trip.follow = true;
+  if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
+    DeviceMotionEvent.requestPermission().then(function (s) { if (s === 'granted') window.addEventListener('devicemotion', onMotion); }).catch(function () {});
+  } else if (window.DeviceMotionEvent) window.addEventListener('devicemotion', onMotion);
+  trip.watchId = navigator.geolocation.watchPosition(onTripPos, function () { toast(t('noGeo')); }, { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 });
+  if (navigator.wakeLock && navigator.wakeLock.request) navigator.wakeLock.request('screen').then(function (w) { trip.wake = w; }).catch(function () {});
+  trip.timer = setInterval(renderTrip, 1000);
+  renderTrip();
+}
+function stopTrip() {
+  trip.on = false;
+  if (trip.watchId !== null) navigator.geolocation.clearWatch(trip.watchId);
+  trip.watchId = null; trip.metro = null; trip.metroForm = false;
+  window.removeEventListener('devicemotion', onMotion);
+  if (trip.wake) { trip.wake.release().catch(function () {}); trip.wake = null; }
+  clearInterval(trip.timer);
+  $('nearby').hidden = true;
+  renderTrip();
+}
+function onTripPos(pos) {
+  var p = { lat: pos.coords.latitude, lng: pos.coords.longitude, acc: pos.coords.accuracy || 999 };
+  myPos = p; trip.fix = true;
+  if (trip.metro && p.acc < 50) { trip.metro = null; toast(t('metroExit')); }
+  // Count distance only from good fixes and real moves (ignore GPS jitter and jumps).
+  if (trip.last && p.acc <= 30) { var dm = haversineKm(trip.last, p) * 1000; if (dm >= 5 && dm < 200) trip.meters += dm; }
+  if (p.acc <= 30 || !trip.last) trip.last = p;
+  setMe();
+  if (map && trip.follow) map.easeTo({ center: [p.lng, p.lat], padding: mapPadding(), duration: 600 });
+  if (p.acc <= 60) checkNearby(p);
+  renderTrip();
+}
+function checkNearby(p) {
+  if (!$('nearby').hidden) return;
+  var cands = plan.stops.map(place).filter(Boolean).concat(DATA.places);
+  for (var i = 0; i < cands.length; i++) {
+    var c = cands[i];
+    if (isVisited(c.id) || trip.dismissed[c.id]) continue;
+    if (haversineKm(p, c) * 1000 <= 80) { showNearby(c); return; }
+  }
+}
+function showNearby(c) {
+  var el = $('nearby');
+  el.innerHTML = '<b>' + esc(t('nearbyQ', { name: tx(c.name) })) + '</b><div class="row"><button type="button" class="btn" data-nvisit="' + esc(c.id) + '">' + esc(t('nearbyVisit')) + '</button>' +
+    '<button type="button" class="btn ghost" data-nlater="' + esc(c.id) + '">' + esc(t('later')) + '</button></div>';
+  el.hidden = false;
+}
+function onNearbyClick(e) {
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.hasAttribute('data-nvisit')) toggleVisit(b.getAttribute('data-nvisit'));
+  else trip.dismissed[b.getAttribute('data-nlater')] = true;
+  $('nearby').hidden = true;
+}
+function fmtDur(ms) { var m = Math.floor(ms / 60000); return Math.floor(m / 60) + ':' + ('0' + (m % 60)).slice(-2); }
+function metroState() {
+  var M = trip.metro; if (!M) return null;
+  var line = DATA.metro.lines.filter(function (l) { return l.id === M.line; })[0];
+  var dir = M.to >= M.from ? 1 : -1, total = Math.abs(M.to - M.from);
+  var passed = Math.min(total, Math.floor((Date.now() - M.t0) / 60000 / line.minPerStop));
+  return { line: line, idx: M.from + dir * passed, left: total - passed, min: Math.max(0, Math.round(total * line.minPerStop - (Date.now() - M.t0) / 60000)) };
+}
+function renderTrip() {
+  var el = $('trip-panel'); if (!el || !DATA) return;
+  if (!trip.on) {
+    el.innerHTML = '<div class="trip"><h3>' + esc(t('tripH')) + '</h3><p class="where">' + esc(t('tripIntro')) + '</p><div class="row"><button type="button" class="btn" data-trip="start">' + esc(t('tripStart')) + '</button></div></div>';
+    return;
+  }
+  var steps = trip.motionOK ? trip.motionSteps : Math.round(trip.meters / 0.75);
+  var html = '<div class="trip"><span class="live"><i></i>' + esc(trip.fix ? t('tripLive') : t('tripWaiting')) + '</span>' +
+    '<div class="stats"><div><b>' + fmtDur(Date.now() - trip.start) + '</b><span>' + esc(t('tripTime')) + '</span></div>' +
+    '<div><b>' + num(trip.meters / 1000, 2) + ' km</b><span>' + esc(t('tripKm')) + '</span></div>' +
+    '<div><b>' + num(steps) + '</b><span>' + esc(t('tripSteps')) + '</span></div></div>';
+  var nextId = plan.stops.filter(function (id) { return !isVisited(id); })[0];
+  if (plan.stops.length) {
+    if (nextId && myPos) {
+      var np = place(nextId), km = haversineKm(myPos, np) * DATA.fares.roadFactor;
+      html += '<div class="next"><span class="where">' + esc(t('tripNext')) + '</span><b>' + esc(tx(np.name)) + '</b><span class="where">' +
+        esc(t('tripNextLine', { d: km < 1 ? Math.round(km * 1000) + ' m' : num(km, 1) + ' km', m: Math.max(1, Math.round(km / 4.5 * 60)) })) + '</span></div>';
+    } else if (!nextId) html += '<div class="next"><b>' + esc(t('tripDone')) + '</b></div>';
+  }
+  var ms = metroState();
+  if (ms) {
+    if (ms.left === 0 && !trip.metro.told) { trip.metro.told = true; toast(t('metroArrive', { st: ms.line.stations[ms.idx] })); }
+    html += '<div class="metro"><span class="where">' + esc(ms.line.name) + '</span><span class="est">' + esc(t('metroEst', { st: ms.line.stations[ms.idx] })) + '</span><span>' +
+      esc(t('metroLeft', { n: ms.left, m: ms.min })) + '</span><span class="where">' + esc(t('metroNote')) + '</span><div class="row"><button type="button" class="btn ghost" data-trip="metro-off">' + esc(t('metroCancel')) + '</button></div></div>';
+  } else if (trip.metroForm) {
+    var cur = $('m-line') ? $('m-line').value : DATA.metro.lines[0].id;
+    var line = DATA.metro.lines.filter(function (l) { return l.id === cur; })[0] || DATA.metro.lines[0];
+    var opts = function (sel) { return line.stations.map(function (s, i) { return '<option value="' + i + '"' + (i === sel ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join(''); };
+    html += '<div class="metro"><label class="label" for="m-line">' + esc(t('metroLine')) + '</label><select id="m-line">' + DATA.metro.lines.map(function (l) { return '<option value="' + l.id + '"' + (l.id === line.id ? ' selected' : '') + '>' + esc(l.name) + '</option>'; }).join('') + '</select>' +
+      '<label class="label" for="m-from">' + esc(t('metroFrom')) + '</label><select id="m-from">' + opts(0) + '</select>' +
+      '<label class="label" for="m-to">' + esc(t('metroTo')) + '</label><select id="m-to">' + opts(line.stations.length - 1) + '</select>' +
+      '<div class="row"><button type="button" class="btn" data-trip="metro-go">' + esc(t('metroGo')) + '</button></div></div>';
+  }
+  html += '<div class="row">' + (!ms && !trip.metroForm ? '<button type="button" class="btn ghost" data-trip="metro">' + esc(t('metroBtn')) + '</button>' : '') +
+    (trip.follow ? '' : '<button type="button" class="btn ghost" data-trip="follow">' + esc(t('follow')) + '</button>') +
+    '<button type="button" class="btn ghost" data-trip="stop">' + esc(t('tripStop')) + '</button></div></div>';
+  // Keep the metro form's choices while the panel refreshes every second.
+  if (trip.metroForm && !ms && $('m-from') && el.contains($('m-from'))) return;
+  el.innerHTML = html;
+}
+function onTripClick(e) {
+  var b = e.target.closest('[data-trip]'); if (!b) return;
+  var a = b.getAttribute('data-trip');
+  if (a === 'start') startTrip();
+  else if (a === 'stop') stopTrip();
+  else if (a === 'follow') { trip.follow = true; if (myPos && map) map.easeTo({ center: [myPos.lng, myPos.lat], padding: mapPadding() }); renderTrip(); }
+  else if (a === 'metro') { trip.metroForm = true; $('trip-panel').innerHTML = ''; renderTrip(); }
+  else if (a === 'metro-go') {
+    var from = +$('m-from').value, to = +$('m-to').value;
+    if (from !== to) trip.metro = { line: $('m-line').value, from: from, to: to, t0: Date.now(), told: false };
+    trip.metroForm = false; $('trip-panel').innerHTML = ''; renderTrip();
+  }
+  else if (a === 'metro-off') { trip.metro = null; renderTrip(); }
+}
+function onTripChange(e) {
+  if (e.target.id === 'm-line') { $('trip-panel').innerHTML = ''; trip.metroForm = true; var v = e.target.value; renderTrip(); if ($('m-line')) $('m-line').value = v; renderTripForm(v); }
+}
+function renderTripForm(lineId) {
+  var line = DATA.metro.lines.filter(function (l) { return l.id === lineId; })[0];
+  ['m-from', 'm-to'].forEach(function (id, k) {
+    $(id).innerHTML = line.stations.map(function (s, i) { return '<option value="' + i + '"' + (i === (k ? line.stations.length - 1 : 0) ? ' selected' : '') + '>' + esc(s) + '</option>'; }).join('');
+  });
+}
+
 // ---------- Help: tourist first aid kit (content lives in DATA.help) ----------
 var bigPhrase = null;
 function renderHelp() {
@@ -992,7 +1160,7 @@ function renderText() {
   $('t-report-send').textContent = t('reportSend'); $('report-copy').textContent = t('reportCopy');
   $('lang-tr').setAttribute('aria-pressed', lang === 'tr' ? 'true' : 'false');
   $('lang-en').setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
-  renderRoutes(); renderExplore(); renderPlan(); renderMemories(); renderHelp(); renderTransportOptions(); calc(); renderMarkets(); renderSettings(); renderMapStatus();
+  renderRoutes(); renderExplore(); renderPlan(); renderTrip(); renderMemories(); renderHelp(); renderTransportOptions(); calc(); renderMarkets(); renderSettings(); renderMapStatus();
   if (!$('view-yer').hidden) showView(currentTab);
 }
 function setLang(l) {
@@ -1032,6 +1200,9 @@ function bind() {
   $('plan-body').addEventListener('click', onPlanClick);
   $('view-yardim').addEventListener('click', onHelpClick);
   $('view-anilar').addEventListener('click', onMemClick);
+  $('trip-panel').addEventListener('click', onTripClick);
+  $('trip-panel').addEventListener('change', onTripChange);
+  $('nearby').addEventListener('click', onNearbyClick);
   Array.prototype.forEach.call(document.querySelectorAll('[data-start]'), function (b) {
     b.addEventListener('click', function () { plan.start = b.getAttribute('data-start'); planChanged(); });
   });

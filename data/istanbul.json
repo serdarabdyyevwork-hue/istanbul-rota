@@ -1852,5 +1852,94 @@
         "say": "am-bu-LANS cha-uh-RUHN"
       }
     ]
+  },
+  "metro": {
+    "note": {
+      "tr": "Durak listeleri ve süreler tahmini; resmî hat haritasıyla doğrulanacak.",
+      "en": "Station lists and times are estimates, to be checked against the official network map."
+    },
+    "lines": [
+      {
+        "id": "M1B",
+        "name": "M1B Yenikapı – Kirazlı",
+        "minPerStop": 2,
+        "verified": false,
+        "stations": [
+          "Yenikapı",
+          "Aksaray",
+          "Emniyet-Fatih",
+          "Topkapı-Ulubatlı",
+          "Bayrampaşa-Maltepe",
+          "Sağmalcılar",
+          "Kocatepe",
+          "Otogar",
+          "Esenler",
+          "Menderes",
+          "Üçyüzlü",
+          "Bağcılar Meydan",
+          "Kirazlı"
+        ]
+      },
+      {
+        "id": "M2",
+        "name": "M2 Yenikapı – Hacıosman",
+        "minPerStop": 2,
+        "verified": false,
+        "stations": [
+          "Yenikapı",
+          "Vezneciler-İstanbul Ü.",
+          "Haliç",
+          "Şişhane",
+          "Taksim",
+          "Osmanbey",
+          "Şişli-Mecidiyeköy",
+          "Gayrettepe",
+          "Levent",
+          "4. Levent",
+          "Sanayi Mahallesi",
+          "İTÜ-Ayazağa",
+          "Atatürk Oto Sanayi",
+          "Darüşşafaka",
+          "Hacıosman"
+        ]
+      },
+      {
+        "id": "T1",
+        "name": "T1 Kabataş – Bağcılar (tramvay)",
+        "minPerStop": 2,
+        "verified": false,
+        "stations": [
+          "Kabataş",
+          "Fındıklı",
+          "Tophane",
+          "Karaköy",
+          "Eminönü",
+          "Sirkeci",
+          "Gülhane",
+          "Sultanahmet",
+          "Çemberlitaş",
+          "Beyazıt-Kapalıçarşı",
+          "Laleli-Üniversite",
+          "Aksaray",
+          "Yusufpaşa",
+          "Haseki",
+          "Fındıkzade",
+          "Çapa-Şehremini",
+          "Pazartekke",
+          "Topkapı",
+          "Cevizlibağ",
+          "Merkezefendi",
+          "Seyitnizam",
+          "Akşemsettin",
+          "Zeytinburnu",
+          "Mithatpaşa",
+          "Akıncılar",
+          "Soğanlı",
+          "Güneştepe",
+          "Yavuzselim",
+          "Bağcılar"
+        ]
+      }
+    ]
   }
 }
