@@ -2,7 +2,7 @@
 // İstanbul Rota: all city content lives in data/istanbul.json. This file only draws it.
 // Layout: full-screen map + bottom sheet. Palettes and theme are user settings.
 
-var TABS = ['rotalar', 'plan', 'ulasim', 'pazarlar', 'ayarlar'];
+var TABS = ['rotalar', 'plan', 'anilar', 'ulasim', 'pazarlar', 'ayarlar'];
 var DATA = null;
 var lang = 'tr';
 var routeId = null;
@@ -58,6 +58,24 @@ applyTheme();
 var UI = {
   tabRotalar: { tr: 'Rotalar', en: 'Routes' },
   tabPlan: { tr: 'Planım', en: 'My plan' },
+  tabAnilar: { tr: 'Anılarım', en: 'Memories' },
+  visitBtn: { tr: 'Ziyaret ettim (+10)', en: 'I visited (+10)' },
+  visitedBtn: { tr: '✓ Ziyaret edildi (geri al)', en: '✓ Visited (undo)' },
+  visitedOn: { tr: 'Ziyaret: {d}', en: 'Visited: {d}' },
+  markVisit: { tr: 'Ziyaret ettim', en: 'Mark visited' },
+  points: { tr: 'puan', en: 'points' },
+  levelOf: { tr: 'Seviye {n}: {name}', en: 'Level {n}: {name}' },
+  toNext: { tr: 'Sonraki seviyeye {p} puan', en: '{p} points to the next level' },
+  maxLevel: { tr: 'En yüksek seviyedesin!', en: 'You reached the top level!' },
+  badgesH: { tr: 'Rozetler', en: 'Badges' },
+  routesH: { tr: 'Rotalar', en: 'Routes' },
+  historyH: { tr: 'Gezdiğin yerler', en: 'Places you visited' },
+  noVisits: { tr: 'Henüz bir yer işaretlemedin. Bir yeri gezince kartındaki "Ziyaret ettim" düğmesine bas; puan kazan, rozetleri aç. Gezdiğin yerler haritada yeşil görünür.', en: 'You haven\'t marked any place yet. After a visit, tap "I visited" on its card to earn points and badges. Visited places turn green on the map.' },
+  undo: { tr: 'Geri al', en: 'Undo' },
+  toastVisit: { tr: '+10 puan: {name}', en: '+10 points: {name}' },
+  toastRoute: { tr: '+50 puan! "{name}" rotasını tamamladın', en: '+50 points! You finished "{name}"' },
+  toastBadge: { tr: 'Yeni rozet: {name}', en: 'New badge: {name}' },
+  memNote: { tr: 'Anıların sadece bu telefonda saklanır.', en: 'Your memories are stored only on this phone.' },
   sosTitle: { tr: 'Acil durumda 112', en: 'Emergency: 112' },
   sosText: { tr: 'Polis, ambulans, itfaiye: hepsi tek numara.', en: 'Police, ambulance, fire: one number for all.' },
   sosCall: { tr: 'Ara', en: 'Call' },
@@ -212,7 +230,7 @@ function cycleSheet() {
 }
 
 function showView(id) {
-  ['rotalar', 'plan', 'ulasim', 'pazarlar', 'yer', 'yardim', 'ayarlar'].forEach(function (k) { $('view-' + k).hidden = k !== id; });
+  ['rotalar', 'plan', 'anilar', 'ulasim', 'pazarlar', 'yer', 'yardim', 'ayarlar'].forEach(function (k) { $('view-' + k).hidden = k !== id; });
   TABS.forEach(function (k) {
     var a = $('tab-' + k);
     if (k === id) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
@@ -283,7 +301,9 @@ function openPlace(id) {
   var html = '<button type="button" class="back" id="place-back">' + esc(t('back')) + '</button>' +
     '<span class="cat" style="background:' + cat.color + '">' + esc(tx(cat)) + ' · ' + esc(p.district) + '</span>' +
     '<div class="head"><h2>' + esc(tx(p.name)) + '</h2><p>' + esc(tx(p.note)) + '</p></div>' + factsHtml(p) +
+    (isVisited(id) ? '<p class="where" style="margin-top:8px">' + esc(t('visitedOn', { d: new Date(visits[id].date).toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-GB', { day: 'numeric', month: 'long' }) })) + '</p>' : '') +
     '<div class="actions"><button type="button" class="btn" id="plan-toggle">' + esc(inPlan(id) ? t('inPlanRemove') : t('addToPlan')) + '</button>' +
+    '<button type="button" class="btn ghost" id="visit-toggle">' + esc(isVisited(id) ? t('visitedBtn') : t('visitBtn')) + '</button>' +
     '<a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng + '">' + esc(t('directions')) + '</a>' +
     '<button type="button" class="btn ghost" id="fare-here">' + esc(t('fareHere')) + '</button>' +
     '<button type="button" class="btn ghost" id="report-place">' + esc(t('reportPlace')) + '</button></div>';
@@ -298,6 +318,10 @@ function openPlace(id) {
   $('plan-toggle').addEventListener('click', function () {
     togglePlan(id);
     $('plan-toggle').textContent = inPlan(id) ? t('inPlanRemove') : t('addToPlan');
+  });
+  $('visit-toggle').addEventListener('click', function () {
+    toggleVisit(id);
+    $('visit-toggle').textContent = isVisited(id) ? t('visitedBtn') : t('visitBtn');
   });
   $('fare-here').addEventListener('click', function () { $('to').value = id; setDistanceFromSelection(); location.hash = '#ulasim'; show(); });
   $('report-place').addEventListener('click', function () {
@@ -393,7 +417,7 @@ function resetMap() {
 
 function placesGeoJSON() {
   var feats = DATA.places.map(function (p) {
-    return { type: 'Feature', properties: { id: p.id, kind: 'place', color: DATA.categories[p.cat].color }, geometry: { type: 'Point', coordinates: [p.lng, p.lat] } };
+    return { type: 'Feature', properties: { id: p.id, kind: 'place', color: DATA.categories[p.cat].color, visited: isVisited(p.id) }, geometry: { type: 'Point', coordinates: [p.lng, p.lat] } };
   });
   DATA.markets.forEach(function (m) {
     if (m.lat === undefined) return;
@@ -411,11 +435,12 @@ function addOverlays() {
   // Each place is a coloured circle with a white "!" in it: tap it for the info card.
   map.addLayer({ id: 'places', type: 'circle', source: 'places', paint: {
     'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 6, 15, 11],
-    'circle-color': ['case', ['==', ['get', 'kind'], 'market'], '#FFFFFF', ['get', 'color']],
+    'circle-color': ['case', ['==', ['get', 'kind'], 'market'], '#FFFFFF', ['==', ['get', 'visited'], true], '#2E8B3A', ['get', 'color']],
     'circle-stroke-color': ['case', ['==', ['get', 'kind'], 'market'], '#C77D1E', '#FFFFFF'],
     'circle-stroke-width': ['case', ['==', ['get', 'kind'], 'market'], 3, 2] } });
   map.addLayer({ id: 'places-mark', type: 'symbol', source: 'places', layout: {
-    'text-field': '!', 'text-font': ['Noto Sans Medium'], 'text-size': ['interpolate', ['linear'], ['zoom'], 10, 9, 15, 14],
+    // Visited places turn green and lose the "!" (they show a small dot instead).
+    'text-field': ['case', ['==', ['get', 'visited'], true], '•', '!'], 'text-font': ['Noto Sans Medium'], 'text-size': ['interpolate', ['linear'], ['zoom'], 10, 9, 15, 14],
     'text-allow-overlap': true, 'text-ignore-placement': true },
     paint: { 'text-color': ['case', ['==', ['get', 'kind'], 'market'], '#C77D1E', '#FFFFFF'] } });
   map.addLayer({ id: 'route-stops', type: 'circle', source: 'route', filter: ['==', ['geometry-type'], 'Point'],
@@ -632,7 +657,8 @@ function renderPlan() {
       '<button type="button" class="open" data-open="' + esc(it.p.id) + '" style="border:0;background:transparent;text-align:left;padding:0;cursor:pointer;min-width:0;color:inherit">' +
       '<h3>' + esc(tx(it.p.name)) + '</h3><span class="where">' + esc(tx(DATA.categories[it.p.cat])) + ' · ' + esc(it.p.district) + ' · ' + esc(t('stayMin', { m: visitMin(it.p) })) + '</span>' +
       (it.closed ? '<p class="warn">' + esc(t('closedWarn', { d: DAYS[lang][it.arrive.getDay()] })) + '</p>' : '') + '</button>' +
-      '<div class="tools"><button type="button" class="tool" data-up="' + i + '" aria-label="' + esc(t('moveUp')) + '">↑</button>' +
+      '<div class="tools"><button type="button" class="tool' + (isVisited(it.p.id) ? ' done' : '') + '" data-visit="' + esc(it.p.id) + '" aria-label="' + esc(t('markVisit')) + '" aria-pressed="' + (isVisited(it.p.id) ? 'true' : 'false') + '">✓</button>' +
+      '<button type="button" class="tool" data-up="' + i + '" aria-label="' + esc(t('moveUp')) + '">↑</button>' +
       '<button type="button" class="tool" data-down="' + i + '" aria-label="' + esc(t('moveDown')) + '">↓</button>' +
       '<button type="button" class="tool" data-del="' + i + '" aria-label="' + esc(t('remove')) + '">×</button></div></div>';
   });
@@ -683,6 +709,7 @@ function onPlanClick(e) {
   if (!b) return;
   if (b.hasAttribute('data-goexplore')) { exploreMode = 'kesfet'; renderExplore(); location.hash = '#rotalar'; return; }
   if (b.hasAttribute('data-open')) { openPlace(b.getAttribute('data-open')); return; }
+  if (b.hasAttribute('data-visit')) { toggleVisit(b.getAttribute('data-visit')); return; }
   var i;
   if (b.hasAttribute('data-up')) { i = +b.getAttribute('data-up'); if (i > 0) { plan.stops.splice(i - 1, 0, plan.stops.splice(i, 1)[0]); planChanged(); } return; }
   if (b.hasAttribute('data-down')) { i = +b.getAttribute('data-down'); if (i < plan.stops.length - 1) { plan.stops.splice(i + 1, 0, plan.stops.splice(i, 1)[0]); planChanged(); } return; }
@@ -696,6 +723,97 @@ function onPlanClick(e) {
     clearArmed = false; plan.stops = []; planChanged();
   }
 }
+
+// ---------- Memories: visits, points, badges, levels (stored on this phone) ----------
+var visits = {};
+try { visits = JSON.parse(localStorage.getItem('rota-visits') || '{}') || {}; } catch (e) { visits = {}; }
+function saveVisits() { try { localStorage.setItem('rota-visits', JSON.stringify(visits)); } catch (e) {} }
+function isVisited(id) { return !!visits[id]; }
+var LEVELS = [
+  { min: 0, name: { tr: 'Yolcu', en: 'Traveller' } },
+  { min: 60, name: { tr: 'Seyyah', en: 'Explorer' } },
+  { min: 150, name: { tr: 'Rehber', en: 'Guide' } },
+  { min: 300, name: { tr: 'İstanbul ustası', en: 'Istanbul master' } }
+];
+var ASIA = ['Kadıköy', 'Üsküdar', 'Adalar'];
+var BADGES = [
+  { id: 'first', color: '#1D9E75', name: { tr: 'İlk adım', en: 'First step' }, desc: { tr: '1 yer gez', en: 'Visit 1 place' }, ok: function (s) { return s.count >= 1; } },
+  { id: 'five', color: '#185FA5', name: { tr: 'Beş durak', en: 'Five stops' }, desc: { tr: '5 yer gez', en: 'Visit 5 places' }, ok: function (s) { return s.count >= 5; } },
+  { id: 'ten', color: '#534AB7', name: { tr: 'On durak', en: 'Ten stops' }, desc: { tr: '10 yer gez', en: 'Visit 10 places' }, ok: function (s) { return s.count >= 10; } },
+  { id: 'history', color: '#7B3FA0', name: { tr: 'Tarihçi', en: 'Historian' }, desc: { tr: '3 müze ya da tarihi yer', en: '3 museums or historic sites' }, ok: function (s) { return (s.cat.muze || 0) + (s.cat.tarihi || 0) >= 3; } },
+  { id: 'domes', color: '#0F7A6C', name: { tr: 'Kubbeler altında', en: 'Under the domes' }, desc: { tr: '3 cami', en: '3 mosques' }, ok: function (s) { return (s.cat.cami || 0) >= 3; } },
+  { id: 'nature', color: '#2E8B3A', name: { tr: 'Doğa sever', en: 'Nature lover' }, desc: { tr: '2 doğa ve piknik yeri', en: '2 nature spots' }, ok: function (s) { return (s.cat.doga || 0) >= 2; } },
+  { id: 'ferry', color: '#0E6BA8', name: { tr: 'Vapur yolcusu', en: 'Ferry rider' }, desc: { tr: '2 iskele', en: '2 ferry piers' }, ok: function (s) { return (s.cat.iskele || 0) >= 2; } },
+  { id: 'continents', color: '#C77D1E', name: { tr: 'İki kıta', en: 'Two continents' }, desc: { tr: 'Hem Avrupa hem Asya yakası', en: 'Both the European and Asian side' }, ok: function (s) { return s.asia && s.europe; } },
+  { id: 'route', color: '#B8325A', name: { tr: 'Rota bitirici', en: 'Route finisher' }, desc: { tr: 'Bir rotayı tamamla', en: 'Finish a route' }, ok: function (s) { return s.routes.length >= 1; } },
+  { id: 'allroutes', color: '#993C1D', name: { tr: 'Tüm rotalar', en: 'All routes' }, desc: { tr: 'Bütün hazır rotaları bitir', en: 'Finish every ready route' }, ok: function (s) { return s.routes.length === DATA.routes.length; } }
+];
+function routeStopIds(r) { return r.stops.filter(function (s) { return s.place; }).map(function (s) { return s.place; }); }
+function memStats() {
+  var s = { count: 0, cat: {}, asia: false, europe: false, routes: [] };
+  Object.keys(visits).forEach(function (id) {
+    var p = place(id); if (!p) return;
+    s.count++;
+    s.cat[p.cat] = (s.cat[p.cat] || 0) + 1;
+    if (ASIA.indexOf(p.district) >= 0) s.asia = true; else s.europe = true;
+  });
+  DATA.routes.forEach(function (r) { if (routeStopIds(r).every(isVisited)) s.routes.push(r.id); });
+  s.points = s.count * 10 + s.routes.length * 50;
+  return s;
+}
+function levelFor(points) { var l = 0; LEVELS.forEach(function (x, i) { if (points >= x.min) l = i; }); return l; }
+function medal(color) {
+  return '<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M12 2h5l-3 9h-5zM24 2h-5l3 9h5z" fill="' + color + '" opacity=".6"/><circle cx="18" cy="22" r="11" fill="' + color + '"/><path d="m18 15 2.1 4.3 4.7.7-3.4 3.3.8 4.7-4.2-2.2-4.2 2.2.8-4.7-3.4-3.3 4.7-.7z" fill="#fff"/></svg>';
+}
+var toastTimer = null;
+function toast(msg) {
+  var el = $('toast');
+  el.textContent = msg; el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { el.hidden = true; }, 3200);
+}
+function toggleVisit(id) {
+  var before = memStats();
+  if (visits[id]) delete visits[id]; else visits[id] = { date: new Date().toISOString() };
+  saveVisits();
+  var after = memStats(), msgs = [];
+  if (visits[id]) {
+    msgs.push(t('toastVisit', { name: tx(place(id).name) }));
+    after.routes.forEach(function (rid) { if (before.routes.indexOf(rid) < 0) msgs.push(t('toastRoute', { name: tx(DATA.routes.filter(function (r) { return r.id === rid; })[0].name) })); });
+    BADGES.forEach(function (b) { if (b.ok(after) && !b.ok(before)) msgs.push(t('toastBadge', { name: tx(b.name) })); });
+  }
+  // Show the newest news; when a route or badge was just earned, show it together with the one before it.
+  if (msgs.length) toast(msgs.slice(-2).join(' · '));
+  renderMemories(); renderPlan(); refreshMapPlaces();
+}
+function renderMemories() {
+  var s = memStats(), li = levelFor(s.points), L = LEVELS[li], next = LEVELS[li + 1];
+  var pct = next ? Math.round((s.points - L.min) / (next.min - L.min) * 100) : 100;
+  var html = '<div class="level"><span class="pts">' + s.points + ' <small>' + esc(t('points')) + '</small></span><span class="name">' + esc(t('levelOf', { n: li + 1, name: tx(L.name) })) + '</span>' +
+    '<div class="bar"><i style="width:' + pct + '%"></i></div><small>' + esc(next ? t('toNext', { p: next.min - s.points }) : t('maxLevel')) + '</small></div>';
+  html += '<div class="section"><h3>' + esc(t('badgesH')) + '</h3><div class="badges">' + BADGES.map(function (b) {
+    var got = b.ok(s);
+    return '<div class="bdg' + (got ? '' : ' locked') + '">' + medal(got ? b.color : '#9AA3AE') + '<b>' + esc(tx(b.name)) + '</b><span>' + esc(tx(b.desc)) + '</span></div>';
+  }).join('') + '</div></div>';
+  html += '<div class="section"><h3>' + esc(t('routesH')) + '</h3>' + DATA.routes.map(function (r) {
+    var ids = routeStopIds(r), done = ids.filter(isVisited).length;
+    return '<div class="rprog"><div class="top"><span>' + esc(tx(r.name)) + '</span><span class="mono">' + done + '/' + ids.length + '</span></div><div class="bar"><i style="width:' + Math.round(done / ids.length * 100) + '%"></i></div></div>';
+  }).join('') + '</div>';
+  var list = Object.keys(visits).filter(function (id) { return place(id); }).sort(function (a, b) { return visits[b].date < visits[a].date ? -1 : 1; });
+  html += '<div class="section"><h3>' + esc(t('historyH')) + '</h3>' + (list.length ? '<div class="vlist">' + list.map(function (id) {
+    var p = place(id), d = new Date(visits[id].date);
+    return '<div class="vitem"><span class="d">' + esc(d.toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-GB', { day: 'numeric', month: 'short' })) + '</span>' +
+      '<button type="button" class="open" data-open="' + esc(id) + '" style="border:0;background:transparent;text-align:left;padding:0;cursor:pointer;color:inherit;font-weight:600">' + esc(tx(p.name)) + '</button>' +
+      '<button type="button" class="tool" style="width:auto;padding:0 8px" data-unvisit="' + esc(id) + '">' + esc(t('undo')) + '</button></div>';
+  }).join('') + '</div>' : '<p class="where">' + esc(t('noVisits')) + '</p>') + '</div><p class="where">' + esc(t('memNote')) + '</p>';
+  $('view-anilar').innerHTML = html;
+}
+function onMemClick(e) {
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.hasAttribute('data-open')) openPlace(b.getAttribute('data-open'));
+  else if (b.hasAttribute('data-unvisit')) toggleVisit(b.getAttribute('data-unvisit'));
+}
+function refreshMapPlaces() { if (map && overlaysReady) map.getSource('places').setData(placesGeoJSON()); }
 
 // ---------- Help: tourist first aid kit (content lives in DATA.help) ----------
 var bigPhrase = null;
@@ -874,7 +992,7 @@ function renderText() {
   $('t-report-send').textContent = t('reportSend'); $('report-copy').textContent = t('reportCopy');
   $('lang-tr').setAttribute('aria-pressed', lang === 'tr' ? 'true' : 'false');
   $('lang-en').setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
-  renderRoutes(); renderExplore(); renderPlan(); renderHelp(); renderTransportOptions(); calc(); renderMarkets(); renderSettings(); renderMapStatus();
+  renderRoutes(); renderExplore(); renderPlan(); renderMemories(); renderHelp(); renderTransportOptions(); calc(); renderMarkets(); renderSettings(); renderMapStatus();
   if (!$('view-yer').hidden) showView(currentTab);
 }
 function setLang(l) {
@@ -913,6 +1031,7 @@ function bind() {
   });
   $('plan-body').addEventListener('click', onPlanClick);
   $('view-yardim').addEventListener('click', onHelpClick);
+  $('view-anilar').addEventListener('click', onMemClick);
   Array.prototype.forEach.call(document.querySelectorAll('[data-start]'), function (b) {
     b.addEventListener('click', function () { plan.start = b.getAttribute('data-start'); planChanged(); });
   });

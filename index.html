@@ -57,8 +57,8 @@ button, select, input, textarea { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) { .sheet { transition: none; } }
 .handle { border: 0; background: transparent; padding: 10px 0 4px; cursor: pointer; display: grid; place-items: center; }
 .handle span { width: 44px; height: 5px; border-radius: 3px; background: var(--line); display: block; }
-.tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; padding: 4px max(12px, env(safe-area-inset-left, 0px)) 8px; border-bottom: 1px solid var(--line); }
-.tabs a { text-align: center; text-decoration: none; color: var(--muted); font-size: 12.5px; font-weight: 600; padding: 6px 2px; border-radius: 10px; display: grid; gap: 2px; justify-items: center; }
+.tabs { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; padding: 4px max(12px, env(safe-area-inset-left, 0px)) 8px; border-bottom: 1px solid var(--line); }
+.tabs a { text-align: center; text-decoration: none; color: var(--muted); font-size: 11.5px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; padding: 6px 2px; border-radius: 10px; display: grid; gap: 2px; justify-items: center; }
 .tabs a svg { width: 22px; height: 22px; }
 .tabs a[aria-current="page"] { color: var(--primary); background: var(--soft); }
 .sheet-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 14px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px)); }
@@ -158,6 +158,27 @@ textarea { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid va
 .summary div { background: var(--soft); border-radius: 12px; padding: 8px 10px; }
 .summary b { display: block; font: 700 17px var(--mono); }
 .summary span { font-size: 12px; color: var(--muted); }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); top: calc(var(--top) + 64px); z-index: 40; background: var(--primary); color: var(--on-primary); padding: 10px 16px; border-radius: 14px; font-weight: 700; font-size: 14.5px; box-shadow: 0 6px 18px rgba(0,0,0,.25); max-width: calc(100% - 32px); text-align: center; }
+.level { background: var(--primary); color: var(--on-primary); border-radius: 18px; padding: 16px; display: grid; gap: 6px; margin-bottom: 16px; }
+.level .pts { font: 800 34px var(--font); line-height: 1; }
+.level .name { font-weight: 700; font-size: 16px; }
+.bar { height: 10px; border-radius: 6px; background: rgba(255,255,255,.3); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--on-primary); border-radius: 6px; }
+.level small { opacity: .9; font-size: 13px; }
+.badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+.bdg { border: 1px solid var(--line); border-radius: 14px; padding: 10px 8px; text-align: center; background: var(--bg); display: grid; gap: 4px; justify-items: center; }
+.bdg svg { width: 34px; height: 34px; }
+.bdg b { font-size: 13px; }
+.bdg span { font-size: 11.5px; color: var(--muted); }
+.bdg.locked { opacity: .45; }
+.rprog { display: grid; gap: 4px; margin-bottom: 10px; }
+.rprog .top { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; }
+.rprog .bar { background: var(--soft); }
+.rprog .bar i { background: var(--primary); }
+.vlist { display: grid; gap: 6px; }
+.vitem { display: grid; grid-template-columns: 70px 1fr auto; gap: 10px; align-items: center; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; }
+.vitem .d { font-size: 12.5px; color: var(--muted); }
+.tool.done { background: var(--primary); color: var(--on-primary); border-color: var(--primary); }
 .help-btn { color: #C62828; }
 .sos { background: #C62828; color: #FFFFFF; border-radius: 16px; padding: 14px 16px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; margin-bottom: 16px; }
 .sos h2 { font-size: 20px; color: #FFFFFF; }
@@ -213,6 +234,7 @@ details.hsec[open] > summary::after { content: "–"; }
   <nav class="tabs" aria-label="Bölümler">
     <a href="#rotalar" id="tab-rotalar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18h6a3.5 3.5 0 0 0 0-7h-5a3.5 3.5 0 0 1 0-7h6"/></svg><span></span></a>
     <a href="#plan" id="tab-plan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 14h3M8 17h6"/></svg><span></span></a>
+    <a href="#anilar" id="tab-anilar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M8.5 13.9 7 22l5-3 5 3-1.5-8.1"/><path d="m12 6 1 2 2 .3-1.5 1.4.4 2.1-1.9-1-1.9 1 .4-2.1L9 8.3l2-.3 1-2Z"/></svg><span></span></a>
     <a href="#ulasim" id="tab-ulasim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="5" width="16" height="11" rx="2"/><path d="M4 11h16M8 19l-1 2M16 19l1 2"/></svg><span></span></a>
     <a href="#pazarlar" id="tab-pazarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 9h18l-2-5H5L3 9Z"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></svg><span></span></a>
     <a href="#ayarlar" id="tab-ayarlar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg><span></span></a>
@@ -275,6 +297,8 @@ details.hsec[open] > summary::after { content: "–"; }
 
     <section id="view-yardim" hidden></section>
 
+    <section id="view-anilar" hidden></section>
+
     <section id="view-ayarlar" hidden>
       <div class="section">
         <h3 id="t-look"></h3>
@@ -326,6 +350,8 @@ details.hsec[open] > summary::after { content: "–"; }
     </section>
   </div>
 </section>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="https://unpkg.com/pmtiles@4.4.1/dist/pmtiles.js"></script>
