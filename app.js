@@ -58,6 +58,20 @@ applyTheme();
 var UI = {
   tabRotalar: { tr: 'Rotalar', en: 'Routes' },
   tabPlan: { tr: 'Planım', en: 'My plan' },
+  sosTitle: { tr: 'Acil durumda 112', en: 'Emergency: 112' },
+  sosText: { tr: 'Polis, ambulans, itfaiye: hepsi tek numara.', en: 'Police, ambulance, fire: one number for all.' },
+  sosCall: { tr: 'Ara', en: 'Call' },
+  call: { tr: 'Ara', en: 'Call' },
+  open: { tr: 'Aç', en: 'Open' },
+  source: { tr: 'Kaynak', en: 'Source' },
+  tagOk: { tr: 'resmî kaynak', en: 'official source' },
+  tagNo: { tr: 'doğrulanmadı', en: 'not confirmed' },
+  tagTip: { tr: 'ipucu', en: 'tip' },
+  phrasebook: { tr: 'Cep sözlüğü (Türkçe)', en: 'Pocket phrasebook (Turkish)' },
+  phraseHint: { tr: 'Dinle düğmesi cümleyi Türkçe okur. Göster düğmesi büyük yazıyla ekrana getirir; karşındakine göster.', en: 'Listen reads the phrase aloud in Turkish. Show puts it on screen in big letters so you can show it to someone.' },
+  listen: { tr: 'Dinle', en: 'Listen' },
+  showBig: { tr: 'Göster', en: 'Show' },
+  noVoice: { tr: 'Bu telefonda Türkçe ses yok; Göster düğmesini kullan.', en: 'No Turkish voice on this phone; use Show instead.' },
   modePackages: { tr: 'Hazır rotalar', en: 'Ready routes' },
   modeExplore: { tr: 'Yerleri keşfet', en: 'Explore places' },
   onlyFree: { tr: 'Sadece ücretsiz', en: 'Free only' },
@@ -198,7 +212,7 @@ function cycleSheet() {
 }
 
 function showView(id) {
-  ['rotalar', 'plan', 'ulasim', 'pazarlar', 'yer', 'ayarlar'].forEach(function (k) { $('view-' + k).hidden = k !== id; });
+  ['rotalar', 'plan', 'ulasim', 'pazarlar', 'yer', 'yardim', 'ayarlar'].forEach(function (k) { $('view-' + k).hidden = k !== id; });
   TABS.forEach(function (k) {
     var a = $('tab-' + k);
     if (k === id) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
@@ -207,9 +221,10 @@ function showView(id) {
 }
 function show() {
   var v = (location.hash || '#rotalar').slice(1);
-  if (TABS.indexOf(v) < 0) v = 'rotalar';
+  if (TABS.indexOf(v) < 0 && v !== 'yardim') v = 'rotalar';
   currentTab = v;
   showView(v);
+  if (v === 'yardim') { setSheet('full'); return; }
   if ($('sheet').dataset.size === 'peek') setSheet('half');
   // The map shows what the open tab is about: your plan, or the chosen ready route.
   if (v === 'plan') drawPlan();
@@ -682,6 +697,57 @@ function onPlanClick(e) {
   }
 }
 
+// ---------- Help: tourist first aid kit (content lives in DATA.help) ----------
+var bigPhrase = null;
+function renderHelp() {
+  var H = DATA.help;
+  if (!H) { $('view-yardim').innerHTML = ''; return; }
+  var tagHtml = function (k) {
+    return k === 'verified' ? '<span class="tag ok">' + esc(t('tagOk')) + '</span>' : k === 'unverified' ? '<span class="tag no">' + esc(t('tagNo')) + '</span>' : '<span class="tag tip">' + esc(t('tagTip')) + '</span>';
+  };
+  var html = '<div class="sos"><h2>' + esc(t('sosTitle')) + '</h2><p>' + esc(t('sosText')) + '</p><a href="tel:112">' + esc(t('sosCall')) + ' 112</a></div>';
+  H.sections.forEach(function (s, si) {
+    html += '<details class="hsec"' + (si === 0 ? ' open' : '') + '><summary>' + esc(tx(s.title)) + '</summary>';
+    s.items.forEach(function (it) {
+      html += '<div class="hitem"><h3>' + esc(tx(it.title)) + '</h3><p>' + esc(tx(it.text)) + '</p><div class="hactions">' + tagHtml(it.kind) +
+        (it.call ? '<a class="btn small" href="tel:' + esc(it.call) + '">' + esc(t('call')) + ' ' + esc(it.call.replace(/^\+90/, '0')) + '</a>' : '') +
+        (it.action ? '<a class="btn ghost small" href="' + esc(it.action) + '">' + esc(t('open')) + '</a>' : '') +
+        (it.source ? '<a class="where link" target="_blank" rel="noopener" href="' + esc(it.source) + '">' + esc(t('source')) + '</a>' : '') + '</div></div>';
+    });
+    html += '</details>';
+  });
+  html += '<details class="hsec" open><summary>' + esc(t('phrasebook')) + '</summary><div class="hitem"><p class="where">' + esc(t('phraseHint')) + '</p>' +
+    (bigPhrase !== null ? '<div class="show-big"><b>' + esc(H.phrases[bigPhrase].tr) + '</b><span>' + esc(H.phrases[bigPhrase].en) + '</span></div>' : '') + '</div>';
+  H.phrases.forEach(function (p, i) {
+    html += '<div class="phrase"><b>' + esc(p.tr) + '</b><span>' + esc(p.en) + ' · <i>' + esc(p.say) + '</i></span><div class="pbtns">' +
+      '<button type="button" class="tool" style="width:auto;padding:0 8px" data-say="' + i + '">' + esc(t('listen')) + '</button>' +
+      '<button type="button" class="tool" style="width:auto;padding:0 8px" data-big="' + i + '">' + esc(t('showBig')) + '</button></div></div>';
+  });
+  html += '</details>';
+  $('view-yardim').innerHTML = html;
+}
+function sayTurkish(text) {
+  if (!('speechSynthesis' in window)) return false;
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'tr-TR';
+  u.rate = 0.9;
+  var v = window.speechSynthesis.getVoices().filter(function (x) { return /^tr/i.test(x.lang); })[0];
+  if (v) u.voice = v;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(u);
+  return true;
+}
+function onHelpClick(e) {
+  var b = e.target.closest('[data-say],[data-big]');
+  if (!b) return;
+  var i = +(b.getAttribute('data-say') || b.getAttribute('data-big'));
+  if (b.hasAttribute('data-say')) { if (!sayTurkish(DATA.help.phrases[i].tr)) alertSheet(t('noVoice')); return; }
+  bigPhrase = bigPhrase === i ? null : i;
+  renderHelp();
+  var box = $('view-yardim').querySelector('.show-big');
+  if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
 // ---------- Transport ----------
 function renderTransportOptions() {
   ['from', 'to'].forEach(function (id) {
@@ -808,7 +874,7 @@ function renderText() {
   $('t-report-send').textContent = t('reportSend'); $('report-copy').textContent = t('reportCopy');
   $('lang-tr').setAttribute('aria-pressed', lang === 'tr' ? 'true' : 'false');
   $('lang-en').setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
-  renderRoutes(); renderExplore(); renderPlan(); renderTransportOptions(); calc(); renderMarkets(); renderSettings(); renderMapStatus();
+  renderRoutes(); renderExplore(); renderPlan(); renderHelp(); renderTransportOptions(); calc(); renderMarkets(); renderSettings(); renderMapStatus();
   if (!$('view-yer').hidden) showView(currentTab);
 }
 function setLang(l) {
@@ -846,6 +912,7 @@ function bind() {
     var open = e.target.closest('[data-open]'); if (open) openPlace(open.getAttribute('data-open'));
   });
   $('plan-body').addEventListener('click', onPlanClick);
+  $('view-yardim').addEventListener('click', onHelpClick);
   Array.prototype.forEach.call(document.querySelectorAll('[data-start]'), function (b) {
     b.addEventListener('click', function () { plan.start = b.getAttribute('data-start'); planChanged(); });
   });

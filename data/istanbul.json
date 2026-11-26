@@ -1483,5 +1483,374 @@
         "en": "Day and place from the city's official list. Hours and goods not known yet."
       }
     }
-  ]
+  ],
+  "help": {
+    "updated": "2026-11-26",
+    "sections": [
+      {
+        "id": "acil",
+        "sos": true,
+        "title": {
+          "tr": "Acil durum",
+          "en": "Emergency"
+        },
+        "items": [
+          {
+            "title": {
+              "tr": "112 – tek acil numara",
+              "en": "112 – the single emergency number"
+            },
+            "text": {
+              "tr": "Polis, ambulans, itfaiye, jandarma ve sahil güvenlik: hepsi 112. Arama ücretsizdir.",
+              "en": "Police, ambulance, fire, gendarmerie and coast guard: all on 112. The call is free."
+            },
+            "kind": "verified",
+            "source": "https://www.hurriyet.com.tr/gundem/tum-acil-numaralar-112de-toplandi-41914102",
+            "call": "112"
+          },
+          {
+            "title": {
+              "tr": "Turizm danışma ofisi (Sultanahmet)",
+              "en": "Tourist information office (Sultanahmet)"
+            },
+            "text": {
+              "tr": "Divan Yolu Cd. No:3, Sultanahmet.",
+              "en": "Divan Yolu St. No:3, Sultanahmet."
+            },
+            "kind": "verified",
+            "source": "https://istanbul.ktb.gov.tr/EN-284752/tourism-information-offices.html",
+            "call": "+902125181802"
+          },
+          {
+            "title": {
+              "tr": "Turizm polisi",
+              "en": "Tourist police"
+            },
+            "text": {
+              "tr": "Yerebatan Cd. No:6, Sultanahmet. Bu numara resmî kaynaktan doğrulanmadı; acil durumda 112'yi ara.",
+              "en": "Yerebatan St. No:6, Sultanahmet. This number is not confirmed by an official source; in an emergency call 112."
+            },
+            "kind": "unverified",
+            "call": "+902125274503"
+          },
+          {
+            "title": {
+              "tr": "İBB Beyaz Masa – 153",
+              "en": "City hotline – 153"
+            },
+            "text": {
+              "tr": "İstanbulkart, ulaşım ve belediye hizmetleri için.",
+              "en": "For the Istanbulkart, transport and city services."
+            },
+            "kind": "verified",
+            "source": "https://www.istanbulkart.istanbul",
+            "call": "153"
+          },
+          {
+            "title": {
+              "tr": "Pasaportunu kaybedersen",
+              "en": "If you lose your passport"
+            },
+            "text": {
+              "tr": "Önce polise bildir (112), sonra kendi ülkenin İstanbul'daki başkonsolosluğuna git. Pasaportunun fotoğrafını telefonunda sakla.",
+              "en": "Report it to the police first (112), then go to your country's consulate in Istanbul. Keep a photo of your passport on your phone."
+            },
+            "kind": "tip"
+          }
+        ]
+      },
+      {
+        "id": "gelmeden",
+        "title": {
+          "tr": "Gelmeden önce",
+          "en": "Before you arrive"
+        },
+        "items": [
+          {
+            "title": {
+              "tr": "Turkcell – Tourist Welcome Pack",
+              "en": "Turkcell – Tourist Welcome Pack"
+            },
+            "text": {
+              "tr": "20 GB internet, 200 dakika, 100 SMS, sınırsız WhatsApp, 28 gün. Önerilen fiyat 1.800 TL. Pasaportla; Turkcell mağazasında ya da uygulamadan eSIM olarak.",
+              "en": "20 GB data, 200 minutes, 100 SMS, unlimited WhatsApp, 28 days. Suggested price 1,800 TL. With your passport, in a Turkcell shop or as an eSIM in their app."
+            },
+            "kind": "verified",
+            "source": "https://www.turkcell.com.tr/en/aboutus/traveling-turkey/local-sim-card-for-your-vacation"
+          },
+          {
+            "title": {
+              "tr": "Vodafone – Welcome To Turkey Pack",
+              "en": "Vodafone – Welcome To Turkey Pack"
+            },
+            "text": {
+              "tr": "20 GB, 750 dakika, sınırsız WhatsApp, 28 gün. Fiyat resmî sayfada yazmıyor. Havalimanı mağazalarında ya da eSIM olarak.",
+              "en": "20 GB, 750 minutes, unlimited WhatsApp, 28 days. The official page shows no price. At airport shops or as an eSIM."
+            },
+            "kind": "verified",
+            "source": "https://www.vodafone.com.tr/en/tourist-sim-card-turkey"
+          },
+          {
+            "title": {
+              "tr": "Türk Telekom – Welcome paketleri",
+              "en": "Türk Telekom – Welcome packs"
+            },
+            "text": {
+              "tr": "10 GB 320 TL (7 gün) · 25 GB 420 TL (28 gün) · 50 GB 550 TL (28 gün). Havalimanı bayileri ve mağazalarda.",
+              "en": "10 GB 320 TL (7 days) · 25 GB 420 TL (28 days) · 50 GB 550 TL (28 days). At airport dealers and shops."
+            },
+            "kind": "verified",
+            "source": "https://www.turktelekom.com.tr/en/prepaid-tourist-sim-turkey"
+          },
+          {
+            "title": {
+              "tr": "Kendi telefonun",
+              "en": "Your own phone"
+            },
+            "text": {
+              "tr": "Kendi hattınla (roaming) sorunsuz kullanırsın. Türk hattı takarsan kayıtsız telefon 120 gün çalışır; daha uzun kalacaksan IMEI kaydı gerekir (2026 ücreti haberlere göre 54.258 TL).",
+              "en": "Your own SIM (roaming) works fine. With a Turkish SIM an unregistered phone works for 120 days; staying longer needs IMEI registration (2026 fee 54,258 TL per news reports)."
+            },
+            "kind": "unverified"
+          },
+          {
+            "title": {
+              "tr": "Haritayı şimdi indir",
+              "en": "Download the map now"
+            },
+            "text": {
+              "tr": "Wi-Fi'deyken İstanbul haritasını indir (50 MB). Sonra internetsiz çalışır.",
+              "en": "Download the Istanbul map on Wi-Fi (50 MB). It then works offline."
+            },
+            "kind": "tip",
+            "action": "#ayarlar"
+          },
+          {
+            "title": {
+              "tr": "Para",
+              "en": "Money"
+            },
+            "text": {
+              "tr": "Para birimi Türk lirası (TL). ATM'de \"kur dönüşümü\" teklif edilirse reddet ve TL olarak çek; genelde daha ucuzdur. Döviz bürolarında kur çoğu zaman havalimanından iyidir.",
+              "en": "The currency is the Turkish lira (TL). If an ATM offers \"currency conversion\", decline it and withdraw in TL; it is usually cheaper. Exchange offices in town usually beat airport rates."
+            },
+            "kind": "tip"
+          }
+        ]
+      },
+      {
+        "id": "ulasim",
+        "title": {
+          "tr": "Şehirde dolaşmak",
+          "en": "Getting around"
+        },
+        "items": [
+          {
+            "title": {
+              "tr": "İstanbulkart",
+              "en": "Istanbulkart"
+            },
+            "text": {
+              "tr": "Metro, tramvay, otobüs, vapur ve Marmaray'da geçer. Kart 165 TL, tek biniş 46,20 TL. Kartın yoksa tek kullanımlık elektronik bilet 65 TL.",
+              "en": "Works on metro, tram, bus, ferry and Marmaray. The card costs 165 TL, a ride 46.20 TL. Without a card, a single-use ticket is 65 TL."
+            },
+            "kind": "verified",
+            "source": "https://www.metro.istanbul/SeferDurumlari/BiletUcretleri"
+          },
+          {
+            "title": {
+              "tr": "İstanbulkart nereden alınır?",
+              "en": "Where to buy an Istanbulkart"
+            },
+            "text": {
+              "tr": "Metro, tramvay ve iskele girişlerindeki bilet otomatlarından. Para yüklemesini de aynı otomatlardan yaparsın.",
+              "en": "From the ticket machines at metro, tram and ferry stations. You top it up at the same machines."
+            },
+            "kind": "tip"
+          },
+          {
+            "title": {
+              "tr": "Taksi",
+              "en": "Taxi"
+            },
+            "text": {
+              "tr": "Binince taksimetrenin açık olduğundan emin ol. Tahmini ücreti Ulaşım sekmesinde hesapla.",
+              "en": "Make sure the meter is on when you get in. Estimate the fare in the Transport tab."
+            },
+            "kind": "tip",
+            "action": "#ulasim"
+          },
+          {
+            "title": {
+              "tr": "Vapur",
+              "en": "Ferry"
+            },
+            "text": {
+              "tr": "Karaköy/Eminönü–Kadıköy vapuru 65,21 TL. Boğaz manzarasının en ucuz yolu.",
+              "en": "The Karaköy/Eminönü–Kadıköy ferry is 65.21 TL: the cheapest Bosphorus view."
+            },
+            "kind": "verified",
+            "source": "https://sehirhatlari.istanbul/tr/ucret-tarifeleri"
+          }
+        ]
+      },
+      {
+        "id": "internet",
+        "title": {
+          "tr": "Ücretsiz internet",
+          "en": "Free Wi-Fi"
+        },
+        "items": [
+          {
+            "title": {
+              "tr": "ibbWiFi",
+              "en": "ibbWiFi"
+            },
+            "text": {
+              "tr": "İBB'nin ücretsiz Wi-Fi ağı; meydanlarda, iskelelerde ve parklarda. Akıllı telefonda \"İstanbul Senin\" uygulamasıyla bağlanılır.",
+              "en": "The city's free Wi-Fi in squares, piers and parks. On a smartphone you connect through the \"İstanbul Senin\" app."
+            },
+            "kind": "verified",
+            "source": "https://services.ibb.gov.tr/istanbulsenin/ibb-wifi-ucretsiz-mobil-internet-sadece-istanbul-seninde/"
+          }
+        ]
+      },
+      {
+        "id": "kultur",
+        "title": {
+          "tr": "Bilmekte fayda var",
+          "en": "Good to know"
+        },
+        "items": [
+          {
+            "title": {
+              "tr": "Cami ziyareti",
+              "en": "Visiting a mosque"
+            },
+            "text": {
+              "tr": "Omuz ve diz kapalı olmalı; kadınlar başını örter (girişte örtü verilir). Ayakkabılar çıkarılır. Namaz vakitlerinde turist girişi kısa süre kapanır.",
+              "en": "Cover shoulders and knees; women cover their hair (scarves are given at the door). Take your shoes off. Tourist entry closes briefly at prayer times."
+            },
+            "kind": "tip"
+          },
+          {
+            "title": {
+              "tr": "Pazarlık",
+              "en": "Bargaining"
+            },
+            "text": {
+              "tr": "Kapalıçarşı'da ve pazarlarda pazarlık normaldir; mağaza ve restoranlarda fiyatlar sabittir.",
+              "en": "Bargaining is normal in the Grand Bazaar and markets; shop and restaurant prices are fixed."
+            },
+            "kind": "tip"
+          },
+          {
+            "title": {
+              "tr": "Bahşiş",
+              "en": "Tipping"
+            },
+            "text": {
+              "tr": "Restoranda hizmeti beğendiysen yaklaşık %5–10 bahşiş yaygındır; zorunlu değildir.",
+              "en": "In restaurants about 5–10% is common if you liked the service; it is not required."
+            },
+            "kind": "tip"
+          },
+          {
+            "title": {
+              "tr": "Kapalı günler",
+              "en": "Closing days"
+            },
+            "text": {
+              "tr": "Topkapı Salı, Dolmabahçe Pazartesi, Kapalıçarşı Pazar günleri kapalıdır. Planım sekmesi bunu otomatik uyarır.",
+              "en": "Topkapı is closed on Tuesdays, Dolmabahçe on Mondays, the Grand Bazaar on Sundays. The My plan tab warns you automatically."
+            },
+            "kind": "tip",
+            "action": "#plan"
+          }
+        ]
+      }
+    ],
+    "phrases": [
+      {
+        "tr": "Merhaba",
+        "en": "Hello",
+        "say": "mer-ha-BA"
+      },
+      {
+        "tr": "Teşekkür ederim",
+        "en": "Thank you",
+        "say": "teh-shek-KÜR eh-deh-rim"
+      },
+      {
+        "tr": "Lütfen",
+        "en": "Please",
+        "say": "LÜT-fen"
+      },
+      {
+        "tr": "Evet / Hayır",
+        "en": "Yes / No",
+        "say": "eh-VET / HA-yuhr"
+      },
+      {
+        "tr": "Ne kadar?",
+        "en": "How much is it?",
+        "say": "neh ka-DAR"
+      },
+      {
+        "tr": "Hesap, lütfen",
+        "en": "The bill, please",
+        "say": "heh-SAP, LÜT-fen"
+      },
+      {
+        "tr": "Tuvalet nerede?",
+        "en": "Where is the toilet?",
+        "say": "too-va-LET neh-reh-DEH"
+      },
+      {
+        "tr": "İngilizce biliyor musunuz?",
+        "en": "Do you speak English?",
+        "say": "in-gi-LIZ-jeh bi-li-YOR mu-su-nuz"
+      },
+      {
+        "tr": "Anlamıyorum",
+        "en": "I don't understand",
+        "say": "an-LA-muh-yo-rum"
+      },
+      {
+        "tr": "Taksimetreyi açar mısınız?",
+        "en": "Could you turn on the meter?",
+        "say": "tak-si-MET-reh-yi a-CHAR muh-suh-nuz"
+      },
+      {
+        "tr": "Bu adrese gitmek istiyorum",
+        "en": "I want to go to this address",
+        "say": "boo ad-reh-SEH git-MEK is-ti-YO-rum"
+      },
+      {
+        "tr": "Vejetaryenim",
+        "en": "I am vegetarian",
+        "say": "veh-zheh-tar-YEH-nim"
+      },
+      {
+        "tr": "Alerjim var",
+        "en": "I have an allergy",
+        "say": "a-ler-ZHIM var"
+      },
+      {
+        "tr": "Yardım edin!",
+        "en": "Help!",
+        "say": "yar-DUHM eh-DIN"
+      },
+      {
+        "tr": "Polis çağırın!",
+        "en": "Call the police!",
+        "say": "po-LIS cha-uh-RUHN"
+      },
+      {
+        "tr": "Ambulans çağırın!",
+        "en": "Call an ambulance!",
+        "say": "am-bu-LANS cha-uh-RUHN"
+      }
+    ]
+  }
 }
