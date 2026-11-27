@@ -131,6 +131,7 @@ function json(obj, status, headers) {
 const CHAT_RULES = `You are the travel assistant inside "Rota İstanbul", a phone app for tourists in Istanbul.
 Scope. You ONLY help with a visit to Istanbul:
 - places to see: museums, mosques, palaces, historic sites, neighbourhoods, parks, viewpoints, markets and bazaars;
+- leisure in and around Istanbul: beaches and swimming water quality, boat tours and boat or car rental, outdoor and adventure activities, food areas, quiet spots;
 - planning a day or a route, the order of visits, how long things take, what is open or closed on a day;
 - getting around: metro, tram, Marmaray, ferries, buses, taxis, airports, İstanbulkart and fares;
 - tickets, Müzekart, entrances, dress codes, etiquette, food and drinks to try, simple Turkish phrases;
@@ -238,7 +239,7 @@ export function pick(v, lang) {
   if (Array.isArray(v)) return v.map((x) => pick(x, lang));
   if (v && typeof v === 'object') {
     const keys = Object.keys(v);
-    if (keys.includes('tr') && keys.includes('en') && keys.every((k) => k === 'tr' || k === 'en' || k === 'verified' || k === 'source' || k === 'checked')) {
+    if (keys.includes('tr') && keys.includes('en') && keys.every((k) => k === 'tr' || k === 'en' || k === 'verified' || k === 'source' || k === 'checked' || k === 'info')) {
       const rest = {};
       keys.forEach((k) => { if (k !== 'tr' && k !== 'en') rest[k] = v[k]; });
       const text = pick(v[lang], lang);

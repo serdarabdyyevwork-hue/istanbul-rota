@@ -6,6 +6,8 @@
 <title>Rota İstanbul</title>
 <meta name="description" content="İstanbul için hazır gezi rotaları, internetsiz harita, ulaşım ücreti hesaplayıcı ve semt pazarları.">
 <meta name="theme-color" content="#0B5563">
+<!-- The app has its own light and dark themes; this stops browsers (e.g. Samsung Internet) from darkening it by force. -->
+<meta name="color-scheme" content="light dark">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -250,6 +252,14 @@ details.hsec[open] > summary::after { content: "–"; }
 .asst-privacy { margin-top: 16px; }
 @media (max-width: 420px) { .brand span { display: none; } .brand { padding: 4px; } }
 .rail-panel { margin-bottom: 14px; }
+.search-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+#explore-q { flex: 1; min-width: 0; padding: 11px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 16px; }
+.ask-card { display: flex; gap: 12px; align-items: center; text-decoration: none; color: var(--ink); background: var(--soft); border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; margin-bottom: 12px; }
+.ask-card .ask-ico { font-size: 24px; }
+.ask-card b { display: block; color: var(--primary); }
+.ask-card small { display: block; color: var(--muted); font-size: 13px; }
+.filters .row { flex-wrap: wrap; }
+.handle { touch-action: none; }
 .rail-h { font-size: 16px; }
 .rail-panel .row { display: flex; gap: 8px; align-items: center; }
 .rail-panel input[list] { flex: 1; min-width: 0; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); }
@@ -319,6 +329,8 @@ details.hsec[open] > summary::after { content: "–"; }
     <div id="load-error" class="error" hidden></div>
 
     <section id="view-rotalar">
+      <div class="search-row"><input type="search" id="explore-q" autocomplete="off"><span id="q-mic"></span></div>
+      <a class="ask-card" href="#asistan" id="ask-card"><span class="ask-ico" aria-hidden="true">💬</span><span><b id="t-ask"></b><small id="t-ask-sub"></small></span></a>
       <div class="seg two" id="explore-seg" role="group">
         <button type="button" data-mode="paket"></button>
         <button type="button" data-mode="kesfet"></button>
@@ -332,6 +344,9 @@ details.hsec[open] > summary::after { content: "–"; }
           <div class="chips" id="cat-chips" role="group" style="margin-bottom:0"></div>
           <div class="row">
             <button type="button" class="chip small" id="free-chip" aria-pressed="false"></button>
+            <button type="button" class="chip small" id="open-chip" aria-pressed="false"></button>
+            <button type="button" class="chip small" id="short-chip" aria-pressed="false"></button>
+            <button type="button" class="chip small" id="near-chip" aria-pressed="false"></button>
             <select id="explore-district" style="flex:1"></select>
           </div>
         </div>

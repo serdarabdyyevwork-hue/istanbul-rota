@@ -3,8 +3,9 @@
 Telefona yüklenebilen bir web uygulaması (PWA). App Store veya Google Play gerekmez, komisyon yok.
 
 **İçinde ne var**
-- **Rotalar:** 6 hazır rota (Tarihi Yarımada, Galata–Beyoğlu, Kadıköy–Moda, Yeşil İstanbul, Boğaz kıyısı, Üsküdar–Kuzguncuk).
-- **Harita:** 47 yer (Fatih, Beyoğlu, Beşiktaş, Üsküdar, Kadıköy, Sarıyer, Beykoz, Eyüpsultan, Adalar) ve pazarlar, kategori renkleriyle, Türkçe veya İngilizce yer isimleriyle. "Konumumu göster" düğmesi var. "Haritayı indir (50 MB)" düğmesiyle İstanbul haritası telefona kaydedilir ve **internetsiz çalışır**.
+- **Rotalar:** 9 hazır rota (Tarihi Yarımada, Galata–Beyoğlu, Kadıköy–Moda, Yeşil İstanbul, Boğaz kıyısı, Üsküdar–Kuzguncuk, Vapurla Boğaz ve balık, Anadolu kıyısı, Macera günü).
+- **Harita:** 83 yer, iki yakada 22 ilçe, ve pazarlar, kategori renkleriyle, Türkçe veya İngilizce yer isimleriyle. "Konumumu göster" düğmesi var. "Haritayı indir (50 MB)" düğmesiyle İstanbul haritası telefona kaydedilir ve **internetsiz çalışır**.
+- **Dinlenme ve eğlence:** plajlar, tur ve kiralama, aktivite ve macera, yeme içme, sakin köşe kategorileri. Plajlarda su kalitesi Sağlık Bakanlığı'nın Yüzme Suyu Takip Sistemi'nden (yuzme.saglik.gov.tr), mavi bayrak TÜRÇEV'den (mavibayrak.org.tr) alınır; ikisi de her yaz değişir, yeni sezonda kontrol et. Yer ücretlerinde `"info": true` olan satırlar ücret değil bilgidir ("ücretsiz" filtresini etkilemez). Şile, Ağva, Silivri, Çatalca ve Arnavutköy kıyısı haritanın kapsadığı alanın dışında: işaret görünür ama altı boş kalır.
 - **Ulaşım:** iki yer seç, taksi ücreti İBB tarifesiyle hesaplanır. Araba yakıt masrafı da gösterilir.
 - **Pazarlar:** hangi gün nerede pazar kuruluyor. Bugün kurulanlar en üstte.
 - **Dil:** Türkçe ve İngilizce.

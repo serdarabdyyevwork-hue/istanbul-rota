@@ -138,6 +138,12 @@ var UI = {
   micNoSpeech: { tr: 'Ses duyulmadı. Mikrofona tekrar basıp konuş.', en: 'No speech heard. Tap the microphone and try again.' },
   micFail: { tr: 'Ses tanıma şu an çalışmadı (internet gerekir). Yazarak devam edebilirsin.', en: 'Speech recognition did not work (it needs internet). You can type instead.' },
   streetView: { tr: '360° sokak görünümü', en: '360° street view' },
+  searchPh: { tr: 'Yer, semt veya tür ara (ör. müze, Kadıköy)…', en: 'Search a place, district or type (e.g. museum, Kadıköy)…' },
+  fOpenToday: { tr: 'Bugün açık', en: 'Open today' },
+  fShort: { tr: 'Kısa ziyaret (≤1 saat)', en: 'Short visit (≤1 hour)' },
+  fNear: { tr: 'Yakınımda', en: 'Near me' },
+  askTitle: { tr: 'Asistana sor · Çevirmen', en: 'Ask the assistant · Translator' },
+  askSub: { tr: 'Gezinle ilgili soru sor ya da istediğin dilden Türkçeye çevir.', en: 'Ask about your trip or translate any language to and from Turkish.' },
   railTitle: { tr: 'Metro, tramvay, Marmaray: hangi hat, hangi yön?', en: 'Metro, tram, Marmaray: which line, which direction?' },
   railIntro: { tr: 'Nereden nereye gideceğini yaz. Hangi hatta binip peronda hangi yazıyı arayacağını, kaç durak sonra ineceğini gösterelim.', en: 'Type where you start and where you are going. We show which line to take, which sign to look for on the platform and after how many stops to get off.' },
   railLoading: { tr: 'Metro bilgileri yükleniyor…', en: 'Loading rail information…' },
@@ -356,6 +362,30 @@ function factsHtml(p) {
 function setSheet(size) { $('sheet').dataset.size = size; }
 function sheetPx() { return $('sheet').getBoundingClientRect().height; }
 function mapPadding() { return { top: 80, bottom: Math.round(sheetPx()) + 16, left: 30, right: 30 }; }
+// Drag the handle up or down with a finger; on release the panel snaps to small, half or full.
+var sheetDragged = false;
+function bindSheetDrag() {
+  var h = $('handle'), sheet = $('sheet'), startY = 0, startH = 0, dragging = false;
+  h.addEventListener('pointerdown', function (e) { dragging = true; sheetDragged = false; startY = e.clientY; startH = sheet.getBoundingClientRect().height; try { h.setPointerCapture(e.pointerId); } catch (x) {} });
+  h.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var dy = startY - e.clientY;
+    if (Math.abs(dy) > 6) sheetDragged = true;
+    if (!sheetDragged) return;
+    sheet.style.transition = 'none';
+    sheet.style.height = Math.max(120, Math.min(window.innerHeight - 70, startH + dy)) + 'px';
+  });
+  function end() {
+    if (!dragging) return;
+    dragging = false;
+    if (!sheetDragged) return;
+    var f = sheet.getBoundingClientRect().height / window.innerHeight;
+    sheet.style.transition = ''; sheet.style.height = '';
+    setSheet(f < 0.32 ? 'peek' : f < 0.72 ? 'half' : 'full');
+    setTimeout(function () { sheetDragged = false; }, 50);
+  }
+  h.addEventListener('pointerup', end); h.addEventListener('pointercancel', end);
+}
 function cycleSheet() {
   var s = $('sheet').dataset.size;
   setSheet(s === 'peek' ? 'half' : s === 'half' ? 'full' : 'peek');
@@ -646,7 +676,10 @@ function clearRoute() { drawnStops = []; pendingRoute = null; if (map && overlay
 function fitAll() {
   if (!map) return;
   var b = new maplibregl.LngLatBounds([DATA.places[0].lng, DATA.places[0].lat], [DATA.places[0].lng, DATA.places[0].lat]);
-  DATA.places.forEach(function (p) { if (p.district !== 'Sarıyer' && p.district !== 'Adalar') b.extend([p.lng, p.lat]); });
+  // Frame the central city only: far beaches, airports and forests would zoom the map out too much.
+  DATA.places.forEach(function (p) {
+    if (p.district !== 'Sarıyer' && p.district !== 'Adalar' && p.lat > 40.95 && p.lat < 41.11 && p.lng > 28.83 && p.lng < 29.13) b.extend([p.lng, p.lat]);
+  });
   map.fitBounds(b, { padding: mapPadding(), maxZoom: 14 });
 }
 var drawnStops = [];   // place ids of the numbered stops now on the map
@@ -731,8 +764,12 @@ function removeMap() {
 
 // ---------- Explore: filter places and pick them for the plan ----------
 var exploreMode = 'paket';
-var filt = { cats: [], free: false, district: 'all' };
-function isFree(p) { return (p.fees || []).length > 0 && p.fees.every(function (f) { return /^Ücretsiz/.test(f.tr); }); }
+var filt = { cats: [], free: false, district: 'all', q: '', open: false, short: false, near: false };
+// Facts marked "info" (water quality, Blue Flag) are not prices, so they do not decide "free".
+function isFree(p) {
+  var fees = (p.fees || []).filter(function (f) { return !f.info; });
+  return fees.length > 0 && fees.every(function (f) { return /^Ücretsiz/.test(f.tr); });
+}
 function renderExplore() {
   Array.prototype.forEach.call($('explore-seg').querySelectorAll('button'), function (b) {
     var m = b.getAttribute('data-mode');
@@ -746,21 +783,33 @@ function renderExplore() {
   }).join('');
   $('free-chip').textContent = t('onlyFree');
   $('free-chip').setAttribute('aria-pressed', filt.free ? 'true' : 'false');
+  [['open-chip', 'open', 'fOpenToday'], ['short-chip', 'short', 'fShort'], ['near-chip', 'near', 'fNear']].forEach(function (c) {
+    $(c[0]).textContent = t(c[2]); $(c[0]).setAttribute('aria-pressed', filt[c[1]] ? 'true' : 'false');
+  });
   var districts = DATA.places.map(function (p) { return p.district; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).sort();
   $('explore-district').innerHTML = '<option value="all">' + esc(t('allDistricts')) + '</option>' + districts.map(function (x) { return '<option value="' + esc(x) + '">' + esc(x) + '</option>'; }).join('');
   $('explore-district').value = filt.district;
+  // Search looks at the name in every language, the district, the category and the note.
+  var q = fold(filt.q || '').trim(), today = new Date().getDay();
   var list = DATA.places.filter(function (p) {
-    return (!filt.cats.length || filt.cats.indexOf(p.cat) >= 0) && (!filt.free || isFree(p)) && (filt.district === 'all' || p.district === filt.district);
-  }).sort(function (a, b) { return tx(a.name).localeCompare(tx(b.name), lang); });
+    if (q) {
+      var hay = fold([tx(p.name), p.name.tr, p.name.en, p.district, tx(DATA.categories[p.cat]), tx(p.note)].join(' '));
+      if (q.split(/\s+/).some(function (w) { return hay.indexOf(w) < 0; })) return false;
+    }
+    return (!filt.cats.length || filt.cats.indexOf(p.cat) >= 0) && (!filt.free || isFree(p)) && (filt.district === 'all' || p.district === filt.district) &&
+      (!filt.open || (p.closedDays || []).indexOf(today) < 0) && (!filt.short || visitMin(p) <= 60);
+  });
+  var dist = function (p) { return myPos ? haversineKm(myPos, { lat: p.lat, lng: p.lng }) : 0; };
+  list.sort(filt.near && myPos ? function (a, b) { return dist(a) - dist(b); } : function (a, b) { return tx(a.name).localeCompare(tx(b.name), lang); });
   $('explore-list').innerHTML = list.length ? list.map(function (p) {
     var on = inPlan(p.id);
     return '<div class="pitem"><button type="button" class="open" data-open="' + esc(p.id) + '"><h3>' + esc(tx(p.name)) + (isFree(p) ? '<span class="badge">' + esc(t('free')) + '</span>' : '') + '</h3><span class="where">' +
-      esc(tx(DATA.categories[p.cat])) + ' · ' + esc(p.district) + '</span></button><button type="button" class="add" data-add="' + esc(p.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '" aria-label="' + esc(on ? t('inPlanRemove') : t('addToPlan')) + '">' + (on ? '✓' : '+') + '</button></div>';
+      esc(tx(DATA.categories[p.cat])) + ' · ' + esc(p.district) + (filt.near && myPos ? ' · ' + esc(num(dist(p), 1)) + ' km' : '') + '</span></button><button type="button" class="add" data-add="' + esc(p.id) + '" aria-pressed="' + (on ? 'true' : 'false') + '" aria-label="' + esc(on ? t('inPlanRemove') : t('addToPlan')) + '">' + (on ? '✓' : '+') + '</button></div>';
   }).join('') : '<p class="where">' + esc(t('noResults')) + '</p>';
 }
 
 // ---------- Planner ----------
-var VISIT_MIN = { muze: 90, cami: 30, tarihi: 60, carsi: 60, doga: 90, tiyatro: 120, semt: 45, iskele: 15 };
+var VISIT_MIN = { muze: 90, cami: 30, tarihi: 60, carsi: 60, doga: 90, tiyatro: 120, semt: 45, iskele: 15, plaj: 180, aktivite: 180, yemek: 90, kiralama: 120, sakin: 60 };
 var plan = { stops: [], start: 'tomorrow' };
 try {
   var savedPlan = JSON.parse(localStorage.getItem('rota-plan') || 'null');
@@ -913,7 +962,7 @@ var LEVELS = [
   { min: 150, name: { tr: 'Rehber', en: 'Guide' } },
   { min: 300, name: { tr: 'İstanbul ustası', en: 'Istanbul master' } }
 ];
-var ASIA = ['Kadıköy', 'Üsküdar', 'Adalar'];
+var ASIA = ['Kadıköy', 'Üsküdar', 'Adalar', 'Beykoz', 'Şile', 'Kartal', 'Pendik', 'Ataşehir'];
 var BADGES = [
   { id: 'first', color: '#1D9E75', name: { tr: 'İlk adım', en: 'First step' }, desc: { tr: '1 yer gez', en: 'Visit 1 place' }, ok: function (s) { return s.count >= 1; } },
   { id: 'five', color: '#185FA5', name: { tr: 'Beş durak', en: 'Five stops' }, desc: { tr: '5 yer gez', en: 'Visit 5 places' }, ok: function (s) { return s.count >= 5; } },
@@ -1885,6 +1934,9 @@ function renderText() {
   document.documentElement.lang = lang;
   TABS.forEach(function (k) { $('tab-' + k).querySelector('span').textContent = t('tab' + k.charAt(0).toUpperCase() + k.slice(1)); });
   $('offline').textContent = t('offline');
+  $('explore-q').placeholder = t('searchPh'); $('explore-q').setAttribute('aria-label', t('searchPh'));
+  $('q-mic').innerHTML = micBtn('explore-q', 'app');
+  $('t-ask').textContent = t('askTitle'); $('t-ask-sub').textContent = t('askSub');
   $('asst-btn').setAttribute('aria-label', t('asstTitle'));
   $('t-from').textContent = t('from'); $('t-to').textContent = t('to');
   $('t-km').textContent = t('km'); $('t-wait').textContent = t('wait'); $('t-min').textContent = t('min');
@@ -1916,7 +1968,8 @@ function updateOnline() { $('offline').hidden = navigator.onLine; renderMapStatu
 function bind() {
   $('lang-sel').innerHTML = APP_LANGS.map(function (c) { return '<option value="' + c + '">' + c.toUpperCase() + ' · ' + LANG_LABEL[c] + '</option>'; }).join('');
   $('lang-sel').addEventListener('change', function () { setLang($('lang-sel').value); });
-  $('handle').addEventListener('click', cycleSheet);
+  $('handle').addEventListener('click', function () { if (!sheetDragged) cycleSheet(); });
+  bindSheetDrag();
   window.addEventListener('hashchange', show);
   window.addEventListener('online', updateOnline);
   window.addEventListener('offline', updateOnline);
@@ -1934,6 +1987,16 @@ function bind() {
     renderExplore();
   });
   $('free-chip').addEventListener('click', function () { filt.free = !filt.free; renderExplore(); });
+  $('open-chip').addEventListener('click', function () { filt.open = !filt.open; renderExplore(); });
+  $('short-chip').addEventListener('click', function () { filt.short = !filt.short; renderExplore(); });
+  $('near-chip').addEventListener('click', function () {
+    if (filt.near || myPos) { filt.near = !filt.near; renderExplore(); return; }
+    if (!navigator.geolocation) { toast(t('locateFail')); return; }
+    navigator.geolocation.getCurrentPosition(function (p) { myPos = { lat: p.coords.latitude, lng: p.coords.longitude }; if (map) setMe(); filt.near = true; renderExplore(); },
+      function () { toast(t('locateFail')); }, { enableHighAccuracy: true, timeout: 10000 });
+  });
+  // Typing in the search box switches to "Explore places" and filters as you type.
+  $('explore-q').addEventListener('input', function () { filt.q = $('explore-q').value; if (filt.q && exploreMode !== 'kesfet') exploreMode = 'kesfet'; renderExplore(); });
   $('explore-district').addEventListener('change', function () { filt.district = $('explore-district').value; renderExplore(); });
   $('explore-list').addEventListener('click', function (e) {
     var add = e.target.closest('[data-add]'); if (add) { togglePlan(add.getAttribute('data-add')); return; }
