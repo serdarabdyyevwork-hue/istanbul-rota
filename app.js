@@ -11,13 +11,26 @@ var map = null;
 var myPos = null;
 var installEvent = null;
 var prefs = { palette: 'bogaz', theme: 'auto' };
+// Turkish and English are built in; the other languages are loaded from data/i18n/<code>.json (see tools/i18n.mjs).
+var APP_LANGS = ['tr', 'en', 'ru', 'de', 'ar', 'fr', 'es'];
+var LANG_LABEL = { tr: 'Türkçe', en: 'English', ru: 'Русский', de: 'Deutsch', ar: 'العربية', fr: 'Français', es: 'Español' };
+var LOCALE = { tr: 'tr-TR', en: 'en-GB', ru: 'ru-RU', de: 'de-DE', ar: 'ar-u-nu-latn', fr: 'fr-FR', es: 'es-ES' };
+var I18N = {};   // code -> { ui: {key: text}, content: {english text: text} }
+function loadLang(code) {
+  if (code === 'tr' || code === 'en' || I18N[code]) return Promise.resolve();
+  return fetch('data/i18n/' + code + '.json').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (d) { I18N[code] = d; });
+}
+function locale() { return LOCALE[lang] || 'tr-TR'; }
+// English text of the content, in the chosen extra language when a translation exists.
+function fromEn(en) { var d = I18N[lang]; return (d && d.content[en]) || en; }
 
 try {
   var savedPrefs = JSON.parse(localStorage.getItem('rota-prefs') || '{}');
   if (savedPrefs.palette) prefs.palette = savedPrefs.palette;
   if (savedPrefs.theme) prefs.theme = savedPrefs.theme;
   var savedLang = localStorage.getItem('rota-lang');
-  if (savedLang === 'tr' || savedLang === 'en') lang = savedLang;
+  if (APP_LANGS.indexOf(savedLang) >= 0) lang = savedLang;
 } catch (e) {}
 
 // ---------- Palettes (light and dark variant of each) ----------
@@ -119,6 +132,12 @@ var UI = {
   listen: { tr: 'Dinle', en: 'Listen' },
   showBig: { tr: 'Göster', en: 'Show' },
   noVoice: { tr: 'Bu telefonda Türkçe ses yok; Göster düğmesini kullan.', en: 'No Turkish voice on this phone; use Show instead.' },
+  micLabel: { tr: 'Konuşarak yaz', en: 'Speak instead of typing' },
+  micHint: { tr: 'Mikrofona basıp konuş; yazı kendisi dolar. Ses, telefonun ses tanıma hizmetine (Google veya Apple) gider.', en: 'Tap the microphone and speak; the text fills in. Your voice goes to the phone\'s speech service (Google or Apple).' },
+  micDenied: { tr: 'Mikrofon izni yok. Tarayıcı ayarlarından mikrofona izin ver.', en: 'No microphone permission. Allow the microphone in your browser settings.' },
+  micNoSpeech: { tr: 'Ses duyulmadı. Mikrofona tekrar basıp konuş.', en: 'No speech heard. Tap the microphone and try again.' },
+  micFail: { tr: 'Ses tanıma şu an çalışmadı (internet gerekir). Yazarak devam edebilirsin.', en: 'Speech recognition did not work (it needs internet). You can type instead.' },
+  streetView: { tr: '360° sokak görünümü', en: '360° street view' },
   railTitle: { tr: 'Metro, tramvay, Marmaray: hangi hat, hangi yön?', en: 'Metro, tram, Marmaray: which line, which direction?' },
   railIntro: { tr: 'Nereden nereye gideceğini yaz. Hangi hatta binip peronda hangi yazıyı arayacağını, kaç durak sonra ineceğini gösterelim.', en: 'Type where you start and where you are going. We show which line to take, which sign to look for on the platform and after how many stops to get off.' },
   railLoading: { tr: 'Metro bilgileri yükleniyor…', en: 'Loading rail information…' },
@@ -293,22 +312,30 @@ var UI = {
   about: { tr: 'Bilgiler {d} tarihinde kontrol edildi. Harita verisi: © OpenStreetMap katkıcıları, Protomaps.', en: 'Info checked on {d}. Map data: © OpenStreetMap contributors, Protomaps.' },
   loadError: { tr: 'Şehir bilgileri yüklenemedi. İnternet bağlantını kontrol edip sayfayı yenile.', en: 'Could not load the city info. Check your connection and reload.' }
 };
+// Weekday names: built in for Turkish and English, from the phone's own calendar for the other languages.
+function dayName(i) { return DAYS[lang] ? DAYS[lang][i] : new Date(2024, 0, 7 + i).toLocaleDateString(locale(), { weekday: 'long' }); }
 var DAYS = {
   tr: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
   en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 };
 
 function $(id) { return document.getElementById(id); }
-function tx(o) { return o ? (o[lang] !== undefined ? o[lang] : o.tr) : ''; }
+function tx(o) {
+  if (!o) return '';
+  if (o[lang] !== undefined) return o[lang];
+  if (lang !== 'tr' && typeof o.en === 'string') return fromEn(o.en);
+  return o.tr;
+}
 function t(k, vars) {
-  var s = UI[k][lang];
-  if (vars) Object.keys(vars).forEach(function (v) { s = s.split('{' + v + '}').join(vars[v]); });
+  var s = UI[k][lang] !== undefined ? UI[k][lang] : ((I18N[lang] && I18N[lang].ui[k]) || UI[k].en);
+  // Each inserted value is wrapped in Unicode isolates so Latin names and numbers keep their place in Arabic text.
+  if (vars) Object.keys(vars).forEach(function (v) { s = s.split('{' + v + '}').join('⁨' + vars[v] + '⁩'); });
   return s;
 }
 function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
-function num(n, d) { return Number(n).toLocaleString(lang === 'tr' ? 'tr-TR' : 'en-GB', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
+function num(n, d) { return Number(n).toLocaleString(locale(), { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
 function money(n) { return num(Math.round(n)) + ' TL'; }
-function fmtDate(iso) { var p = iso.split('-'); return lang === 'tr' ? p[2] + '.' + p[1] + '.' + p[0] : iso; }
+function fmtDate(iso) { var p = iso.split('-'); return lang === 'en' ? iso : p[2] + '.' + p[1] + '.' + p[0]; }
 function place(id) { return DATA.places.filter(function (p) { return p.id === id; })[0]; }
 function market(id) { return DATA.markets.filter(function (m) { return m.id === id; })[0]; }
 function haversineKm(a, b) {
@@ -405,10 +432,12 @@ function openPlace(id) {
   var html = '<button type="button" class="back" id="place-back">' + esc(t('back')) + '</button>' +
     '<span class="cat" style="background:' + cat.color + '">' + esc(tx(cat)) + ' · ' + esc(p.district) + '</span>' +
     '<div class="head"><h2>' + esc(tx(p.name)) + '</h2><p>' + esc(tx(p.note)) + '</p></div>' + factsHtml(p) +
-    (isVisited(id) ? '<p class="where" style="margin-top:8px">' + esc(t('visitedOn', { d: new Date(visits[id].date).toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-GB', { day: 'numeric', month: 'long' }) })) + '</p>' : '') +
+    (isVisited(id) ? '<p class="where" style="margin-top:8px">' + esc(t('visitedOn', { d: new Date(visits[id].date).toLocaleDateString(locale(), { day: 'numeric', month: 'long' }) })) + '</p>' : '') +
     '<div class="actions"><button type="button" class="btn" id="plan-toggle">' + esc(inPlan(id) ? t('inPlanRemove') : t('addToPlan')) + '</button>' +
     '<button type="button" class="btn ghost" id="visit-toggle">' + esc(isVisited(id) ? t('visitedBtn') : t('visitBtn')) + '</button>' +
     '<a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + p.lat + ',' + p.lng + '">' + esc(t('directions')) + '</a>' +
+    // 360° street photos of the spot, opened in Google Maps (no key, no cost; needs internet).
+    '<a class="btn ghost" target="_blank" rel="noopener" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=' + p.lat + ',' + p.lng + '">' + esc(t('streetView')) + '</a>' +
     '<button type="button" class="btn ghost" id="fare-here">' + esc(t('fareHere')) + '</button>' +
     '<button type="button" class="btn ghost" id="report-place">' + esc(t('reportPlace')) + '</button></div>';
   if (inRoutes.length) {
@@ -504,16 +533,29 @@ function mapStyle() {
   }
   return {
     version: 8,
-    glyphs: absUrl('maps/fonts/') + '{fontstack}/{range}.pbf',
+    // Fonts go through the "glyph" protocol below: a missing font range must never blank out a whole map tile.
+    glyphs: 'glyph://{fontstack}/{range}.pbf',
     sprite: absUrl('maps/sprites/light'),
     sources: { protomaps: { type: 'vector', url: url, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://protomaps.com">Protomaps</a>' } },
-    layers: basemaps.layers('protomaps', basemaps.namedFlavor(isDark() ? 'dark' : 'light'), { lang: lang })
+    // The offline map fonts only cover Latin/Turkish letters, so Russian and Arabic users get Latin (English) labels,
+    // which also match the street and station signs.
+    layers: basemaps.layers('protomaps', basemaps.namedFlavor(isDark() ? 'dark' : 'light'), { lang: lang === 'ru' || lang === 'ar' ? 'en' : lang })
   };
 }
 
 function ensureMap() {
   if (map || typeof window.maplibregl === 'undefined' || typeof window.pmtiles === 'undefined' || typeof window.basemaps === 'undefined') return;
-  if (!pmProtocol) { pmProtocol = new pmtiles.Protocol(); maplibregl.addProtocol('pmtiles', pmProtocol.tile); }
+  if (!pmProtocol) {
+    pmProtocol = new pmtiles.Protocol(); maplibregl.addProtocol('pmtiles', pmProtocol.tile);
+    // A street name in a script we do not ship (e.g. "ə", Armenian, Chinese) used to make MapLibre drop the
+    // whole tile, leaving a grey square. Now a missing font range simply loads as an empty font:
+    // those few letters are not drawn, but the streets and buildings are.
+    maplibregl.addProtocol('glyph', function (params) {
+      var url = absUrl('maps/fonts/') + params.url.slice('glyph://'.length);
+      return fetch(url).then(function (r) { return r.ok ? r.arrayBuffer() : new ArrayBuffer(0); }, function () { return new ArrayBuffer(0); })
+        .then(function (data) { return { data: data }; });
+    });
+  }
   overlaysReady = false;
   map = new maplibregl.Map({
     container: 'map', style: mapStyle(), center: [28.979, 41.012], zoom: 12.5,
@@ -749,7 +791,7 @@ function legInfo(a, b) {
   return { km: km, min: Math.round(km / 18 * 60 + 8), walk: false, taxi: Math.max(f.min, f.start + km * f.perKm) };
 }
 function hhmm(d) { return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2); }
-function fmtDay(d) { return d.toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long' }); }
+function fmtDay(d) { return d.toLocaleDateString(locale(), { weekday: 'long', day: 'numeric', month: 'long' }); }
 function schedule() {
   var start = planStartDate(), cur = new Date(start), items = [], walkKm = 0;
   plan.stops.forEach(function (id, i) {
@@ -789,7 +831,7 @@ function renderPlan() {
     html += '<div class="pstop"><div class="time">' + hhmm(it.arrive) + '<small>' + esc(t('leave', { t: hhmm(it.leave) })) + '</small></div>' +
       '<button type="button" class="open" data-open="' + esc(it.p.id) + '" style="border:0;background:transparent;text-align:left;padding:0;cursor:pointer;min-width:0;color:inherit">' +
       '<h3>' + esc(tx(it.p.name)) + '</h3><span class="where">' + esc(tx(DATA.categories[it.p.cat])) + ' · ' + esc(it.p.district) + ' · ' + esc(t('stayMin', { m: visitMin(it.p) })) + '</span>' +
-      (it.closed ? '<p class="warn">' + esc(t('closedWarn', { d: DAYS[lang][it.arrive.getDay()] })) + '</p>' : '') + '</button>' +
+      (it.closed ? '<p class="warn">' + esc(t('closedWarn', { d: dayName(it.arrive.getDay()) })) + '</p>' : '') + '</button>' +
       '<div class="tools"><button type="button" class="tool' + (isVisited(it.p.id) ? ' done' : '') + '" data-visit="' + esc(it.p.id) + '" aria-label="' + esc(t('markVisit')) + '" aria-pressed="' + (isVisited(it.p.id) ? 'true' : 'false') + '">✓</button>' +
       '<button type="button" class="tool" data-up="' + i + '" aria-label="' + esc(t('moveUp')) + '">↑</button>' +
       '<button type="button" class="tool" data-down="' + i + '" aria-label="' + esc(t('moveDown')) + '">↓</button>' +
@@ -898,6 +940,39 @@ function levelFor(points) { var l = 0; LEVELS.forEach(function (x, i) { if (poin
 function medal(color) {
   return '<svg viewBox="0 0 36 36" aria-hidden="true"><path d="M12 2h5l-3 9h-5zM24 2h-5l3 9h5z" fill="' + color + '" opacity=".6"/><circle cx="18" cy="22" r="11" fill="' + color + '"/><path d="m18 15 2.1 4.3 4.7.7-3.4 3.3.8 4.7-4.2-2.2-4.2 2.2.8-4.7-3.4-3.3 4.7-.7z" fill="#fff"/></svg>';
 }
+// ---------- Microphone: speak instead of typing ----------
+// Uses the phone's own speech recognition (Chrome on Android, Safari on iPhone). Browsers without it get no button.
+var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+var SPEECH_LANG = { tr: 'tr-TR', en: 'en-US', ru: 'ru-RU', de: 'de-DE', ar: 'ar-SA', fr: 'fr-FR', es: 'es-ES', it: 'it-IT', fa: 'fa-IR', az: 'az-AZ', tk: 'tk-TM', uk: 'uk-UA', zh: 'zh-CN', ja: 'ja-JP', ko: 'ko-KR' };
+var micRec = null;
+function micBtn(target, mode) {
+  if (!SpeechRec) return '';
+  return '<button type="button" class="mic" data-mic="' + target + '" data-mmode="' + mode + '" aria-label="' + esc(t('micLabel')) + '" title="' + esc(t('micLabel')) + '">' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>';
+}
+// Which language to listen for: the app's language, Turkish (station names), or the translator's source language.
+function micLang(mode) {
+  if (mode === 'tr') return 'tr-TR';
+  if (mode === 'trsrc') { var c = asst.dir === 'to' ? (asst.from === 'auto' ? lang : asst.from) : 'tr'; return SPEECH_LANG[c] || 'tr-TR'; }
+  return SPEECH_LANG[lang] || 'tr-TR';
+}
+function micOff() { micRec = null; Array.prototype.forEach.call(document.querySelectorAll('.mic.on'), function (b) { b.classList.remove('on'); }); }
+function startMic(btn) {
+  if (micRec) { micRec.stop(); return; }                 // second tap stops listening
+  var el = $(btn.getAttribute('data-mic')); if (!el) return;
+  var r = new SpeechRec(), base = el.value ? el.value.replace(/\s*$/, ' ') : '';
+  r.lang = micLang(btn.getAttribute('data-mmode')); r.interimResults = true; r.maxAlternatives = 1;
+  r.onresult = function (e) {
+    var said = ''; for (var i = 0; i < e.results.length; i++) said += e.results[i][0].transcript;
+    el.value = base + said;
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+  r.onerror = function (e) { toast(t(e.error === 'not-allowed' || e.error === 'service-not-allowed' ? 'micDenied' : e.error === 'no-speech' ? 'micNoSpeech' : 'micFail')); };
+  r.onend = micOff;
+  micRec = r; btn.classList.add('on');
+  try { r.start(); } catch (err) { micOff(); }
+}
+
 var toastTimer = null;
 function toast(msg) {
   var el = $('toast');
@@ -935,7 +1010,7 @@ function renderMemories() {
   var list = Object.keys(visits).filter(function (id) { return place(id); }).sort(function (a, b) { return visits[b].date < visits[a].date ? -1 : 1; });
   html += '<div class="section"><h3>' + esc(t('historyH')) + '</h3>' + (list.length ? '<div class="vlist">' + list.map(function (id) {
     var p = place(id), d = new Date(visits[id].date);
-    return '<div class="vitem"><span class="d">' + esc(d.toLocaleDateString(lang === 'tr' ? 'tr-TR' : 'en-GB', { day: 'numeric', month: 'short' })) + '</span>' +
+    return '<div class="vitem"><span class="d">' + esc(d.toLocaleDateString(locale(), { day: 'numeric', month: 'short' })) + '</span>' +
       '<button type="button" class="open" data-open="' + esc(id) + '" style="border:0;background:transparent;text-align:left;padding:0;cursor:pointer;color:inherit;font-weight:600">' + esc(tx(p.name)) + '</button>' +
       '<button type="button" class="tool" style="width:auto;padding:0 8px" data-unvisit="' + esc(id) + '">' + esc(t('undo')) + '</button></div>';
   }).join('') + '</div>' : '<p class="where">' + esc(t('noVisits')) + '</p>') + '</div><p class="where">' + esc(t('memNote')) + '</p>';
@@ -1107,7 +1182,7 @@ function renderHelp() {
   });
   html += '<a class="asst-link" href="#asistan"><b>' + esc(t('asstTitle')) + '</b><span>' + esc(t(asstState() === 'ready' ? 'asstReadyShort' : 'asstNoBackendShort')) + '</span></a>';
   html += '<details class="hsec" id="phrasebook" open><summary>' + esc(t('phrasebook')) + '</summary><div class="hitem"><p class="where">' + esc(t('phraseHint')) + '</p>' +
-    '<input type="search" id="phrase-q" placeholder="' + esc(t('phraseSearch')) + '" aria-label="' + esc(t('phraseSearch')) + '" value="' + esc(phraseQ) + '">' +
+    '<div class="row"><input type="search" id="phrase-q" placeholder="' + esc(t('phraseSearch')) + '" aria-label="' + esc(t('phraseSearch')) + '" value="' + esc(phraseQ) + '">' + micBtn('phrase-q', 'app') + '</div>' +
     '<div class="chips" id="phrase-groups" role="group" style="margin-bottom:0">' + H.phraseGroups.map(function (g) {
       return '<button type="button" class="chip small" data-pgroup="' + esc(g.id) + '" aria-pressed="' + (!phraseQ && g.id === phraseGroup) + '">' + esc(tx(g.title)) + '</button>';
     }).join('') + '</div></div><div id="phrase-list"></div></details>';
@@ -1133,18 +1208,19 @@ function phraseMatches(text, max) {
   var words = fold(text).split(/\s+/).filter(function (w) { return w.length >= 2; });
   if (!words.length) return [];
   return allPhrases().map(function (x) {
-    var hay = ' ' + fold(x.p.tr + ' ' + x.p.en) + ' ';
+    var hay = ' ' + fold(x.p.tr + ' ' + x.p.en + ' ' + meaning(x.p)) + ' ';
     var s = 0;
     words.forEach(function (w) { if (hay.indexOf(' ' + w) >= 0) s += w.length >= 4 ? 2 : 1; });
     return { x: x, s: s };
   }).filter(function (m) { return m.s > 0; }).sort(function (a, b) { return b.s - a.s || a.x.p.en.length - b.x.p.en.length; }).slice(0, max || 50).map(function (m) { return m.x; });
 }
+function meaning(p) { return lang === 'tr' || lang === 'en' ? p.en : fromEn(p.en); }
 function phraseRow(x) {
-  return '<div class="phrase"><b>' + esc(x.p.tr) + '</b><span>' + esc(x.p.en) + ' · <i>' + esc(x.p.say) + '</i></span><div class="pbtns">' +
+  return '<div class="phrase"><b>' + esc(x.p.tr) + '</b><span>' + esc(meaning(x.p)) + ' · <i>' + esc(x.p.say) + '</i></span><div class="pbtns">' +
     '<button type="button" class="tool" style="width:auto;padding:0 8px" data-say="' + esc(x.key) + '">' + esc(t('listen')) + '</button>' +
     '<button type="button" class="tool" style="width:auto;padding:0 8px" data-big="' + esc(x.key) + '">' + esc(t('showBig')) + '</button></div></div>';
 }
-function bigBox(p) { return '<div class="show-big"><b>' + esc(p.tr) + '</b><span>' + esc(p.en) + '</span></div>'; }
+function bigBox(p) { return '<div class="show-big"><b>' + esc(p.tr) + '</b><span>' + esc(meaning(p)) + '</span></div>'; }
 function renderPhraseList() {
   var box = $('phrase-list'); if (!box) return;
   var list = phraseQ ? phraseMatches(phraseQ) : allPhrases().filter(function (x) { return x.g.id === phraseGroup; });
@@ -1211,7 +1287,7 @@ try {
 } catch (e) {}
 function saveAsst() { try { localStorage.setItem('rota-asst', JSON.stringify({ share: asst.share, to: asst.to })); } catch (e) {} }
 function asstState() { return !ASSIST_URL ? 'nobackend' : navigator.onLine ? 'ready' : 'offline'; }
-function langName(c) { var l = TR_LANGS.filter(function (x) { return x.c === c; })[0]; return l ? tx(l) + ' · ' + l.n : c; }
+function langName(c) { var l = TR_LANGS.filter(function (x) { return x.c === c; })[0]; return !l ? c : (lang === 'tr' || lang === 'en') ? l[lang] + ' · ' + l.n : l.n; }
 
 // What the server may see: only what the user ticked. Location is rounded (3 decimals ≈ 100 m).
 function asstContext() {
@@ -1305,7 +1381,7 @@ function renderAssistant() {
       }).join('') + (asst.busy ? '<div class="msg bot wait">' + esc(t('asstThinking')) + '</div>' : '') + '</div>';
     if (!asst.msgs.length) html += '<div class="chips">' + ['asstSug1', 'asstSug2', 'asstSug3'].map(function (k) {
       return '<button type="button" class="chip small" data-sug="' + k + '">' + esc(t(k)) + '</button>'; }).join('') + '</div>';
-    html += '<form class="asst-form" id="asst-form"><textarea id="asst-q" rows="2" maxlength="600" placeholder="' + esc(t('asstPlaceholder')) + '" aria-label="' + esc(t('asstPlaceholder')) + '"></textarea>' +
+    html += '<form class="asst-form" id="asst-form"><textarea id="asst-q" rows="2" maxlength="600" placeholder="' + esc(t('asstPlaceholder')) + '" aria-label="' + esc(t('asstPlaceholder')) + '"></textarea>' + micBtn('asst-q', 'app') +
       '<button class="btn" type="submit"' + (asst.busy ? ' disabled' : '') + '>' + esc(t('asstSend')) + '</button></form>' +
       '<div class="consent"><label><input type="checkbox" data-share="plan"' + (asst.share.plan ? ' checked' : '') + '> ' + esc(t('asstSharePlan')) + '</label>' +
       '<label><input type="checkbox" data-share="loc"' + (asst.share.loc ? ' checked' : '') + '> ' + esc(t('asstShareLoc')) + '</label>' +
@@ -1321,7 +1397,8 @@ function renderAssistant() {
       '<div class="field"><label for="tr-lang">' + esc(t('trLang')) + '</label><select id="tr-lang">' + opts + '</select></div>' +
       '<form class="field" id="tr-form" style="margin-top:10px"><label for="tr-text">' + esc(t('trInput')) + '</label>' +
       '<textarea id="tr-text" maxlength="1000" placeholder="' + esc(t('trInputPh')) + '"></textarea>' +
-      '<button class="btn" type="submit"' + (asst.busy ? ' disabled' : '') + '>' + esc(asst.busy ? t('asstThinking') : t('trGo')) + '</button></form>';
+      '<div class="row">' + micBtn('tr-text', 'trsrc') + '<button class="btn" type="submit" style="flex:1"' + (asst.busy ? ' disabled' : '') + '>' + esc(asst.busy ? t('asstThinking') : t('trGo')) + '</button></div></form>' +
+      (SpeechRec ? '<p class="where">' + esc(t('micHint')) + '</p>' : '');
     var r = asst.tr;
     if (r) {
       if (r.result) {
@@ -1503,7 +1580,8 @@ function railChoices() {
     var hint = /^Yeni Havalimanı/.test(n) ? ' (' + t('railNewAirport') + ')' : /^Atatürk Havalimanı/.test(n) ? ' (' + t('railOldAirport') + ')' : '';
     out.push({ label: n + hint + ' · ' + lines.join(' '), kind: 'stop', stop: railIdx.stops[n] });
   });
-  DATA.places.forEach(function (p) { out.push({ label: tx(p.name) + ' (' + t('railPlace') + ')', kind: 'place', place: p }); });
+  // Places also match their Turkish and English names (what people see on signs), whatever the app language.
+  DATA.places.forEach(function (p) { out.push({ label: tx(p.name) + ' (' + t('railPlace') + ')', alt: p.name.tr + ' ' + p.name.en, kind: 'place', place: p }); });
   return out;
 }
 function findChoice(text) {
@@ -1511,8 +1589,8 @@ function findChoice(text) {
   if (text === t('railMe')) return { kind: 'me' };
   var all = railChoices(), f = fold(text).trim();
   return all.filter(function (c) { return c.label === text; })[0] ||
-    all.filter(function (c) { return fold(c.label).indexOf(f) === 0; })[0] ||
-    all.filter(function (c) { return fold(c.label).indexOf(f) >= 0; })[0] || null;
+    all.filter(function (c) { return fold(c.label).indexOf(f) === 0 || fold(c.alt || '').indexOf(f) === 0; })[0] ||
+    all.filter(function (c) { return fold(c.label + ' ' + (c.alt || '')).indexOf(f) >= 0; })[0] || null;
 }
 // Resolve a choice to a stop, plus the walk to/from it when the choice is a place or the user's position.
 function resolveChoice(c) {
@@ -1532,10 +1610,10 @@ function renderRail() {
     '<datalist id="rail-list"><option value="' + esc(t('railMe')) + '">' + opts + '</datalist>' +
     '<div class="field"><label for="rail-from">' + esc(t('railFrom')) + '</label><div class="row">' +
     '<input id="rail-from" list="rail-list" autocomplete="off" placeholder="' + esc(t('railPh')) + '" value="' + esc(railSel.from) + '">' +
-    '<button type="button" class="btn ghost small" id="rail-me">' + esc(t('railUseMe')) + '</button></div></div>' +
+    micBtn('rail-from', 'tr') + '<button type="button" class="btn ghost small" id="rail-me">' + esc(t('railUseMe')) + '</button></div></div>' +
     '<div class="field"><label for="rail-to">' + esc(t('railTo')) + '</label><div class="row">' +
     '<input id="rail-to" list="rail-list" autocomplete="off" placeholder="' + esc(t('railPh')) + '" value="' + esc(railSel.to) + '">' +
-    '<button type="button" class="btn ghost small" id="rail-swap" aria-label="' + esc(t('railSwap')) + '">⇅</button></div></div>' +
+    micBtn('rail-to', 'tr') + '<button type="button" class="btn ghost small" id="rail-swap" aria-label="' + esc(t('railSwap')) + '">⇅</button></div></div>' +
     '<button type="button" class="btn" id="rail-go">' + esc(t('railGo')) + '</button>' +
     '<div id="rail-result" aria-live="polite"></div>' +
     '<p class="src">' + esc(t('railSource', { d: fmtDate(RAIL.updated) })) + '</p>';
@@ -1705,7 +1783,7 @@ function calc() {
 // ---------- Markets ----------
 function renderMarkets() {
   var d = new Date().getDay();
-  $('today-line').textContent = t('todayIs', { d: DAYS[lang][d] });
+  $('today-line').textContent = t('todayIs', { d: dayName(d) });
   var sel = $('district'), cur = sel.value || 'all';
   var districts = DATA.markets.map(function (m) { return m.district; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).sort();
   sel.innerHTML = '<option value="all">' + esc(t('allDistricts')) + '</option>' + districts.map(function (x) { return '<option value="' + esc(x) + '">' + esc(x) + '</option>'; }).join('');
@@ -1717,7 +1795,7 @@ function renderMarkets() {
   $('markets').innerHTML = list.length ? list.map(function (m) {
     var ds = daysOf(m), isToday = ds.indexOf(d) >= 0;
     var cls = !ds.length ? 'day unknown' : (isToday ? 'day today' : 'day');
-    var label = !ds.length ? t('unknownDay') : (isToday ? t('today') : ds.map(function (x) { return DAYS[lang][x]; }).join(', '));
+    var label = !ds.length ? t('unknownDay') : (isToday ? t('today') : ds.map(function (x) { return dayName(x); }).join(', '));
     return '<article class="market"><span class="' + cls + '">' + esc(label) + '</span><button type="button" class="card" data-market="' + esc(m.id) + '"><h3>' + esc(tx(m.name)) + '</h3><span class="where">' +
       esc(tx(m.where)) + ', ' + esc(m.district) + '</span><p>' + esc(tx(m.sells)) + '</p>' +
       (m.verified ? '' : '<div class="facts"><span class="fact check">' + esc(t('toVerify')) + '</span></div>') + '</button></article>';
@@ -1790,22 +1868,26 @@ function renderText() {
   $('t-install-h').textContent = t('installH'); $('install').textContent = t('install');
   $('t-report-h').textContent = t('reportH'); $('t-report-label').textContent = t('reportLabel');
   $('t-report-send').textContent = t('reportSend'); $('report-copy').textContent = t('reportCopy');
-  $('lang-tr').setAttribute('aria-pressed', lang === 'tr' ? 'true' : 'false');
-  $('lang-en').setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+  $('lang-sel').value = lang;
+  $('lang-code').textContent = lang.toUpperCase();
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
   renderRoutes(); renderExplore(); renderPlan(); renderTrip(); renderMemories(); renderHelp(); renderAssistant(); renderRail(); renderTransportOptions(); calc(); renderMarkets(); renderSettings(); renderMapStatus();
   if (!$('view-yer').hidden) showView(currentTab);
 }
 function setLang(l) {
-  lang = l;
-  try { localStorage.setItem('rota-lang', l); } catch (e) {}
-  renderText();
-  if (map) resetMap();   // map labels follow the chosen language
+  // Extra languages are loaded first; if that fails (e.g. offline before the first visit), keep the current one.
+  loadLang(l).then(function () {
+    lang = l;
+    try { localStorage.setItem('rota-lang', l); } catch (e) {}
+    renderText();
+    if (map) resetMap();   // map labels follow the chosen language
+  }, function () { $('lang-sel').value = lang; toast(UI.loadError[lang] || UI.loadError.en); });
 }
 function updateOnline() { $('offline').hidden = navigator.onLine; renderMapStatus(); renderAssistant(); }
 
 function bind() {
-  $('lang-tr').addEventListener('click', function () { setLang('tr'); });
-  $('lang-en').addEventListener('click', function () { setLang('en'); });
+  $('lang-sel').innerHTML = APP_LANGS.map(function (c) { return '<option value="' + c + '">' + c.toUpperCase() + ' · ' + LANG_LABEL[c] + '</option>'; }).join('');
+  $('lang-sel').addEventListener('change', function () { setLang($('lang-sel').value); });
   $('handle').addEventListener('click', cycleSheet);
   window.addEventListener('hashchange', show);
   window.addEventListener('online', updateOnline);
@@ -1834,6 +1916,7 @@ function bind() {
   $('view-yardim').addEventListener('input', onPhraseInput);
   $('view-asistan').addEventListener('click', onAsstClick);
   $('rail-box').addEventListener('click', onRailClick);
+  document.addEventListener('click', function (e) { var b = e.target.closest('[data-mic]'); if (b) { e.preventDefault(); startMic(b); } });
   $('rail-box').addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); railGo(); } });
   $('view-asistan').addEventListener('change', onAsstChange);
   $('view-asistan').addEventListener('submit', onAsstSubmit);
@@ -1892,7 +1975,11 @@ function start() {
 
 fetch('data/istanbul.json')
   .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-  .then(function (d) { DATA = d; start(); })
+  .then(function (d) {
+    DATA = d;
+    // A saved extra language is loaded before the first paint; if it cannot be loaded, English is used.
+    return loadLang(lang).catch(function () { lang = 'en'; }).then(start);
+  })
   .catch(function (err) {
     // Right after an update the phone can briefly mix an old saved page with new code.
     // If the page is missing something this code needs, reload once to get the matching page.

@@ -139,6 +139,19 @@ await test('Anthropic rate limit becomes 429 busy', async () => {
   assert.deepEqual(await r.json(), { error: 'busy' });
 });
 
+await test('scope rules limit the assistant to Istanbul trips and cap the answer size', async () => {
+  const c = fakeClient('x');
+  await handle(req('/chat', chatBody), env, c);
+  assert.match(c.calls[0].system[0].text, /ONLY help with a visit to Istanbul/);
+  assert.match(c.calls[0].system[0].text, /homework/);
+  assert.equal(c.calls[0].max_tokens, 1200);
+});
+await test('a Russian app gets the English data and is named in the context', async () => {
+  const c = fakeClient('x');
+  await handle(req('/chat', { messages: [{ role: 'user', content: 'Привет' }], context: { lang: 'ru' } }), env, c);
+  assert.match(c.calls[0].system[0].text, /Hagia Sophia/);
+  assert.match(c.calls[0].system[1].text, /App language: Russian/);
+});
 await test('missing API key gives a clear 503, not a crash', async () => {
   const r = await handle(req('/chat', chatBody), env, null);
   assert.equal(r.status, 503);

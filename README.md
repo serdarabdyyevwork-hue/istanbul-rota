@@ -10,6 +10,8 @@ Telefona yüklenebilen bir web uygulaması (PWA). App Store veya Google Play ger
 - **Dil:** Türkçe ve İngilizce.
 - **Eksik bilgi bildir:** kullanıcı yazar, şimdilik telefonda saklanır.
 - **Cep sözlüğü:** 8 bölüm, 64 cümle (temel, ulaşım, yeme içme, alışveriş, konaklama, sağlık, acil, sayılar), arama kutusu, sesli okuma. İnternetsiz çalışır. Cümleler `data/istanbul.json` → `help.phraseGroups` içinde.
+- **Diller:** Türkçe, İngilizce, Rusça, Almanca, Arapça (sağdan sola), Fransızca, İspanyolca. Üst çubuktaki 🌐 düğmesinden seçilir. TR ve EN metinleri `app.js` ve `data/istanbul.json` içinde; diğer diller `tools/i18n/<dil>.json` dosyalarında, `node tools/i18n.mjs build` ile `data/i18n/` içine derlenir. Yeni bir metin eklenince önce `node tools/i18n.mjs source`, sonra çevirileri ekleyip `build`. Pazar açıklamaları bu dillerde şimdilik İngilizce. Rusça ve Arapçada harita yazıları Latin harfli (İngilizce) kalır.
+- **Mikrofon:** asistan, çeviri, cep sözlüğü araması ve istasyon kutularında 🎤 düğmesi (telefonun ses tanıma hizmeti; internet gerekir).
 - **Asistan ve çevirmen (hazırlanıyor):** üst çubuktaki konuşma balonu. Ekran çalışır ama sunucu kurulana kadar "henüz hazır değil" der; çeviride internetsiz olarak sözlükten benzer cümleleri gösterir. Sunucu kodu `server/` klasöründe (Cloudflare Workers); kurulum adımları `server/KURULUM.md` içinde. Sunucu kurulunca `app.js` içindeki `ASSIST_URL` doldurulur. Yapay zekâ anahtarı **asla** uygulamada durmaz, yalnızca sunucuda saklanır.
 - **İnternetsiz:** rotalar, ücretler ve pazarlar ilk açılıştan sonra internetsiz çalışır. Harita, "Haritayı indir" düğmesine bir kez basıldıktan sonra internetsiz çalışır.
 
