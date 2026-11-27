@@ -119,6 +119,79 @@ var UI = {
   listen: { tr: 'Dinle', en: 'Listen' },
   showBig: { tr: 'Göster', en: 'Show' },
   noVoice: { tr: 'Bu telefonda Türkçe ses yok; Göster düğmesini kullan.', en: 'No Turkish voice on this phone; use Show instead.' },
+  railTitle: { tr: 'Metro, tramvay, Marmaray: hangi hat, hangi yön?', en: 'Metro, tram, Marmaray: which line, which direction?' },
+  railIntro: { tr: 'Nereden nereye gideceğini yaz. Hangi hatta binip peronda hangi yazıyı arayacağını, kaç durak sonra ineceğini gösterelim.', en: 'Type where you start and where you are going. We show which line to take, which sign to look for on the platform and after how many stops to get off.' },
+  railLoading: { tr: 'Metro bilgileri yükleniyor…', en: 'Loading rail information…' },
+  railFrom: { tr: 'Nereden', en: 'From' },
+  railTo: { tr: 'Nereye', en: 'To' },
+  railPh: { tr: 'İstasyon veya gezilecek yer yaz…', en: 'Type a station or a place…' },
+  railMe: { tr: 'Konumum', en: 'My location' },
+  railUseMe: { tr: 'Konumum', en: 'My location' },
+  railSwap: { tr: 'Nereden ve nereyeyi değiştir', en: 'Swap from and to' },
+  railGo: { tr: 'Nasıl giderim?', en: 'How do I get there?' },
+  railPlace: { tr: 'yer', en: 'place' },
+  railNewAirport: { tr: 'İstanbul Havalimanı', en: 'Istanbul Airport' },
+  railOldAirport: { tr: 'eski havalimanı, yolcu uçuşu yok', en: 'old airport, no passenger flights' },
+  railPick: { tr: 'Listeden bir istasyon veya yer seç (yazmaya başlayınca liste açılır).', en: 'Pick a station or place from the list (it opens as you type).' },
+  railSame: { tr: 'İkisi de aynı istasyona yakın; yürüyerek gidebilirsin.', en: 'Both are near the same station; you can walk.' },
+  railNone: { tr: 'Raylı sistemle bağlantı bulunamadı. Otobüs, vapur veya taksi gerekebilir.', en: 'No rail connection found. You may need a bus, ferry or taxi.' },
+  railNoPos: { tr: 'Konumun alınamadı. Konum iznini aç ya da bir istasyon yaz.', en: 'Could not get your location. Allow location or type a station.' },
+  railLocating: { tr: 'Konumun bulunuyor…', en: 'Finding your location…' },
+  railSummary: { tr: 'Yaklaşık {m} dk · {n} aktarma', en: 'About {m} min · {n} change(s)' },
+  railWalkTo: { tr: '🚶 {from} → {to} istasyonuna yürü (yaklaşık {m} m, {min} dk)', en: '🚶 Walk from {from} to {to} station (about {m} m, {min} min)' },
+  railWalkFrom: { tr: '🚶 {from} istasyonundan çık, {to} yerine yürü (yaklaşık {m} m, {min} dk)', en: '🚶 Leave {from} station and walk to {to} (about {m} m, {min} min)' },
+  railFar: { tr: 'Uzak: taksi veya otobüs daha iyi olabilir.', en: 'Far: a taxi or bus may be better.' },
+  railChange: { tr: '↔ Aktarma: {a} istasyonunda in, {line} hattına geç ({b}, yaklaşık {m} m yürüme). Tabelalarda {line} işaretini takip et.', en: '↔ Change: get off at {a} and walk to the {line} line ({b}, about {m} m). Follow the {line} signs.' },
+  railSignLabel: { tr: 'Peronda bu yazıyı ara', en: 'Look for this sign on the platform' },
+  railOr: { tr: 'veya', en: 'or' },
+  railLoop: { tr: 'Bu hat tek yönde tur atar; her araç doğru yöne gider.', en: 'This line runs one way in a loop; every tram goes the right way.' },
+  railRide: { tr: '{from} istasyonundan bin → {n} durak → {to} istasyonunda in.', en: 'Board at {from} → {n} stops → get off at {to}.' },
+  railStops: { tr: 'Aradaki {n} durak', en: '{n} stops in between' },
+  railHours: { tr: 'İlk sefer {f} · son sefer {l} (Metro İstanbul)', en: 'First train {f} · last train {l} (Metro İstanbul)' },
+  railNotNow: { tr: 'Şu an bu hatta sefer olmayabilir (çalışma saatleri dışında).', en: 'There may be no service now (outside operating hours).' },
+  railComputed: { tr: 'Bu hattın durak sırası istasyon konumlarından hesaplandı; resmî haritayla da kontrol et.', en: 'This line\'s stop order was worked out from station positions; check the official map too.' },
+  railTip: { tr: 'İpucu: aracın önünde yazan son durak, ineceğin durağın ilerisinde olmalı. Bazı seferler hattın sonuna kadar gitmez. Süreler tahminidir.', en: 'Tip: the destination shown on the front of the train must be beyond your stop. Some trains end early. Times are estimates.' },
+  railSource: { tr: 'Kaynak: Metro İstanbul ve İBB Açık Veri ({d}). Hat renkleri Metro İstanbul\'dan; Marmaray, M11, F2 ve Sirkeci–Kazlıçeşme renkleri resmî değil.', en: 'Source: Metro İstanbul and İBB Open Data ({d}). Line colors from Metro İstanbul; Marmaray, M11, F2 and Sirkeci–Kazlıçeşme colors are not official.' },
+  phraseSearch: { tr: 'Sözlükte ara (Türkçe veya İngilizce)', en: 'Search the phrasebook (English or Turkish)' },
+  phraseNone: { tr: 'Bu kelimeyle cümle yok. Başka bir kelime dene.', en: 'No phrase with that word. Try another word.' },
+  phraseFound: { tr: '{n} cümle bulundu', en: '{n} phrases found' },
+  // Assistant and translator (need internet and the app's own server)
+  asstTitle: { tr: 'Asistan ve çevirmen', en: 'Assistant and translator' },
+  asstNoBackendShort: { tr: 'Soru sor, çeviri yap. İnternet ve sunucu gerekir; henüz hazır değil.', en: 'Ask questions, translate. Needs internet and the server; not ready yet.' },
+  asstReadyShort: { tr: 'Gezinle ilgili soru sor, istediğin dilden Türkçeye çevir.', en: 'Ask about your trip, translate any language to and from Turkish.' },
+  asstChat: { tr: 'Sohbet', en: 'Chat' },
+  asstTranslate: { tr: 'Çeviri', en: 'Translate' },
+  asstNoBackend: { tr: 'Bu bölüm henüz hazır değil. Asistan ve çeviri için internet ve uygulamanın kendi sunucusu gerekir; sunucu henüz kurulmadı. Şimdilik cep sözlüğü internetsiz çalışır.', en: 'This part is not ready yet. The assistant and translator need internet and the app\'s own server, which is not set up yet. The pocket phrasebook works offline in the meantime.' },
+  asstOffline: { tr: 'İnternet yok. Asistan ve çeviri internetle çalışır. Cep sözlüğü internetsiz çalışır.', en: 'No internet. The assistant and translator need internet. The pocket phrasebook works offline.' },
+  asstToPhrasebook: { tr: 'Cep sözlüğünü aç', en: 'Open the phrasebook' },
+  asstHello: { tr: 'Merhaba! İstanbul gezinle ilgili sorabilirsin: nereye gidilir, nasıl gidilir, ne kadar tutar, hangi gün kapalı. Uygulamadaki bilgilere göre cevap veririm; emin olmadığım şeyi söylerim.', en: 'Hello! Ask me about your Istanbul trip: where to go, how to get there, what it costs, which day a place is closed. I answer from the app\'s own information and say so when I am not sure.' },
+  asstSug1: { tr: 'Bugün hangi müzeler açık?', en: 'Which museums are open today?' },
+  asstSug2: { tr: 'Sultanahmet\'e en ucuz nasıl giderim?', en: 'What is the cheapest way to Sultanahmet?' },
+  asstSug3: { tr: 'Planıma göre öğle yemeğini nerede yerim?', en: 'Where should I have lunch on my plan?' },
+  asstPlaceholder: { tr: 'Sorunu yaz…', en: 'Type your question…' },
+  asstSend: { tr: 'Gönder', en: 'Send' },
+  asstSharePlan: { tr: 'Planımı paylaş', en: 'Share my plan' },
+  asstShareLoc: { tr: 'Yaklaşık konumumu paylaş', en: 'Share my rough location' },
+  asstShareNote: { tr: 'İşaretlemezsen planın ve konumun gönderilmez. Konum yaklaşık 100 metreye yuvarlanır.', en: 'Unless you tick these, your plan and location are not sent. Location is rounded to about 100 metres.' },
+  asstPrivacy: { tr: 'Yazdıkların cevap için uygulamanın sunucusuna ve yapay zekâ hizmetine gönderilir. İsim, pasaport no gibi kişisel bilgi yazma. Yapay zekâ yanılabilir; fiyat ve saatleri resmî kaynaktan kontrol et.', en: 'What you type is sent to the app\'s server and an AI service to get an answer. Do not type personal details such as your name or passport number. AI can be wrong; check prices and hours with the official source.' },
+  asstThinking: { tr: 'Cevap hazırlanıyor…', en: 'Working on an answer…' },
+  asstWait: { tr: 'Biraz bekle, sonra tekrar gönder.', en: 'Please wait a moment, then send again.' },
+  asstError: { tr: 'Cevap alınamadı. İnternetini kontrol edip tekrar dene.', en: 'Could not get an answer. Check your internet and try again.' },
+  asstLimit: { tr: 'Çok sık gönderdin. Bir dakika bekleyip tekrar dene.', en: 'Too many in a row. Wait a minute and try again.' },
+  asstBusy: { tr: 'Asistan şu an çok yoğun. Biraz sonra tekrar dene.', en: 'The assistant is very busy right now. Try again shortly.' },
+  asstClear: { tr: 'Sohbeti temizle', en: 'Clear chat' },
+  trToTr: { tr: 'Türkçeye çevir', en: 'Into Turkish' },
+  trFromTr: { tr: 'Türkçeden çevir', en: 'From Turkish' },
+  trLang: { tr: 'Dil', en: 'Language' },
+  trAuto: { tr: 'Dili kendisi tanısın', en: 'Detect the language' },
+  trInput: { tr: 'Çevrilecek metin', en: 'Text to translate' },
+  trInputPh: { tr: 'Buraya yaz…', en: 'Type here…' },
+  trGo: { tr: 'Çevir', en: 'Translate' },
+  trResult: { tr: 'Çeviri', en: 'Translation' },
+  trMatches: { tr: 'İnternetsiz: cep sözlüğünde benzer cümleler', en: 'Offline: similar phrases in the pocket phrasebook' },
+  trNoMatch: { tr: 'Cep sözlüğünde benzer cümle yok.', en: 'No similar phrase in the pocket phrasebook.' },
+  trEmpty: { tr: 'Önce çevrilecek metni yaz.', en: 'Type the text to translate first.' },
+  trSay: { tr: 'Sesli oku', en: 'Read aloud' },
   modePackages: { tr: 'Hazır rotalar', en: 'Ready routes' },
   modeExplore: { tr: 'Yerleri keşfet', en: 'Explore places' },
   onlyFree: { tr: 'Sadece ücretsiz', en: 'Free only' },
@@ -196,7 +269,8 @@ var UI = {
   offlineMap: { tr: 'İnternetsiz harita', en: 'Offline map' },
   mapDownload: { tr: 'Haritayı indir ({s} MB)', en: 'Download map ({s} MB)' },
   mapDownloading: { tr: 'İndiriliyor: {p}', en: 'Downloading: {p}' },
-  mapDownloadFail: { tr: 'İndirme yarıda kaldı. İnternetini kontrol edip tekrar dene.', en: 'The download stopped. Check your connection and try again.' },
+  mapWasBroken: { tr: 'Telefondaki harita eksik inmişti, silindi. Aşağıdan tekrar indirebilirsin.', en: 'The saved map was incomplete and has been removed. You can download it again below.' },
+  mapDownloadFail: { tr:'İndirme yarıda kaldı. İnternetini kontrol edip tekrar dene.', en: 'The download stopped. Check your connection and try again.' },
   mapSaved: { tr: 'İstanbul haritası telefonda kayıtlı. İnternetsiz çalışır.', en: 'The Istanbul map is saved on this phone. It works offline.' },
   mapOnline: { tr: 'Harita şu an internetten geliyor. İnternetsiz kullanmak için bir kez indir (Wi-Fi önerilir).', en: 'The map is loading over the internet. Download it once to use it offline (Wi-Fi recommended).' },
   mapNeedDownload: { tr: 'İnternet yok ve harita indirilmemiş. İnternete bağlanınca haritayı indir.', en: 'No internet and the map is not downloaded. Download it when you are back online.' },
@@ -259,7 +333,7 @@ function cycleSheet() {
 }
 
 function showView(id) {
-  ['rotalar', 'plan', 'anilar', 'ulasim', 'pazarlar', 'yer', 'yardim', 'ayarlar'].forEach(function (k) { $('view-' + k).hidden = k !== id; });
+  ['rotalar', 'plan', 'anilar', 'ulasim', 'pazarlar', 'yer', 'yardim', 'asistan', 'ayarlar'].forEach(function (k) { $('view-' + k).hidden = k !== id; });
   TABS.forEach(function (k) {
     var a = $('tab-' + k);
     if (k === id) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
@@ -268,10 +342,11 @@ function showView(id) {
 }
 function show() {
   var v = (location.hash || '#rotalar').slice(1);
-  if (TABS.indexOf(v) < 0 && v !== 'yardim') v = 'rotalar';
+  var full = v === 'yardim' || v === 'asistan';   // full-height screens opened from the top bar
+  if (TABS.indexOf(v) < 0 && !full) v = 'rotalar';
   currentTab = v;
   showView(v);
-  if (v === 'yardim') { setSheet('full'); return; }
+  if (full) { setSheet('full'); return; }
   if ($('sheet').dataset.size === 'peek') setSheet('half');
   // The map shows what the open tab is about: your plan, or the chosen ready route.
   if (v === 'plan') drawPlan();
@@ -387,11 +462,34 @@ var pendingRoute = null;
 function absUrl(p) { return new URL(p, location.href).href; }
 function emptyFC() { return { type: 'FeatureCollection', features: [] }; }
 
+// A map file cut off mid-download still opens, but shows only the first part of the city (the rest stays
+// blank). The PMTiles header says where the last byte should be, so a short file can be caught.
+function mapComplete(blob) {
+  if (!blob || blob.size < 127) return Promise.resolve(false);
+  return blob.slice(0, 127).arrayBuffer().then(function (buf) {
+    var dv = new DataView(buf), b = new Uint8Array(buf);
+    if (String.fromCharCode.apply(null, b.subarray(0, 7)) !== 'PMTiles') return false;
+    var u64 = function (o) { return dv.getUint32(o, true) + dv.getUint32(o + 4, true) * 4294967296; };
+    var end = Math.max(u64(8) + u64(16), u64(24) + u64(32), u64(40) + u64(48), u64(56) + u64(64));
+    return blob.size >= end;
+  }, function () { return false; });
+}
+var mapWasBroken = false;
 function loadSavedMap() {
   if (!('caches' in window)) return Promise.resolve(null);
   return caches.open(MAP_CACHE)
-    .then(function (c) { return c.match(absUrl(MAP_URL)); })
-    .then(function (res) { return res ? res.blob() : null; })
+    .then(function (c) {
+      return c.match(absUrl(MAP_URL))
+        .then(function (res) { return res ? res.blob() : null; })
+        .then(function (b) {
+          if (!b) return null;
+          return mapComplete(b).then(function (ok) {
+            if (ok) return b;
+            mapWasBroken = true;               // throw the broken copy away; the map then loads online
+            return c.delete(absUrl(MAP_URL)).then(function () { return null; });
+          });
+        });
+    })
     .then(function (b) { mapFile = b; renderMapStatus(); return b; })
     .catch(function () { renderMapStatus(); return null; });
 }
@@ -496,6 +594,7 @@ function addOverlays() {
   });
   overlaysReady = true;
   if (myPos) setMe();
+  addRailLayers();
 }
 
 function clearRoute() { drawnStops = []; pendingRoute = null; if (map && overlaysReady) map.getSource('route').setData(emptyFC()); }
@@ -546,7 +645,7 @@ function renderMapStatus() {
   $('map-remove').hidden = !saved;
   $('map-remove').textContent = t('mapRemove');
   $('map-status').className = 'status' + (saved ? ' saved' : '');
-  $('map-status').textContent = saved ? t('mapSaved') : (navigator.onLine ? t('mapOnline') : t('mapNeedDownload'));
+  $('map-status').textContent = saved ? t('mapSaved') : (mapWasBroken ? t('mapWasBroken') + ' ' : '') + (navigator.onLine ? t('mapOnline') : t('mapNeedDownload'));
 }
 function downloadMap() {
   $('map-download').disabled = true;
@@ -557,7 +656,11 @@ function downloadMap() {
       var reader = res.body.getReader();
       function pump() {
         return reader.read().then(function (r) {
-          if (r.done) return new Blob(chunks, { type: 'application/octet-stream' });
+          if (r.done) {
+            var blob = new Blob(chunks, { type: 'application/octet-stream' });
+            if (total && got < total) throw new Error('short');   // never save a cut-off file
+            return mapComplete(blob).then(function (ok) { if (!ok) throw new Error('short'); return blob; });
+          }
           chunks.push(r.value); got += r.value.length;
           $('map-status').textContent = t('mapDownloading', { p: total ? Math.round(got / total * 100) + '%' : Math.round(got / 1e6) + ' MB' });
           return pump();
@@ -1002,36 +1105,564 @@ function renderHelp() {
     });
     html += '</details>';
   });
-  html += '<details class="hsec" open><summary>' + esc(t('phrasebook')) + '</summary><div class="hitem"><p class="where">' + esc(t('phraseHint')) + '</p>' +
-    (bigPhrase !== null ? '<div class="show-big"><b>' + esc(H.phrases[bigPhrase].tr) + '</b><span>' + esc(H.phrases[bigPhrase].en) + '</span></div>' : '') + '</div>';
-  H.phrases.forEach(function (p, i) {
-    html += '<div class="phrase"><b>' + esc(p.tr) + '</b><span>' + esc(p.en) + ' · <i>' + esc(p.say) + '</i></span><div class="pbtns">' +
-      '<button type="button" class="tool" style="width:auto;padding:0 8px" data-say="' + i + '">' + esc(t('listen')) + '</button>' +
-      '<button type="button" class="tool" style="width:auto;padding:0 8px" data-big="' + i + '">' + esc(t('showBig')) + '</button></div></div>';
-  });
-  html += '</details>';
+  html += '<a class="asst-link" href="#asistan"><b>' + esc(t('asstTitle')) + '</b><span>' + esc(t(asstState() === 'ready' ? 'asstReadyShort' : 'asstNoBackendShort')) + '</span></a>';
+  html += '<details class="hsec" id="phrasebook" open><summary>' + esc(t('phrasebook')) + '</summary><div class="hitem"><p class="where">' + esc(t('phraseHint')) + '</p>' +
+    '<input type="search" id="phrase-q" placeholder="' + esc(t('phraseSearch')) + '" aria-label="' + esc(t('phraseSearch')) + '" value="' + esc(phraseQ) + '">' +
+    '<div class="chips" id="phrase-groups" role="group" style="margin-bottom:0">' + H.phraseGroups.map(function (g) {
+      return '<button type="button" class="chip small" data-pgroup="' + esc(g.id) + '" aria-pressed="' + (!phraseQ && g.id === phraseGroup) + '">' + esc(tx(g.title)) + '</button>';
+    }).join('') + '</div></div><div id="phrase-list"></div></details>';
   $('view-yardim').innerHTML = html;
+  var row = $('phrase-groups'), on = row.querySelector('[aria-pressed="true"]');
+  if (on) row.scrollLeft = on.offsetLeft - row.offsetLeft - 16;   // keep the chosen category in view
+  renderPhraseList();
 }
-function sayTurkish(text) {
+// The phrasebook shows one category at a time, or the search results across all of them.
+var phraseGroup = 'temel', phraseQ = '';
+function allPhrases() {
+  var out = [];
+  DATA.help.phraseGroups.forEach(function (g) { g.phrases.forEach(function (p, i) { out.push({ key: g.id + ':' + i, p: p, g: g }); }); });
+  return out;
+}
+function phraseByKey(k) {
+  var parts = k.split(':'), g = DATA.help.phraseGroups.filter(function (x) { return x.id === parts[0]; })[0];
+  return g ? g.phrases[+parts[1]] : null;
+}
+function fold(s) { return String(s).toLocaleLowerCase('tr-TR').replace(/[.,!?¿¡()/'’"-]/g, ' '); }
+// Score phrases by how many of the typed words they contain (both Turkish and English sides).
+function phraseMatches(text, max) {
+  var words = fold(text).split(/\s+/).filter(function (w) { return w.length >= 2; });
+  if (!words.length) return [];
+  return allPhrases().map(function (x) {
+    var hay = ' ' + fold(x.p.tr + ' ' + x.p.en) + ' ';
+    var s = 0;
+    words.forEach(function (w) { if (hay.indexOf(' ' + w) >= 0) s += w.length >= 4 ? 2 : 1; });
+    return { x: x, s: s };
+  }).filter(function (m) { return m.s > 0; }).sort(function (a, b) { return b.s - a.s || a.x.p.en.length - b.x.p.en.length; }).slice(0, max || 50).map(function (m) { return m.x; });
+}
+function phraseRow(x) {
+  return '<div class="phrase"><b>' + esc(x.p.tr) + '</b><span>' + esc(x.p.en) + ' · <i>' + esc(x.p.say) + '</i></span><div class="pbtns">' +
+    '<button type="button" class="tool" style="width:auto;padding:0 8px" data-say="' + esc(x.key) + '">' + esc(t('listen')) + '</button>' +
+    '<button type="button" class="tool" style="width:auto;padding:0 8px" data-big="' + esc(x.key) + '">' + esc(t('showBig')) + '</button></div></div>';
+}
+function bigBox(p) { return '<div class="show-big"><b>' + esc(p.tr) + '</b><span>' + esc(p.en) + '</span></div>'; }
+function renderPhraseList() {
+  var box = $('phrase-list'); if (!box) return;
+  var list = phraseQ ? phraseMatches(phraseQ) : allPhrases().filter(function (x) { return x.g.id === phraseGroup; });
+  var big = bigPhrase ? phraseByKey(bigPhrase) : null;
+  box.innerHTML = (big ? '<div class="hitem">' + bigBox(big) + '</div>' : '') +
+    (phraseQ ? '<p class="where hitem">' + esc(list.length ? t('phraseFound', { n: list.length }) : t('phraseNone')) + '</p>' : '') +
+    list.map(phraseRow).join('');
+}
+// Reads text aloud with the phone's own voices (works offline when the phone has the voice).
+function sayIn(text, code) {
   if (!('speechSynthesis' in window)) return false;
   var u = new SpeechSynthesisUtterance(text);
-  u.lang = 'tr-TR';
+  u.lang = code === 'tr' ? 'tr-TR' : code;
   u.rate = 0.9;
-  var v = window.speechSynthesis.getVoices().filter(function (x) { return /^tr/i.test(x.lang); })[0];
+  var re = new RegExp('^' + code, 'i');
+  var v = window.speechSynthesis.getVoices().filter(function (x) { return re.test(x.lang); })[0];
   if (v) u.voice = v;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(u);
   return true;
 }
+function sayTurkish(text) { return sayIn(text, 'tr'); }
 function onHelpClick(e) {
+  var g = e.target.closest('[data-pgroup]');
+  if (g) { phraseGroup = g.getAttribute('data-pgroup'); phraseQ = ''; bigPhrase = null; renderHelp(); return; }
   var b = e.target.closest('[data-say],[data-big]');
   if (!b) return;
-  var i = +(b.getAttribute('data-say') || b.getAttribute('data-big'));
-  if (b.hasAttribute('data-say')) { if (!sayTurkish(DATA.help.phrases[i].tr)) alertSheet(t('noVoice')); return; }
-  bigPhrase = bigPhrase === i ? null : i;
-  renderHelp();
-  var box = $('view-yardim').querySelector('.show-big');
+  var k = b.getAttribute('data-say') || b.getAttribute('data-big'), p = phraseByKey(k);
+  if (!p) return;
+  if (b.hasAttribute('data-say')) { if (!sayTurkish(p.tr)) alertSheet(t('noVoice')); return; }
+  bigPhrase = bigPhrase === k ? null : k;
+  renderPhraseList();
+  var box = $('phrase-list').querySelector('.show-big');
   if (box) box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function onPhraseInput(e) {
+  if (e.target.id !== 'phrase-q') return;
+  phraseQ = e.target.value.trim(); bigPhrase = null;
+  Array.prototype.forEach.call(document.querySelectorAll('#phrase-groups [data-pgroup]'), function (c) {
+    c.setAttribute('aria-pressed', String(!phraseQ && c.getAttribute('data-pgroup') === phraseGroup));
+  });
+  renderPhraseList();
+}
+
+// ---------- Assistant (chat) and translator ----------
+// Both need internet and the app's own small server, which holds the AI key (never the phone).
+// Until ASSIST_URL is set, the screen works but says plainly that it is not ready.
+var ASSIST_URL = 'https://istanbul-rota-asistan.istanbul-rota.workers.dev';
+var ASSIST_COOLDOWN_MS = 4000;
+var TR_LANGS = [
+  { c: 'en', tr: 'İngilizce', en: 'English', n: 'English' }, { c: 'ar', tr: 'Arapça', en: 'Arabic', n: 'العربية' },
+  { c: 'ru', tr: 'Rusça', en: 'Russian', n: 'Русский' }, { c: 'de', tr: 'Almanca', en: 'German', n: 'Deutsch' },
+  { c: 'fr', tr: 'Fransızca', en: 'French', n: 'Français' }, { c: 'es', tr: 'İspanyolca', en: 'Spanish', n: 'Español' },
+  { c: 'it', tr: 'İtalyanca', en: 'Italian', n: 'Italiano' }, { c: 'fa', tr: 'Farsça', en: 'Persian', n: 'فارسی' },
+  { c: 'az', tr: 'Azerbaycan Türkçesi', en: 'Azerbaijani', n: 'Azərbaycanca' }, { c: 'tk', tr: 'Türkmence', en: 'Turkmen', n: 'Türkmençe' },
+  { c: 'uk', tr: 'Ukraynaca', en: 'Ukrainian', n: 'Українська' }, { c: 'zh', tr: 'Çince', en: 'Chinese', n: '中文' },
+  { c: 'ja', tr: 'Japonca', en: 'Japanese', n: '日本語' }, { c: 'ko', tr: 'Korece', en: 'Korean', n: '한국어' }
+];
+var asst = { mode: 'chat', msgs: [], busy: false, last: 0, share: { plan: false, loc: false }, dir: 'to', from: 'auto', to: 'en', tr: null };
+try {
+  var savedAsst = JSON.parse(localStorage.getItem('rota-asst') || '{}');
+  if (savedAsst.share) asst.share = { plan: !!savedAsst.share.plan, loc: !!savedAsst.share.loc };
+  if (savedAsst.to) asst.to = savedAsst.to;
+} catch (e) {}
+function saveAsst() { try { localStorage.setItem('rota-asst', JSON.stringify({ share: asst.share, to: asst.to })); } catch (e) {} }
+function asstState() { return !ASSIST_URL ? 'nobackend' : navigator.onLine ? 'ready' : 'offline'; }
+function langName(c) { var l = TR_LANGS.filter(function (x) { return x.c === c; })[0]; return l ? tx(l) + ' · ' + l.n : c; }
+
+// What the server may see: only what the user ticked. Location is rounded (3 decimals ≈ 100 m).
+function asstContext() {
+  var ctx = { lang: lang, today: new Date().toISOString().slice(0, 10), weekday: new Date().getDay() };
+  if (asst.share.plan && plan.stops.length) {
+    var s = schedule();
+    ctx.plan = s.items.map(function (it) { return { id: it.p.id, arrive: hhmm(it.arrive), day: it.arrive.getDay() }; });
+  }
+  if (asst.share.loc && myPos) ctx.near = { lat: Math.round(myPos.lat * 1000) / 1000, lng: Math.round(myPos.lng * 1000) / 1000 };
+  return ctx;
+}
+// A random id for this phone, so the server can limit how often one phone asks. It says nothing about the person.
+function deviceId() {
+  try {
+    var id = localStorage.getItem('rota-device');
+    if (!id) {
+      id = window.crypto && crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + '-' + String(Math.random()).slice(2, 10);
+      localStorage.setItem('rota-device', id);
+    }
+    return id;
+  } catch (e) { return ''; }
+}
+// One request to the app's server. Errors come back as a short code the screen can explain.
+function askServer(path, body) {
+  var ctrl = window.AbortController ? new AbortController() : null;
+  var timer = setTimeout(function () { if (ctrl) ctrl.abort(); }, 30000);
+  var headers = { 'Content-Type': 'application/json' }, dev = deviceId();
+  if (dev) headers['X-Device'] = dev;
+  return fetch(ASSIST_URL.replace(/\/$/, '') + path, {
+    method: 'POST', headers: headers, body: JSON.stringify(body), signal: ctrl ? ctrl.signal : undefined
+  }).then(function (r) {
+    clearTimeout(timer);
+    if (r.status === 429) return r.json().catch(function () { return {}; }).then(function (b) { throw new Error(b.error === 'busy' ? 'busy' : 'limit'); });
+    if (!r.ok) throw new Error('error');
+    return r.json();
+  }, function () { clearTimeout(timer); throw new Error('error'); });
+}
+function asstErrKey(err) { return err.message === 'limit' ? 'asstLimit' : err.message === 'busy' ? 'asstBusy' : 'asstError'; }
+function cooledDown() {
+  if (Date.now() - asst.last < ASSIST_COOLDOWN_MS) return false;
+  asst.last = Date.now(); return true;
+}
+function asstNote(key) { asst.msgs.push({ role: 'note', text: t(key) }); }
+function asstSend(text) {
+  text = (text || '').trim();
+  if (!text || asst.busy) return;
+  var st = asstState();
+  asst.msgs.push({ role: 'user', text: text });
+  if (st !== 'ready') { asstNote(st === 'offline' ? 'asstOffline' : 'asstNoBackend'); renderAssistant(); return; }
+  if (!cooledDown()) { asst.msgs.pop(); asstNote('asstWait'); renderAssistant(); return; }
+  asst.busy = true; renderAssistant();
+  var history = asst.msgs.filter(function (m) { return m.role === 'user' || m.role === 'assistant'; }).slice(-10)
+    .map(function (m) { return { role: m.role, content: m.text }; });
+  askServer('/chat', { messages: history, context: asstContext() }).then(function (r) {
+    asst.msgs.push({ role: 'assistant', text: String(r.reply || '') });
+  }, function (err) { asstNote(asstErrKey(err)); }).then(function () {
+    asst.busy = false; renderAssistant();
+  });
+}
+function asstTranslate(text) {
+  text = (text || '').trim();
+  if (!text) { asst.tr = { text: '', err: 'trEmpty' }; renderAssistant(); return; }
+  var from = asst.dir === 'to' ? asst.from : 'tr', to = asst.dir === 'to' ? 'tr' : asst.to;
+  // The phrasebook match runs on the phone, so there is always something useful offline.
+  asst.tr = { text: text, from: from, to: to, matches: phraseMatches(text, 3), result: null, err: null };
+  var st = asstState();
+  if (st !== 'ready') { asst.tr.err = st === 'offline' ? 'asstOffline' : 'asstNoBackend'; renderAssistant(); return; }
+  if (!cooledDown()) { asst.tr.err = 'asstWait'; renderAssistant(); return; }
+  asst.busy = true; renderAssistant();
+  askServer('/translate', { text: text, from: from, to: to }).then(function (r) {
+    asst.tr.result = String(r.text || '');
+  }, function (err) { asst.tr.err = asstErrKey(err); }).then(function () {
+    asst.busy = false; renderAssistant();
+  });
+}
+function renderAssistant() {
+  var v = $('view-asistan'); if (!v || !DATA) return;
+  var keep = { q: $('asst-q') ? $('asst-q').value : '', tx: $('tr-text') ? $('tr-text').value : (asst.tr ? asst.tr.text : '') };
+  var st = asstState();
+  var banner = st === 'ready' ? '' : '<div class="asst-banner"><p>' + esc(t(st === 'offline' ? 'asstOffline' : 'asstNoBackend')) + '</p>' +
+    '<a class="btn ghost small" href="#yardim" data-goto="phrasebook">' + esc(t('asstToPhrasebook')) + '</a></div>';
+  var html = '<h2 class="asst-h">' + esc(t('asstTitle')) + '</h2>' +
+    '<div class="seg two" role="group"><button type="button" data-amode="chat" aria-pressed="' + (asst.mode === 'chat') + '">' + esc(t('asstChat')) + '</button>' +
+    '<button type="button" data-amode="translate" aria-pressed="' + (asst.mode === 'translate') + '">' + esc(t('asstTranslate')) + '</button></div>' + banner;
+  if (asst.mode === 'chat') {
+    html += '<div class="bubbles" id="bubbles" aria-live="polite"><div class="msg bot">' + esc(t('asstHello')) + '</div>' +
+      asst.msgs.map(function (m) {
+        // Answers may mark words as **bold**; show that as bold, everything else as plain escaped text.
+        var body = m.role === 'assistant' ? esc(m.text).replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>') : esc(m.text);
+        return '<div class="msg ' + (m.role === 'user' ? 'me' : m.role === 'assistant' ? 'bot' : 'note') + '" dir="auto">' + body + '</div>';
+      }).join('') + (asst.busy ? '<div class="msg bot wait">' + esc(t('asstThinking')) + '</div>' : '') + '</div>';
+    if (!asst.msgs.length) html += '<div class="chips">' + ['asstSug1', 'asstSug2', 'asstSug3'].map(function (k) {
+      return '<button type="button" class="chip small" data-sug="' + k + '">' + esc(t(k)) + '</button>'; }).join('') + '</div>';
+    html += '<form class="asst-form" id="asst-form"><textarea id="asst-q" rows="2" maxlength="600" placeholder="' + esc(t('asstPlaceholder')) + '" aria-label="' + esc(t('asstPlaceholder')) + '"></textarea>' +
+      '<button class="btn" type="submit"' + (asst.busy ? ' disabled' : '') + '>' + esc(t('asstSend')) + '</button></form>' +
+      '<div class="consent"><label><input type="checkbox" data-share="plan"' + (asst.share.plan ? ' checked' : '') + '> ' + esc(t('asstSharePlan')) + '</label>' +
+      '<label><input type="checkbox" data-share="loc"' + (asst.share.loc ? ' checked' : '') + '> ' + esc(t('asstShareLoc')) + '</label>' +
+      '<p class="where">' + esc(t('asstShareNote')) + '</p></div>' +
+      (asst.msgs.length ? '<button type="button" class="back" data-aclear="1">' + esc(t('asstClear')) + '</button>' : '');
+  } else {
+    var opts = (asst.dir === 'to' ? '<option value="auto">' + esc(t('trAuto')) + '</option>' : '') + TR_LANGS.map(function (l) {
+      var sel = (asst.dir === 'to' ? asst.from : asst.to) === l.c;
+      return '<option value="' + l.c + '"' + (sel ? ' selected' : '') + '>' + esc(langName(l.c)) + '</option>';
+    }).join('');
+    html += '<div class="seg two" role="group"><button type="button" data-dir="to" aria-pressed="' + (asst.dir === 'to') + '">' + esc(t('trToTr')) + '</button>' +
+      '<button type="button" data-dir="from" aria-pressed="' + (asst.dir === 'from') + '">' + esc(t('trFromTr')) + '</button></div>' +
+      '<div class="field"><label for="tr-lang">' + esc(t('trLang')) + '</label><select id="tr-lang">' + opts + '</select></div>' +
+      '<form class="field" id="tr-form" style="margin-top:10px"><label for="tr-text">' + esc(t('trInput')) + '</label>' +
+      '<textarea id="tr-text" maxlength="1000" placeholder="' + esc(t('trInputPh')) + '"></textarea>' +
+      '<button class="btn" type="submit"' + (asst.busy ? ' disabled' : '') + '>' + esc(asst.busy ? t('asstThinking') : t('trGo')) + '</button></form>';
+    var r = asst.tr;
+    if (r) {
+      if (r.result) {
+        html += '<div class="tr-out"><span class="label">' + esc(t('trResult')) + ' · ' + esc(r.to === 'tr' ? 'Türkçe' : langName(r.to)) + '</span><p class="tr-big" dir="auto">' + esc(r.result) + '</p>' +
+          '<div class="hactions"><button type="button" class="btn ghost small" data-trsay="1">' + esc(t('trSay')) + '</button></div></div>';
+      }
+      if (r.err) html += '<p class="msg note" style="margin-top:12px">' + esc(t(r.err)) + '</p>';
+      if (r.matches) {
+        html += '<div class="hsec tr-matches"><p class="label" style="padding:10px 14px 0">' + esc(t('trMatches')) + '</p>' +
+          (r.matches.length ? r.matches.map(phraseRow).join('') : '<p class="where hitem">' + esc(t('trNoMatch')) + '</p>') + '</div>';
+      }
+    }
+  }
+  html += '<p class="where asst-privacy">' + esc(t('asstPrivacy')) + '</p>';
+  v.innerHTML = html;
+  if ($('asst-q')) $('asst-q').value = keep.q;
+  if ($('tr-text')) $('tr-text').value = keep.tx;
+  var bub = $('bubbles'); if (bub && asst.msgs.length) bub.lastElementChild.scrollIntoView({ block: 'nearest' });
+}
+function onAsstClick(e) {
+  var el = e.target.closest('[data-amode],[data-sug],[data-dir],[data-aclear],[data-trsay],[data-say],[data-big],[data-goto]');
+  if (!el) return;
+  if (el.hasAttribute('data-goto')) {   // the link itself opens #yardim; then jump to the phrasebook
+    bigPhrase = null; phraseQ = '';
+    setTimeout(function () { renderHelp(); var pb = $('phrasebook'); if (pb) pb.scrollIntoView({ block: 'start' }); }, 0);
+    return;
+  }
+  if (el.hasAttribute('data-amode')) { asst.mode = el.getAttribute('data-amode'); renderAssistant(); return; }
+  if (el.hasAttribute('data-sug')) { $('asst-q').value = t(el.getAttribute('data-sug')); $('asst-q').focus(); return; }
+  if (el.hasAttribute('data-dir')) { asst.dir = el.getAttribute('data-dir'); asst.tr = null; renderAssistant(); return; }
+  if (el.hasAttribute('data-aclear')) { asst.msgs = []; renderAssistant(); return; }
+  if (el.hasAttribute('data-trsay')) { if (!sayIn(asst.tr.result, asst.tr.to)) alertSheet(t('noVoice')); return; }
+  var p = phraseByKey(el.getAttribute('data-say') || el.getAttribute('data-big'));
+  if (!p) return;
+  if (el.hasAttribute('data-say')) { if (!sayTurkish(p.tr)) alertSheet(t('noVoice')); return; }
+  // "Show" from the translator opens the same big card in the phrasebook.
+  bigPhrase = el.getAttribute('data-big'); phraseQ = ''; phraseGroup = bigPhrase.split(':')[0];
+  location.hash = '#yardim';
+  setTimeout(function () { renderHelp(); var b = $('phrase-list') && $('phrase-list').querySelector('.show-big'); if (b) b.scrollIntoView({ block: 'center' }); }, 0);
+}
+function onAsstChange(e) {
+  var s = e.target.getAttribute('data-share');
+  if (s) { asst.share[s] = e.target.checked; saveAsst(); return; }
+  if (e.target.id === 'tr-lang') {
+    if (asst.dir === 'to') asst.from = e.target.value; else { asst.to = e.target.value; saveAsst(); }
+  }
+}
+function onAsstSubmit(e) {
+  e.preventDefault();
+  if (e.target.id === 'asst-form') { var q = $('asst-q').value; $('asst-q').value = ''; asstSend(q); }
+  if (e.target.id === 'tr-form') asstTranslate($('tr-text').value);
+}
+function onAsstKey(e) {
+  // Enter sends, Shift+Enter makes a new line (chat box only).
+  if (e.target.id === 'asst-q' && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('asst-form').requestSubmit ? $('asst-form').requestSubmit() : onAsstSubmit({ preventDefault: function () {}, target: $('asst-form') }); }
+}
+
+// ---------- Rail: lines on the map and "which train, which direction" ----------
+// data/rail.json is built by tools/build-rail.mjs from Metro İstanbul and İBB open data.
+// In Istanbul the platform direction is signed with the line's LAST station, so every ride step
+// names that station: "take M2 from the platform signed Hacıosman".
+var RAIL = null, railIdx = null, railSel = { from: '', to: '' }, railResult = null;
+function loadRail() {
+  return fetch('data/rail.json').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (d) { RAIL = d; buildRailIndex(); renderRail(); if (overlaysReady) addRailLayers(); })
+    .catch(function () { RAIL = null; renderRail(); });
+}
+function railLine(id) { return railIdx.lines[id]; }
+function lineLabel(l) { return l.label || l.id; }
+function buildRailIndex() {
+  var lines = {}, stops = {}, adj = {};
+  RAIL.lines.forEach(function (l) {
+    lines[l.id] = l;
+    l.stations.forEach(function (s, i) {
+      var k = l.id + ':' + i;
+      adj[k] = [];
+      (stops[s.n] = stops[s.n] || { n: s.n, c: s.c, nodes: [] }).nodes.push(k);
+    });
+  });
+  RAIL.lines.forEach(function (l) {
+    var hop = l.type && l.type.tr === 'Tramvay' ? 1.5 : l.stations.length === 2 ? 3 : 2;   // minutes, an estimate
+    for (var i = 0; i < l.stations.length - 1; i++) {
+      adj[l.id + ':' + i].push({ to: l.id + ':' + (i + 1), w: hop, ride: true });
+      if (!l.loop) adj[l.id + ':' + (i + 1)].push({ to: l.id + ':' + i, w: hop, ride: true });
+    }
+    if (l.loop) adj[l.id + ':' + (l.stations.length - 1)].push({ to: l.id + ':0', w: hop, ride: true });
+  });
+  RAIL.transfers.forEach(function (t) {
+    var w = 4 + t[4] / 70, a = t[0] + ':' + t[1], b = t[2] + ':' + t[3];
+    adj[a].push({ to: b, w: w, m: t[4] }); adj[b].push({ to: a, w: w, m: t[4] });
+  });
+  railIdx = { lines: lines, stops: stops, adj: adj };
+}
+function nodeStation(k) { var p = k.split(':'); return railLine(p[0]).stations[+p[1]]; }
+function nearestStop(pt) {
+  var best = null, bd = Infinity;
+  Object.keys(railIdx.stops).forEach(function (n) {
+    var s = railIdx.stops[n], d = haversineKm({ lat: pt.lat, lng: pt.lng }, { lat: s.c[1], lng: s.c[0] });
+    if (d < bd) { bd = d; best = s; }
+  });
+  return { stop: best, km: bd };
+}
+// Shortest trip (estimated minutes) from any platform of one stop to any platform of another.
+function railRoute(fromStop, toStop) {
+  var dist = {}, prev = {}, done = {}, targets = {};
+  toStop.nodes.forEach(function (k) { targets[k] = true; });
+  fromStop.nodes.forEach(function (k) { dist[k] = 0; });
+  for (;;) {
+    var u = null;
+    Object.keys(dist).forEach(function (k) { if (!done[k] && (u === null || dist[k] < dist[u])) u = k; });
+    if (u === null) return null;
+    if (targets[u]) break;
+    done[u] = true;
+    railIdx.adj[u].forEach(function (e) {
+      var nd = dist[u] + e.w;
+      if (dist[e.to] === undefined || nd < dist[e.to]) { dist[e.to] = nd; prev[e.to] = { from: u, e: e }; }
+    });
+  }
+  var path = [u];
+  while (prev[path[0]]) path.unshift(prev[path[0]].from);
+  // Turn the node path into ride and walk steps.
+  var steps = [], i = 0;
+  while (i < path.length - 1) {
+    var a = path[i].split(':'), b = path[i + 1].split(':');
+    if (a[0] === b[0]) {
+      var j = i + 1;
+      while (j < path.length - 1 && path[j + 1].split(':')[0] === a[0]) j++;
+      steps.push({ ride: true, line: a[0], from: +a[1], to: +path[j].split(':')[1] });
+      i = j;
+    } else {
+      steps.push({ walk: true, from: path[i], to: path[i + 1], m: prev[path[i + 1]].e.m || 0 });
+      i++;
+    }
+  }
+  // Changing between platforms of the very same station (e.g. M1A/M1B at Otogar) is not a real step.
+  steps = steps.filter(function (s) { return !(s.walk && s.m === 0 && nodeStation(s.from).n === nodeStation(s.to).n); });
+  return { steps: steps, min: Math.round(dist[u]) };
+}
+// The station the train is heading to: that is what the platform sign says.
+function rideDirection(l, from, to) {
+  if (l.loop) return null;
+  return to > from ? l.stations[l.stations.length - 1].n : l.stations[0].n;
+}
+// Other lines that run the same stretch (M1A and M1B share Yenikapı–Otogar).
+function rideAlternatives(step) {
+  var l = railLine(step.line), a = l.stations[step.from].n, b = l.stations[step.to].n, out = [];
+  RAIL.lines.forEach(function (o) {
+    if (o.id === l.id) return;
+    var ia = -1, ib = -1;
+    o.stations.forEach(function (s, i) { if (s.n === a) ia = i; if (s.n === b) ib = i; });
+    if (ia >= 0 && ib >= 0 && Math.abs(ib - ia) === Math.abs(step.to - step.from)) out.push({ line: o, dir: rideDirection(o, ia, ib) });
+  });
+  return out;
+}
+function textOn(hex) {
+  var c = parseInt(hex.slice(1), 16), r = c >> 16, g = (c >> 8) & 255, b = c & 255;
+  return (0.299 * r + 0.587 * g + 0.114 * b) > 160 ? '#1A1A1A' : '#FFFFFF';
+}
+function lineBadge(l) {
+  return '<span class="lbadge" style="background:' + esc(l.color) + ';color:' + textOn(l.color) + '">' + esc(lineLabel(l)) + '</span>';
+}
+function minutesOfDay(hhmm) { var p = String(hhmm || '').split(':'); return p.length === 2 ? (+p[0]) * 60 + (+p[1]) : null; }
+function lineRunningNow(l) {
+  if (!l.hours) return null;
+  var f = minutesOfDay(l.hours.first), last = minutesOfDay(l.hours.last), d = new Date(), now = d.getHours() * 60 + d.getMinutes();
+  if (f === null || last === null) return null;
+  if (last < f) last += 24 * 60;                  // last train after midnight
+  if (now < f && now + 24 * 60 <= last) return true;
+  return now >= f && now <= last;
+}
+
+// What the user can pick: "my location", places from the app, or any station.
+function railChoices() {
+  var out = [];
+  Object.keys(railIdx.stops).sort(function (a, b) { return a.localeCompare(b, 'tr'); }).forEach(function (n) {
+    var lines = railIdx.stops[n].nodes.map(function (k) { return lineLabel(railLine(k.split(':')[0])); })
+      .filter(function (x, i, arr) { return arr.indexOf(x) === i; });
+    // Extra words people actually type: the new airport is "İstanbul Havalimanı"; the old Atatürk airport has no passenger flights.
+    var hint = /^Yeni Havalimanı/.test(n) ? ' (' + t('railNewAirport') + ')' : /^Atatürk Havalimanı/.test(n) ? ' (' + t('railOldAirport') + ')' : '';
+    out.push({ label: n + hint + ' · ' + lines.join(' '), kind: 'stop', stop: railIdx.stops[n] });
+  });
+  DATA.places.forEach(function (p) { out.push({ label: tx(p.name) + ' (' + t('railPlace') + ')', kind: 'place', place: p }); });
+  return out;
+}
+function findChoice(text) {
+  if (!text) return null;
+  if (text === t('railMe')) return { kind: 'me' };
+  var all = railChoices(), f = fold(text).trim();
+  return all.filter(function (c) { return c.label === text; })[0] ||
+    all.filter(function (c) { return fold(c.label).indexOf(f) === 0; })[0] ||
+    all.filter(function (c) { return fold(c.label).indexOf(f) >= 0; })[0] || null;
+}
+// Resolve a choice to a stop, plus the walk to/from it when the choice is a place or the user's position.
+function resolveChoice(c) {
+  if (!c) return null;
+  if (c.kind === 'stop') return { stop: c.stop, label: c.stop.n };
+  var pt = c.kind === 'place' ? { lat: c.place.lat, lng: c.place.lng } : myPos;
+  if (!pt) return null;
+  var near = nearestStop(pt);
+  return { stop: near.stop, walkKm: near.km, label: c.kind === 'place' ? tx(c.place.name) : t('railMe'), pt: pt };
+}
+
+function renderRail() {
+  var box = $('rail-box'); if (!box || !DATA) return;
+  if (!RAIL || !railIdx) { box.innerHTML = '<p class="where">' + esc(t('railLoading')) + '</p>'; return; }
+  var opts = railChoices().map(function (c) { return '<option value="' + esc(c.label) + '">'; }).join('');
+  var html = '<h3 class="rail-h">' + esc(t('railTitle')) + '</h3><p class="where">' + esc(t('railIntro')) + '</p>' +
+    '<datalist id="rail-list"><option value="' + esc(t('railMe')) + '">' + opts + '</datalist>' +
+    '<div class="field"><label for="rail-from">' + esc(t('railFrom')) + '</label><div class="row">' +
+    '<input id="rail-from" list="rail-list" autocomplete="off" placeholder="' + esc(t('railPh')) + '" value="' + esc(railSel.from) + '">' +
+    '<button type="button" class="btn ghost small" id="rail-me">' + esc(t('railUseMe')) + '</button></div></div>' +
+    '<div class="field"><label for="rail-to">' + esc(t('railTo')) + '</label><div class="row">' +
+    '<input id="rail-to" list="rail-list" autocomplete="off" placeholder="' + esc(t('railPh')) + '" value="' + esc(railSel.to) + '">' +
+    '<button type="button" class="btn ghost small" id="rail-swap" aria-label="' + esc(t('railSwap')) + '">⇅</button></div></div>' +
+    '<button type="button" class="btn" id="rail-go">' + esc(t('railGo')) + '</button>' +
+    '<div id="rail-result" aria-live="polite"></div>' +
+    '<p class="src">' + esc(t('railSource', { d: fmtDate(RAIL.updated) })) + '</p>';
+  box.innerHTML = html;
+  renderRailResult();
+}
+function renderRailResult() {
+  var box = $('rail-result'); if (!box) return;
+  var r = railResult;
+  if (!r) { box.innerHTML = ''; return; }
+  if (r.err) { box.innerHTML = '<p class="msg note" style="margin-top:12px">' + esc(t(r.err)) + '</p>'; return; }
+  var rides = r.steps.filter(function (s) { return s.ride; }).length;
+  var html = '<div class="rail-sum">' + esc(t('railSummary', { m: r.total, n: Math.max(0, rides - 1) })) + '</div><ol class="rail-steps">';
+  if (r.startWalk) html += '<li class="rstep walk">' + esc(t('railWalkTo', { from: r.startWalk.from, to: r.startWalk.to, m: r.startWalk.m, min: r.startWalk.min })) + (r.startWalk.far ? ' <b>' + esc(t('railFar')) + '</b>' : '') + '</li>';
+  r.steps.forEach(function (s) {
+    if (s.walk) {
+      var a = nodeStation(s.from), b = nodeStation(s.to), lb = railLine(s.to.split(':')[0]);
+      html += '<li class="rstep walk">' + esc(t('railChange', { a: a.n, b: b.n, line: lineLabel(lb), m: Math.max(10, Math.round(s.m / 10) * 10) })) + '</li>';
+      return;
+    }
+    var l = railLine(s.line), dir = rideDirection(l, s.from, s.to);
+    var n = l.loop ? (s.to - s.from + l.stations.length) % l.stations.length : Math.abs(s.to - s.from);
+    var alts = rideAlternatives(s), run = lineRunningNow(l);
+    var between = [];
+    if (!l.loop) { var st = s.from < s.to ? 1 : -1; for (var i = s.from + st; i !== s.to; i += st) between.push(l.stations[i].n); }
+    html += '<li class="rstep ride" style="border-left-color:' + esc(l.color) + '">' +
+      '<div class="rhead">' + lineBadge(l) + alts.map(function (a) { return ' ' + lineBadge(a.line); }).join('') + ' <span>' + esc(tx(l.name)) + '</span></div>' +
+      (dir ? '<div class="sign" aria-label="' + esc(t('railSignLabel')) + '"><small>' + esc(t('railSignLabel')) + '</small><b>→ ' + esc(dir) + '</b>' +
+        alts.filter(function (a) { return a.dir && a.dir !== dir; }).map(function (a) { return '<b class="alt">' + esc(t('railOr')) + ' → ' + esc(a.dir) + '</b>'; }).join('') + '</div>'
+        : '<div class="sign"><b>' + esc(t('railLoop')) + '</b></div>') +
+      '<p>' + esc(t('railRide', { from: l.stations[s.from].n, n: n, to: l.stations[s.to].n })) + '</p>' +
+      (between.length ? '<details><summary>' + esc(t('railStops', { n: between.length })) + '</summary><p class="where">' + esc(between.join(' · ')) + '</p></details>' : '') +
+      (l.hours ? '<p class="where">' + esc(t('railHours', { f: l.hours.first, l: l.hours.last })) + '</p>' : '') +
+      (run === false ? '<p class="warn-line">' + esc(t('railNotNow')) + '</p>' : '') +
+      (l.orderComputed ? '<p class="where">' + esc(t('railComputed')) + '</p>' : '') + '</li>';
+  });
+  if (r.endWalk) html += '<li class="rstep walk">' + esc(t('railWalkFrom', { from: r.endWalk.from, to: r.endWalk.to, m: r.endWalk.m, min: r.endWalk.min })) + (r.endWalk.far ? ' <b>' + esc(t('railFar')) + '</b>' : '') + '</li>';
+  html += '</ol><p class="where">' + esc(t('railTip')) + '</p>';
+  box.innerHTML = html;
+}
+function walkInfo(from, to, k) { var m = Math.round(k * 1300 / 10) * 10; return { from: from, to: to, m: m, min: Math.max(1, Math.round(m / 75)), far: k > 2 }; }
+function railGo() {
+  railSel.from = $('rail-from').value.trim(); railSel.to = $('rail-to').value.trim();
+  var cf = findChoice(railSel.from), ct = findChoice(railSel.to);
+  if (!cf || !ct) { railResult = { err: 'railPick' }; renderRailResult(); return; }
+  if ((cf.kind === 'me' || ct.kind === 'me') && !myPos) {
+    if (!navigator.geolocation) { railResult = { err: 'railNoPos' }; renderRailResult(); return; }
+    railResult = { err: 'railLocating' }; renderRailResult();
+    navigator.geolocation.getCurrentPosition(function (p) { myPos = { lat: p.coords.latitude, lng: p.coords.longitude }; if (map) setMe(); railGo(); },
+      function () { railResult = { err: 'railNoPos' }; renderRailResult(); }, { enableHighAccuracy: true, timeout: 10000 });
+    return;
+  }
+  var a = resolveChoice(cf), b = resolveChoice(ct);
+  if (!a || !b) { railResult = { err: 'railPick' }; renderRailResult(); return; }
+  if (a.stop === b.stop) { railResult = { err: 'railSame' }; renderRailResult(); return; }
+  var r = railRoute(a.stop, b.stop);
+  if (!r) { railResult = { err: 'railNone' }; renderRailResult(); return; }
+  r.startWalk = a.walkKm !== undefined ? walkInfo(a.label, a.stop.n, a.walkKm) : null;
+  r.endWalk = b.walkKm !== undefined ? walkInfo(b.stop.n, b.label, b.walkKm) : null;
+  r.total = r.min + (r.startWalk ? r.startWalk.min : 0) + (r.endWalk ? r.endWalk.min : 0);
+  r.ends = { a: a, b: b };
+  railResult = r; renderRailResult(); drawRailRoute(r);
+}
+
+// ---------- Rail on the map ----------
+function railLinesGeoJSON() {
+  return { type: 'FeatureCollection', features: RAIL.lines.filter(function (l) { return l.geom && l.geom.length; }).map(function (l) {
+    return { type: 'Feature', properties: { id: l.id, color: l.color }, geometry: { type: 'MultiLineString', coordinates: l.geom } };
+  }) };
+}
+function railStationsGeoJSON() {
+  return { type: 'FeatureCollection', features: Object.keys(railIdx.stops).map(function (n) {
+    var s = railIdx.stops[n], l = railLine(s.nodes[0].split(':')[0]);
+    return { type: 'Feature', properties: { n: n, color: l.color }, geometry: { type: 'Point', coordinates: s.c } };
+  }) };
+}
+function addRailLayers() {
+  if (!map || !RAIL || !railIdx || map.getSource('rail-lines')) return;
+  map.addSource('rail-lines', { type: 'geojson', data: railLinesGeoJSON() });
+  map.addLayer({ id: 'rail-lines', type: 'line', source: 'rail-lines', layout: { 'line-cap': 'round', 'line-join': 'round' },
+    paint: { 'line-color': ['get', 'color'], 'line-opacity': 0.85, 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 2, 14, 4, 17, 6] } }, 'route-line');
+  map.addSource('rail-route', { type: 'geojson', data: emptyFC() });
+  map.addLayer({ id: 'rail-route', type: 'line', source: 'rail-route', filter: ['==', ['geometry-type'], 'LineString'], layout: { 'line-cap': 'round', 'line-join': 'round' },
+    paint: { 'line-color': ['get', 'color'], 'line-width': ['interpolate', ['linear'], ['zoom'], 10, 6, 15, 10], 'line-opacity': 0.95 } }, 'route-line');
+  map.addSource('rail-stations', { type: 'geojson', data: railStationsGeoJSON() });
+  map.addLayer({ id: 'rail-st', type: 'circle', source: 'rail-stations', minzoom: 12,
+    paint: { 'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 3, 16, 6], 'circle-color': '#FFFFFF', 'circle-stroke-color': ['get', 'color'], 'circle-stroke-width': 2 } }, 'route-line');
+  map.addLayer({ id: 'rail-st-label', type: 'symbol', source: 'rail-stations', minzoom: 13.5,
+    layout: { 'text-field': ['get', 'n'], 'text-font': ['Noto Sans Medium'], 'text-size': ['interpolate', ['linear'], ['zoom'], 13.5, 11, 17, 15], 'text-offset': [0, 1.1], 'text-anchor': 'top', 'text-optional': true },
+    paint: { 'text-color': '#1A1A1A', 'text-halo-color': '#FFFFFF', 'text-halo-width': 2 } }, 'route-line');
+  map.addLayer({ id: 'rail-route-st', type: 'circle', source: 'rail-route', filter: ['==', ['geometry-type'], 'Point'],
+    paint: { 'circle-radius': 8, 'circle-color': '#FFFFFF', 'circle-stroke-color': ['get', 'color'], 'circle-stroke-width': 4 } });
+  // Tap a station: which lines stop there.
+  map.on('click', 'rail-st', function (e) {
+    var n = e.features[0].properties.n, s = railIdx.stops[n];
+    var badges = s.nodes.map(function (k) { return railLine(k.split(':')[0]); }).filter(function (l, i, arr) { return arr.indexOf(l) === i; }).map(lineBadge).join(' ');
+    new maplibregl.Popup({ closeButton: true }).setLngLat(s.c).setHTML('<b>' + esc(n) + '</b><div style="margin-top:4px">' + badges + '</div>').addTo(map);
+  });
+  map.on('mouseenter', 'rail-st', function () { map.getCanvas().style.cursor = 'pointer'; });
+  map.on('mouseleave', 'rail-st', function () { map.getCanvas().style.cursor = ''; });
+  if (railResult && railResult.steps) drawRailRoute(railResult);
+}
+function drawRailRoute(r) {
+  if (!map || !overlaysReady || !map.getSource('rail-route')) return;
+  var feats = [], pts = [];
+  r.steps.forEach(function (s) {
+    if (!s.ride) return;
+    var l = railLine(s.line), coords = [], st = s.from <= s.to ? 1 : -1;
+    if (l.loop && s.to < s.from) { for (var i = s.from; i < l.stations.length; i++) coords.push(l.stations[i].c); for (i = 0; i <= s.to; i++) coords.push(l.stations[i].c); }
+    else for (var j = s.from; j !== s.to + st; j += st) coords.push(l.stations[j].c);
+    feats.push({ type: 'Feature', properties: { color: l.color }, geometry: { type: 'LineString', coordinates: coords } });
+    [l.stations[s.from], l.stations[s.to]].forEach(function (x) { feats.push({ type: 'Feature', properties: { color: l.color }, geometry: { type: 'Point', coordinates: x.c } }); });
+    pts = pts.concat(coords);
+  });
+  if (r.ends && r.ends.a.pt) pts.push([r.ends.a.pt.lng, r.ends.a.pt.lat]);
+  if (r.ends && r.ends.b.pt) pts.push([r.ends.b.pt.lng, r.ends.b.pt.lat]);
+  map.getSource('rail-route').setData({ type: 'FeatureCollection', features: feats });
+  if (pts.length) {
+    var b = new maplibregl.LngLatBounds(pts[0], pts[0]);
+    pts.forEach(function (p) { b.extend(p); });
+    map.fitBounds(b, { padding: mapPadding(), maxZoom: 15 });
+  }
+}
+function onRailClick(e) {
+  if (e.target.id === 'rail-go') { railGo(); return; }
+  if (e.target.id === 'rail-me') { $('rail-from').value = t('railMe'); return; }
+  if (e.target.id === 'rail-swap') { var a = $('rail-from').value; $('rail-from').value = $('rail-to').value; $('rail-to').value = a; }
 }
 
 // ---------- Transport ----------
@@ -1148,6 +1779,7 @@ function renderText() {
   document.documentElement.lang = lang;
   TABS.forEach(function (k) { $('tab-' + k).querySelector('span').textContent = t('tab' + k.charAt(0).toUpperCase() + k.slice(1)); });
   $('offline').textContent = t('offline');
+  $('asst-btn').setAttribute('aria-label', t('asstTitle'));
   $('t-from').textContent = t('from'); $('t-to').textContent = t('to');
   $('t-km').textContent = t('km'); $('t-wait').textContent = t('wait'); $('t-min').textContent = t('min');
   $('t-fuel').textContent = t('fuel'); $('t-fuel-note').textContent = t('fuelNote');
@@ -1160,7 +1792,7 @@ function renderText() {
   $('t-report-send').textContent = t('reportSend'); $('report-copy').textContent = t('reportCopy');
   $('lang-tr').setAttribute('aria-pressed', lang === 'tr' ? 'true' : 'false');
   $('lang-en').setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
-  renderRoutes(); renderExplore(); renderPlan(); renderTrip(); renderMemories(); renderHelp(); renderTransportOptions(); calc(); renderMarkets(); renderSettings(); renderMapStatus();
+  renderRoutes(); renderExplore(); renderPlan(); renderTrip(); renderMemories(); renderHelp(); renderAssistant(); renderRail(); renderTransportOptions(); calc(); renderMarkets(); renderSettings(); renderMapStatus();
   if (!$('view-yer').hidden) showView(currentTab);
 }
 function setLang(l) {
@@ -1169,7 +1801,7 @@ function setLang(l) {
   renderText();
   if (map) resetMap();   // map labels follow the chosen language
 }
-function updateOnline() { $('offline').hidden = navigator.onLine; renderMapStatus(); }
+function updateOnline() { $('offline').hidden = navigator.onLine; renderMapStatus(); renderAssistant(); }
 
 function bind() {
   $('lang-tr').addEventListener('click', function () { setLang('tr'); });
@@ -1199,6 +1831,13 @@ function bind() {
   });
   $('plan-body').addEventListener('click', onPlanClick);
   $('view-yardim').addEventListener('click', onHelpClick);
+  $('view-yardim').addEventListener('input', onPhraseInput);
+  $('view-asistan').addEventListener('click', onAsstClick);
+  $('rail-box').addEventListener('click', onRailClick);
+  $('rail-box').addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); railGo(); } });
+  $('view-asistan').addEventListener('change', onAsstChange);
+  $('view-asistan').addEventListener('submit', onAsstSubmit);
+  $('view-asistan').addEventListener('keydown', onAsstKey);
   $('view-anilar').addEventListener('click', onMemClick);
   $('trip-panel').addEventListener('click', onTripClick);
   $('trip-panel').addEventListener('change', onTripChange);
@@ -1248,6 +1887,7 @@ function start() {
   show();
   // Map first: open it right away (from the saved offline copy when the phone has one).
   loadSavedMap().then(ensureMap, ensureMap);
+  loadRail();
 }
 
 fetch('data/istanbul.json')

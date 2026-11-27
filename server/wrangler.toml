@@ -1,0 +1,31 @@
+# Cloudflare Worker for the İstanbul Rota assistant and translator.
+# The AI key is NOT in this file. Add it once with:  npx wrangler secret put ANTHROPIC_API_KEY
+name = "istanbul-rota-asistan"
+main = "src/worker.js"
+compatibility_date = "2026-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+# Which Claude model answers. Change here and run "npx wrangler deploy" again.
+MODEL = "claude-opus-5-5"
+TRANSLATE_MODEL = "claude-opus-5-5"
+# Only these sites may use the server (the live app and the local test server).
+ALLOWED_ORIGINS = "https://serdarabdyyevwork-hue.github.io,http://localhost:8080"
+# The app's own city data, read by the assistant.
+DATA_URL = "https://serdarabdyyevwork-hue.github.io/istanbul-rota/data/istanbul.json"
+
+# Per phone: at most 5 questions (and separately 5 translations) per minute.
+[[ratelimits]]
+name = "DEVICE_LIMITER"
+namespace_id = "7101"
+  [ratelimits.simple]
+  limit = 5
+  period = 60
+
+# Whole app: at most 60 requests per minute (per Cloudflare location).
+[[ratelimits]]
+name = "GLOBAL_LIMITER"
+namespace_id = "7102"
+  [ratelimits.simple]
+  limit = 60
+  period = 60

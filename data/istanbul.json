@@ -1770,100 +1770,446 @@
         ]
       }
     ],
-    "phrases": [
+    "phraseGroups": [
       {
-        "tr": "Merhaba",
-        "en": "Hello",
-        "say": "mer-ha-BA"
+        "id": "temel",
+        "title": {
+          "tr": "Temel",
+          "en": "Basics"
+        },
+        "phrases": [
+          {
+            "tr": "Merhaba",
+            "en": "Hello",
+            "say": "mer-ha-BA"
+          },
+          {
+            "tr": "Günaydın",
+            "en": "Good morning",
+            "say": "gün-ay-DUHN"
+          },
+          {
+            "tr": "İyi akşamlar",
+            "en": "Good evening",
+            "say": "ee-YEE ak-sham-LAR"
+          },
+          {
+            "tr": "Teşekkür ederim",
+            "en": "Thank you",
+            "say": "teh-shek-KÜR eh-deh-rim"
+          },
+          {
+            "tr": "Lütfen",
+            "en": "Please",
+            "say": "LÜT-fen"
+          },
+          {
+            "tr": "Evet / Hayır",
+            "en": "Yes / No",
+            "say": "eh-VET / HA-yuhr"
+          },
+          {
+            "tr": "Özür dilerim / Pardon",
+            "en": "Sorry / Excuse me",
+            "say": "ö-ZÜR di-leh-rim / par-DON"
+          },
+          {
+            "tr": "Anlamıyorum",
+            "en": "I don't understand",
+            "say": "an-LA-muh-yo-rum"
+          },
+          {
+            "tr": "İngilizce biliyor musunuz?",
+            "en": "Do you speak English?",
+            "say": "in-gi-LIZ-jeh bi-li-YOR mu-su-nuz"
+          },
+          {
+            "tr": "Tekrar eder misiniz?",
+            "en": "Could you say that again?",
+            "say": "tek-RAR eh-DER mi-si-niz"
+          },
+          {
+            "tr": "Yavaş konuşur musunuz?",
+            "en": "Could you speak slowly?",
+            "say": "ya-VASH ko-nu-SHUR mu-su-nuz"
+          },
+          {
+            "tr": "Tuvalet nerede?",
+            "en": "Where is the toilet?",
+            "say": "too-va-LET neh-reh-DEH"
+          },
+          {
+            "tr": "Hoşça kalın",
+            "en": "Goodbye (said by the one leaving)",
+            "say": "HOSH-cha ka-luhn"
+          }
+        ]
       },
       {
-        "tr": "Teşekkür ederim",
-        "en": "Thank you",
-        "say": "teh-shek-KÜR eh-deh-rim"
+        "id": "ulasim",
+        "title": {
+          "tr": "Ulaşım",
+          "en": "Getting around"
+        },
+        "phrases": [
+          {
+            "tr": "Taksimetreyi açar mısınız?",
+            "en": "Could you turn on the meter?",
+            "say": "tak-si-MET-reh-yi a-CHAR muh-suh-nuz"
+          },
+          {
+            "tr": "Bu adrese gitmek istiyorum",
+            "en": "I want to go to this address",
+            "say": "boo ad-reh-SEH git-MEK is-ti-YO-rum"
+          },
+          {
+            "tr": "En yakın metro nerede?",
+            "en": "Where is the nearest metro?",
+            "say": "en ya-KUHN MET-ro neh-reh-DEH"
+          },
+          {
+            "tr": "Bu otobüs buraya gider mi?",
+            "en": "Does this bus go here? (show the address)",
+            "say": "boo o-to-BÜS bu-ra-YA gi-DER mi"
+          },
+          {
+            "tr": "İstanbulkart nereden alabilirim?",
+            "en": "Where can I buy an İstanbulkart?",
+            "say": "is-TAN-bul-kart neh-reh-DEN a-la-bi-li-rim"
+          },
+          {
+            "tr": "Vapur iskelesi nerede?",
+            "en": "Where is the ferry pier?",
+            "say": "va-PUR is-keh-leh-SI neh-reh-DEH"
+          },
+          {
+            "tr": "Burada inebilir miyim?",
+            "en": "Can I get off here?",
+            "say": "bu-ra-DA i-neh-bi-LIR mi-yim"
+          },
+          {
+            "tr": "Sağ / Sol / Düz",
+            "en": "Right / Left / Straight on",
+            "say": "saa / sol / düz"
+          }
+        ]
       },
       {
-        "tr": "Lütfen",
-        "en": "Please",
-        "say": "LÜT-fen"
+        "id": "yemek",
+        "title": {
+          "tr": "Yeme içme",
+          "en": "Food and drink"
+        },
+        "phrases": [
+          {
+            "tr": "Menüyü alabilir miyim?",
+            "en": "Could I have the menu?",
+            "say": "meh-nü-YÜ a-la-bi-LIR mi-yim"
+          },
+          {
+            "tr": "Bir çay, lütfen",
+            "en": "One tea, please",
+            "say": "bir CHAI, LÜT-fen"
+          },
+          {
+            "tr": "Su, lütfen",
+            "en": "Water, please",
+            "say": "soo, LÜT-fen"
+          },
+          {
+            "tr": "Vejetaryenim",
+            "en": "I am vegetarian",
+            "say": "veh-zheh-tar-YEH-nim"
+          },
+          {
+            "tr": "İçinde et var mı?",
+            "en": "Is there meat in it?",
+            "say": "i-chin-DEH et VAR muh"
+          },
+          {
+            "tr": "Alerjim var",
+            "en": "I have an allergy",
+            "say": "a-ler-ZHIM var"
+          },
+          {
+            "tr": "Acı mı?",
+            "en": "Is it spicy?",
+            "say": "a-JUH muh"
+          },
+          {
+            "tr": "Hesap, lütfen",
+            "en": "The bill, please",
+            "say": "heh-SAP, LÜT-fen"
+          },
+          {
+            "tr": "Çok lezzetliydi",
+            "en": "It was delicious",
+            "say": "chok lez-zet-LEE-di"
+          }
+        ]
       },
       {
-        "tr": "Evet / Hayır",
-        "en": "Yes / No",
-        "say": "eh-VET / HA-yuhr"
+        "id": "alisveris",
+        "title": {
+          "tr": "Alışveriş ve pazar",
+          "en": "Shopping and markets"
+        },
+        "phrases": [
+          {
+            "tr": "Ne kadar?",
+            "en": "How much is it?",
+            "say": "neh ka-DAR"
+          },
+          {
+            "tr": "Biraz indirim yapar mısınız?",
+            "en": "Could you give me a small discount?",
+            "say": "bi-RAZ in-di-RIM ya-PAR muh-suh-nuz"
+          },
+          {
+            "tr": "Sadece bakıyorum",
+            "en": "I'm just looking",
+            "say": "SA-deh-jeh ba-KUH-yo-rum"
+          },
+          {
+            "tr": "Kartla ödeyebilir miyim?",
+            "en": "Can I pay by card?",
+            "say": "KART-la ö-deh-yeh-bi-LIR mi-yim"
+          },
+          {
+            "tr": "Bir kilo domates, lütfen",
+            "en": "One kilo of tomatoes, please",
+            "say": "bir KI-lo do-MA-tes, LÜT-fen"
+          },
+          {
+            "tr": "Yarım kilo",
+            "en": "Half a kilo",
+            "say": "ya-RUHM ki-LO"
+          },
+          {
+            "tr": "Poşet alabilir miyim?",
+            "en": "Can I have a bag?",
+            "say": "po-SHET a-la-bi-LIR mi-yim"
+          },
+          {
+            "tr": "Fiş alabilir miyim?",
+            "en": "Can I have a receipt?",
+            "say": "FISH a-la-bi-LIR mi-yim"
+          }
+        ]
       },
       {
-        "tr": "Ne kadar?",
-        "en": "How much is it?",
-        "say": "neh ka-DAR"
+        "id": "konaklama",
+        "title": {
+          "tr": "Konaklama",
+          "en": "At the hotel"
+        },
+        "phrases": [
+          {
+            "tr": "Rezervasyonum var",
+            "en": "I have a reservation",
+            "say": "reh-zer-vas-YO-num var"
+          },
+          {
+            "tr": "Wi-Fi şifresi nedir?",
+            "en": "What is the Wi-Fi password?",
+            "say": "vai-fai shif-reh-SI neh-DIR"
+          },
+          {
+            "tr": "Kahvaltı saat kaçta?",
+            "en": "What time is breakfast?",
+            "say": "kah-val-TUH sa-AT kach-TA"
+          },
+          {
+            "tr": "Çıkış saat kaçta?",
+            "en": "What time is check-out?",
+            "say": "chuh-KUHSH sa-AT kach-TA"
+          },
+          {
+            "tr": "Odada bir sorun var",
+            "en": "There is a problem in the room",
+            "say": "o-da-DA bir so-RUN var"
+          }
+        ]
       },
       {
-        "tr": "Hesap, lütfen",
-        "en": "The bill, please",
-        "say": "heh-SAP, LÜT-fen"
+        "id": "saglik",
+        "title": {
+          "tr": "Sağlık ve eczane",
+          "en": "Health and pharmacy"
+        },
+        "phrases": [
+          {
+            "tr": "Eczane nerede?",
+            "en": "Where is a pharmacy?",
+            "say": "ej-ZA-neh neh-reh-DEH"
+          },
+          {
+            "tr": "Nöbetçi eczane nerede?",
+            "en": "Where is the on-duty (night) pharmacy?",
+            "say": "nö-bet-CHI ej-ZA-neh neh-reh-DEH"
+          },
+          {
+            "tr": "Başım ağrıyor",
+            "en": "I have a headache",
+            "say": "ba-SHUHM aa-RUH-yor"
+          },
+          {
+            "tr": "Midem bulanıyor",
+            "en": "I feel sick (nauseous)",
+            "say": "mi-DEM bu-LA-nuh-yor"
+          },
+          {
+            "tr": "Ateşim var",
+            "en": "I have a fever",
+            "say": "a-teh-SHIM var"
+          },
+          {
+            "tr": "Doktora ihtiyacım var",
+            "en": "I need a doctor",
+            "say": "dok-to-RA ih-ti-ya-JUHM var"
+          },
+          {
+            "tr": "Hastane nerede?",
+            "en": "Where is the hospital?",
+            "say": "has-TA-neh neh-reh-DEH"
+          }
+        ]
       },
       {
-        "tr": "Tuvalet nerede?",
-        "en": "Where is the toilet?",
-        "say": "too-va-LET neh-reh-DEH"
+        "id": "acil",
+        "title": {
+          "tr": "Acil durum",
+          "en": "Emergency"
+        },
+        "phrases": [
+          {
+            "tr": "Yardım edin!",
+            "en": "Help!",
+            "say": "yar-DUHM eh-DIN"
+          },
+          {
+            "tr": "Polis çağırın!",
+            "en": "Call the police!",
+            "say": "po-LIS cha-uh-RUHN"
+          },
+          {
+            "tr": "Ambulans çağırın!",
+            "en": "Call an ambulance!",
+            "say": "am-bu-LANS cha-uh-RUHN"
+          },
+          {
+            "tr": "Kayboldum",
+            "en": "I am lost",
+            "say": "KAI-bol-dum"
+          },
+          {
+            "tr": "Çantam çalındı",
+            "en": "My bag was stolen",
+            "say": "chan-TAM cha-luhn-DUH"
+          },
+          {
+            "tr": "Pasaportumu kaybettim",
+            "en": "I lost my passport",
+            "say": "pa-sa-POR-tu-mu kai-BET-tim"
+          },
+          {
+            "tr": "Konsolosluğumu aramam gerekiyor",
+            "en": "I need to call my consulate",
+            "say": "kon-so-los-loo-oo-MU a-ra-MAM geh-REH-ki-yor"
+          }
+        ]
       },
       {
-        "tr": "İngilizce biliyor musunuz?",
-        "en": "Do you speak English?",
-        "say": "in-gi-LIZ-jeh bi-li-YOR mu-su-nuz"
-      },
-      {
-        "tr": "Anlamıyorum",
-        "en": "I don't understand",
-        "say": "an-LA-muh-yo-rum"
-      },
-      {
-        "tr": "Taksimetreyi açar mısınız?",
-        "en": "Could you turn on the meter?",
-        "say": "tak-si-MET-reh-yi a-CHAR muh-suh-nuz"
-      },
-      {
-        "tr": "Bu adrese gitmek istiyorum",
-        "en": "I want to go to this address",
-        "say": "boo ad-reh-SEH git-MEK is-ti-YO-rum"
-      },
-      {
-        "tr": "Vejetaryenim",
-        "en": "I am vegetarian",
-        "say": "veh-zheh-tar-YEH-nim"
-      },
-      {
-        "tr": "Alerjim var",
-        "en": "I have an allergy",
-        "say": "a-ler-ZHIM var"
-      },
-      {
-        "tr": "Yardım edin!",
-        "en": "Help!",
-        "say": "yar-DUHM eh-DIN"
-      },
-      {
-        "tr": "Polis çağırın!",
-        "en": "Call the police!",
-        "say": "po-LIS cha-uh-RUHN"
-      },
-      {
-        "tr": "Ambulans çağırın!",
-        "en": "Call an ambulance!",
-        "say": "am-bu-LANS cha-uh-RUHN"
+        "id": "sayilar",
+        "title": {
+          "tr": "Sayılar ve saat",
+          "en": "Numbers and time"
+        },
+        "phrases": [
+          {
+            "tr": "Bir, iki, üç, dört, beş",
+            "en": "1, 2, 3, 4, 5",
+            "say": "bir, i-KI, üch, dört, besh"
+          },
+          {
+            "tr": "Altı, yedi, sekiz, dokuz, on",
+            "en": "6, 7, 8, 9, 10",
+            "say": "al-TUH, yeh-DI, seh-KIZ, do-KUZ, on"
+          },
+          {
+            "tr": "Yirmi, elli, yüz",
+            "en": "20, 50, 100",
+            "say": "yir-MI, el-LI, yüz"
+          },
+          {
+            "tr": "Bugün / Yarın / Dün",
+            "en": "Today / Tomorrow / Yesterday",
+            "say": "BU-gün / YA-ruhn / dün"
+          },
+          {
+            "tr": "Saat kaç?",
+            "en": "What time is it?",
+            "say": "sa-AT kach"
+          },
+          {
+            "tr": "Kaçta açılıyor?",
+            "en": "What time does it open?",
+            "say": "kach-TA a-CHUH-luh-yor"
+          },
+          {
+            "tr": "Kaçta kapanıyor?",
+            "en": "What time does it close?",
+            "say": "kach-TA ka-PA-nuh-yor"
+          }
+        ]
       }
     ]
   },
   "metro": {
     "note": {
-      "tr": "Durak listeleri ve süreler tahmini; resmî hat haritasıyla doğrulanacak.",
-      "en": "Station lists and times are estimates, to be checked against the official network map."
+      "tr": "İstasyon sıraları Metro İstanbul ve İBB açık verisinden (2026-11-27). Marmaray, M11 ve Sirkeci–Kazlıçeşme sırası konumdan hesaplandı. Duraklar arası süre (2 dk) tahminidir.",
+      "en": "Station order from Metro İstanbul and İBB open data (2026-11-27). Marmaray, M11 and Sirkeci–Kazlıçeşme order worked out from station positions. Time between stops (2 min) is an estimate."
     },
     "lines": [
       {
-        "id": "M1B",
-        "name": "M1B Yenikapı – Kirazlı",
+        "id": "M1A",
+        "name": "M1A Yenikapı-Atatürk Havalimanı Metro Hattı",
         "minPerStop": 2,
-        "verified": false,
+        "verified": true,
+        "hours": {
+          "first": "05:50",
+          "last": "00:00"
+        },
+        "stations": [
+          "Yenikapı",
+          "Aksaray",
+          "Emniyet-Fatih",
+          "Topkapı-Ulubatlı",
+          "Bayrampaşa-Maltepe",
+          "Sağmalcılar",
+          "Kocatepe",
+          "Otogar",
+          "Terazidere",
+          "Davutpaşa-YTÜ",
+          "Merter",
+          "Zeytinburnu",
+          "Bakırköy-İncirli",
+          "Bahçelievler",
+          "Ataköy-Şirinevler",
+          "Yenibosna",
+          "DTM-İstanbul Fuar Merkezi",
+          "Atatürk Havalimanı"
+        ]
+      },
+      {
+        "id": "M1B",
+        "name": "M1B Yenikapı-Kirazlı Metro Hattı",
+        "minPerStop": 2,
+        "verified": true,
+        "hours": {
+          "first": "06:00",
+          "last": "00:03"
+        },
         "stations": [
           "Yenikapı",
           "Aksaray",
@@ -1877,14 +2223,18 @@
           "Menderes",
           "Üçyüzlü",
           "Bağcılar Meydan",
-          "Kirazlı"
+          "Kirazlı-Bağcılar"
         ]
       },
       {
         "id": "M2",
-        "name": "M2 Yenikapı – Hacıosman",
+        "name": "M2 Yenikapı-Hacıosman Metro Hattı",
         "minPerStop": 2,
-        "verified": false,
+        "verified": true,
+        "hours": {
+          "first": "05:57",
+          "last": "00:00"
+        },
         "stations": [
           "Yenikapı",
           "Vezneciler-İstanbul Ü.",
@@ -1895,7 +2245,7 @@
           "Şişli-Mecidiyeköy",
           "Gayrettepe",
           "Levent",
-          "4. Levent",
+          "4.Levent",
           "Sanayi Mahallesi",
           "İTÜ-Ayazağa",
           "Atatürk Oto Sanayi",
@@ -1904,13 +2254,216 @@
         ]
       },
       {
-        "id": "T1",
-        "name": "T1 Kabataş – Bağcılar (tramvay)",
+        "id": "M3",
+        "name": "M3 Bakırköy-Kayaşehir Metro Hattı",
         "minPerStop": 2,
-        "verified": false,
+        "verified": true,
+        "hours": {
+          "first": "06:00",
+          "last": "00:00"
+        },
+        "stations": [
+          "Bakırköy Sahil",
+          "Özgürlük Meydanı",
+          "İncirli",
+          "Haznedar",
+          "İlkyuva",
+          "Yıldıztepe",
+          "Molla Gürani",
+          "Kirazlı-Bağcılar",
+          "Yenimahalle",
+          "Mahmutbey",
+          "İSTOÇ",
+          "İkitelli Sanayi",
+          "Turgut Özal",
+          "Siteler",
+          "Başak Konutları",
+          "Başakşehir-Metrokent",
+          "Onurkent",
+          "Şehir Hastanesi",
+          "Toplu Konutlar",
+          "Kayaşehir Merkez"
+        ]
+      },
+      {
+        "id": "M4",
+        "name": "M4 Kadıköy-Sabiha Gökçen Havalimanı Metro Hattı",
+        "minPerStop": 2,
+        "verified": true,
+        "hours": {
+          "first": "06:00",
+          "last": "23:59"
+        },
+        "stations": [
+          "Kadıköy",
+          "Ayrılık Çeşmesi",
+          "Acıbadem",
+          "Ünalan",
+          "Göztepe",
+          "Yenisahra",
+          "Kozyatağı",
+          "Bostancı",
+          "Küçükyalı",
+          "Maltepe",
+          "Huzurevi",
+          "Gülsuyu",
+          "Esenkent",
+          "Hastane-Adliye",
+          "Soğanlık",
+          "Kartal",
+          "Yakacık-Adnan Kahveci",
+          "Pendik",
+          "Tavşantepe",
+          "Fevzi Çakmak-Hastane",
+          "Yayalar-Şeyhli",
+          "Kurtköy",
+          "Sabiha Gökçen Havalimanı"
+        ]
+      },
+      {
+        "id": "M5",
+        "name": "M5 Üsküdar-Sultanbeyli Metro Hattı",
+        "minPerStop": 2,
+        "verified": true,
+        "hours": {
+          "first": "06:00",
+          "last": "00:02"
+        },
+        "stations": [
+          "Üsküdar",
+          "Fıstıkağacı",
+          "Bağlarbaşı",
+          "Altunizade",
+          "Kısıklı",
+          "Bulgurlu",
+          "Ümraniye",
+          "Çarşı",
+          "Yamanevler",
+          "Çakmak",
+          "Ihlamurkuyu",
+          "Altınşehir",
+          "İmam Hatip Lisesi",
+          "Dudullu",
+          "Necip Fazıl",
+          "Çekmeköy",
+          "Meclis",
+          "Sarıgazi",
+          "Sancaktepe Şehir Hastanesi",
+          "Sancaktepe",
+          "Samandıra Merkez",
+          "Veysel Karani",
+          "Hasanpaşa",
+          "Sultanbeyli"
+        ]
+      },
+      {
+        "id": "M6",
+        "name": "M6 Levent-Boğaziçi Ü. | Hisarüstü Metro Hattı",
+        "minPerStop": 2,
+        "verified": true,
+        "hours": {
+          "first": "06:00",
+          "last": "00:00"
+        },
+        "stations": [
+          "Levent",
+          "Nispetiye",
+          "Etiler",
+          "Boğaziçi Ü.-Hisarüstü"
+        ]
+      },
+      {
+        "id": "M7",
+        "name": "M7 Yıldız-Mahmutbey Metro Hattı",
+        "minPerStop": 2,
+        "verified": true,
+        "hours": {
+          "first": "06:00",
+          "last": "00:25"
+        },
+        "stations": [
+          "Yıldız",
+          "Fulya",
+          "Mecidiyeköy",
+          "Çağlayan",
+          "Kağıthane",
+          "Nurtepe",
+          "Alibeyköy",
+          "Çırçır Mahallesi",
+          "Veysel Karani-Akşemsettin",
+          "Yeşilpınar",
+          "Kazım Karabekir",
+          "Yenimahalle",
+          "Karadeniz Mahallesi",
+          "Giyimkent-Tekstilkent",
+          "Oruç Reis",
+          "Göztepe Mahallesi",
+          "Mahmutbey"
+        ]
+      },
+      {
+        "id": "M8",
+        "name": "M8 Bostancı-Parseller Metro Hattı",
+        "minPerStop": 2,
+        "verified": true,
+        "hours": {
+          "first": "06:00",
+          "last": "00:00"
+        },
+        "stations": [
+          "Bostancı",
+          "Emin Ali Paşa",
+          "Ayşekadın",
+          "Kozyatağı",
+          "Küçükbakkalköy",
+          "İçerenköy",
+          "Kayışdağı",
+          "Mevlana",
+          "İMES",
+          "MODOKO-KEYAP",
+          "Dudullu",
+          "Huzur",
+          "Parseller"
+        ]
+      },
+      {
+        "id": "M9",
+        "name": "M9 Ataköy-Olimpiyat Metro Hattı",
+        "minPerStop": 2,
+        "verified": true,
+        "hours": {
+          "first": "06:00",
+          "last": "00:00"
+        },
+        "stations": [
+          "Ataköy",
+          "Yenibosna",
+          "Çobançeşme",
+          "29 Ekim Cumhuriyet",
+          "Doğu Sanayi",
+          "Mimar Sinan",
+          "15 Temmuz",
+          "Halkalı Caddesi",
+          "Atatürk Mahallesi",
+          "Bahariye",
+          "MASKO",
+          "İkitelli Sanayi",
+          "Ziya Gökalp Mahallesi",
+          "Olimpiyat"
+        ]
+      },
+      {
+        "id": "T1",
+        "name": "T1 Kabataş-Bağcılar Tramvay Hattı",
+        "minPerStop": 2,
+        "verified": true,
+        "hours": {
+          "first": "06:00",
+          "last": "23:36"
+        },
         "stations": [
           "Kabataş",
-          "Fındıklı",
+          "Fındıklı-Mimar Sinan Ü.",
           "Tophane",
           "Karaköy",
           "Eminönü",
@@ -1919,7 +2472,7 @@
           "Sultanahmet",
           "Çemberlitaş",
           "Beyazıt-Kapalıçarşı",
-          "Laleli-Üniversite",
+          "Laleli-İstanbul Ü.",
           "Aksaray",
           "Yusufpaşa",
           "Haseki",
@@ -1927,17 +2480,173 @@
           "Çapa-Şehremini",
           "Pazartekke",
           "Topkapı",
-          "Cevizlibağ",
+          "Cevizlibağ-AÖY",
           "Merkezefendi",
-          "Seyitnizam",
-          "Akşemsettin",
-          "Zeytinburnu",
+          "Seyitnizam-Akşemsettin",
           "Mithatpaşa",
+          "Zeytinburnu",
+          "Mehmet Akif",
+          "Merter Tekstil Merkezi",
+          "Güngören",
           "Akıncılar",
           "Soğanlı",
-          "Güneştepe",
           "Yavuzselim",
+          "Güneştepe",
           "Bağcılar"
+        ]
+      },
+      {
+        "id": "T4",
+        "name": "T4 Topkapı-Mescid-i Selam Tramvay Hattı",
+        "minPerStop": 2,
+        "verified": true,
+        "hours": {
+          "first": "06:00",
+          "last": "00:00"
+        },
+        "stations": [
+          "Topkapı",
+          "Fetihkapı",
+          "Vatan",
+          "Edirnekapı",
+          "Şehitlik",
+          "Demirkapı",
+          "Topçular",
+          "Rami",
+          "Uluyol Bereç",
+          "Sağmalcılar",
+          "Bosna Çukurçeşme",
+          "Ali Fuat Başgil",
+          "Taşköprü",
+          "Karadeniz",
+          "Kiptaş-Venezia",
+          "Cumhuriyet Mahallesi",
+          "50.Yıl-Baştabya",
+          "Hacı Şükrü",
+          "Yenimahalle",
+          "Sultançiftliği",
+          "Cebeci",
+          "Mescid-i Selam"
+        ]
+      },
+      {
+        "id": "T5",
+        "name": "T5 Eminönü-Alibeyköy Tramvay Hattı",
+        "minPerStop": 2,
+        "verified": true,
+        "hours": {
+          "first": "06:00",
+          "last": "00:00"
+        },
+        "stations": [
+          "Eminönü",
+          "Küçükpazar",
+          "Cibali",
+          "Fener",
+          "Balat",
+          "Ayvansaray",
+          "Feshane",
+          "Eyüpsultan Teleferik",
+          "Eyüpsultan Devlet Hastanesi",
+          "Silahtarağa Mahallesi",
+          "Üniversite",
+          "Alibeyköy Merkez",
+          "Alibeyköy Metro",
+          "Alibeyköy Cep Otogarı"
+        ]
+      },
+      {
+        "id": "Marmaray",
+        "name": "Marmaray Halkalı–Gebze",
+        "minPerStop": 2,
+        "verified": false,
+        "hours": null,
+        "stations": [
+          "Halkalı",
+          "Mustafa Kemal",
+          "Küçükçekmece",
+          "Florya",
+          "Florya Akvaryum",
+          "Yeşilköy",
+          "Yeşilyurt",
+          "Ataköy",
+          "Bakırköy",
+          "Yenimahalle",
+          "Zeytinburnu",
+          "Kazlıçeşme",
+          "Yenikapı",
+          "Sirkeci",
+          "Üsküdar",
+          "Ayrılık Çeşmesi",
+          "Söğütlüçeşme",
+          "Feneryolu",
+          "Göztepe",
+          "Erenköy",
+          "Suadiye",
+          "Bostancı",
+          "Küçükyalı",
+          "İdealtepe",
+          "Süreyya Plajı",
+          "Maltepe",
+          "Cevizli",
+          "Atalar",
+          "Başak",
+          "Kartal",
+          "Yunus",
+          "Pendik",
+          "Kaynarca",
+          "Tersane",
+          "Güzelyalı",
+          "Aydıntepe",
+          "İçmeler",
+          "Tuzla",
+          "Çayırova",
+          "Fatih",
+          "Osmangazi",
+          "Darıca",
+          "Gebze"
+        ]
+      },
+      {
+        "id": "M11",
+        "name": "M11 Gayrettepe–İstanbul Havalimanı–Halkalı",
+        "minPerStop": 2,
+        "verified": false,
+        "hours": null,
+        "stations": [
+          "Gayrettepe",
+          "Kağıthane",
+          "Hasdal",
+          "Kemerburgaz",
+          "Göktürk",
+          "İhsaniye",
+          "Yeni Havalimanı - 2",
+          "Yeni Havalimanı - 1",
+          "Kargo Terminali",
+          "Taşoluk",
+          "Arnavutköy",
+          "Fenertepe",
+          "Kayaşehir Merkez",
+          "Olimpiyat",
+          "Tema Park",
+          "Halkalı"
+        ]
+      },
+      {
+        "id": "Sirkeci–Kazlıçeşme",
+        "name": "Sirkeci–Kazlıçeşme raylı sistemi",
+        "minPerStop": 2,
+        "verified": false,
+        "hours": null,
+        "stations": [
+          "Sirkeci",
+          "Cankurtaran",
+          "Kumkapı",
+          "Yenikapı",
+          "Cerrahpaşa",
+          "Kocamustafapaşa",
+          "Yedikule",
+          "Kazlıçeşme"
         ]
       }
     ]

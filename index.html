@@ -220,6 +220,49 @@ details.hsec[open] > summary::after { content: "–"; }
 .show-big { background: var(--surface); border: 3px solid var(--primary); border-radius: 18px; padding: 22px 16px; text-align: center; margin-bottom: 12px; }
 .show-big b { display: block; font-size: 32px; line-height: 1.2; }
 .show-big span { color: var(--muted); }
+#phrase-q { width: 100%; padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); }
+.asst-link { display: grid; gap: 2px; text-decoration: none; color: var(--ink); background: var(--soft); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; }
+.asst-link b { color: var(--primary); }
+.asst-link span { font-size: 13.5px; color: var(--muted); }
+.asst-h { font-size: 19px; margin-bottom: 12px; }
+.asst-banner { background: var(--warn-bg); color: var(--warn-ink); border-radius: 14px; padding: 12px 14px; display: grid; gap: 10px; margin-bottom: 14px; font-size: 14.5px; }
+.asst-banner .btn { justify-self: start; color: var(--warn-ink); box-shadow: inset 0 0 0 2px var(--warn-ink); padding: 7px 12px; font-size: 14px; }
+.bubbles { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.msg { max-width: 88%; border-radius: 16px; padding: 9px 13px; font-size: 15px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.msg.bot { align-self: flex-start; background: var(--soft); border-bottom-left-radius: 4px; }
+.msg.me { align-self: flex-end; background: var(--primary); color: var(--on-primary); border-bottom-right-radius: 4px; }
+.msg.note { align-self: stretch; max-width: none; background: var(--warn-bg); color: var(--warn-ink); font-size: 14px; }
+.msg.wait { color: var(--muted); font-style: italic; }
+.asst-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: end; }
+.asst-form textarea { min-height: 48px; }
+.consent { display: grid; gap: 6px; margin-top: 12px; font-size: 14.5px; }
+.consent label { display: flex; gap: 8px; align-items: center; }
+.consent input { width: 20px; height: 20px; accent-color: var(--primary); }
+.tr-out { border: 2px solid var(--primary); border-radius: 16px; padding: 12px 14px; margin-top: 14px; display: grid; gap: 8px; }
+.tr-big { font-size: 22px; line-height: 1.35; font-weight: 600; white-space: pre-wrap; }
+.tr-matches { margin-top: 14px; }
+.asst-privacy { margin-top: 16px; }
+@media (max-width: 420px) { .brand span { display: none; } .brand { padding: 4px; } }
+.rail-panel { margin-bottom: 14px; }
+.rail-h { font-size: 16px; }
+.rail-panel .row { display: flex; gap: 8px; align-items: center; }
+.rail-panel input[list] { flex: 1; min-width: 0; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); }
+.rail-panel .btn.small { padding: 9px 12px; font-size: 14px; flex: none; }
+.rail-sum { margin-top: 14px; font-weight: 700; font-size: 16px; }
+.rail-steps { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 10px; }
+.rstep { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 8px; font-size: 15px; }
+.rstep.ride { border-left: 6px solid var(--primary); }
+.rstep.walk { background: var(--soft); }
+.rhead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13.5px; color: var(--muted); }
+.lbadge { display: inline-block; font-weight: 800; font-size: 14px; border-radius: 7px; padding: 2px 8px; min-width: 34px; text-align: center; }
+/* Looks like the real platform signs: dark board, big white destination. */
+.sign { background: #1F2A33; color: #FFFFFF; border-radius: 10px; padding: 10px 12px; display: grid; gap: 2px; }
+.sign small { font-size: 12px; opacity: .8; }
+.sign b { font-size: 22px; line-height: 1.2; }
+.sign b.alt { font-size: 17px; opacity: .9; }
+.rstep details summary { cursor: pointer; color: var(--primary); font-weight: 600; font-size: 14px; }
+.warn-line { background: var(--warn-bg); color: var(--warn-ink); border-radius: 8px; padding: 6px 10px; font-size: 14px; }
+.maplibregl-popup-content .lbadge { font-size: 13px; }
 .lang { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface); box-shadow: 0 2px 8px rgba(0,0,0,.12); }
 .lang button { border: 0; background: transparent; padding: 8px 11px; font-size: 13px; font-weight: 700; cursor: pointer; color: var(--muted); }
 .lang button[aria-pressed="true"] { background: var(--primary); color: var(--on-primary); }
@@ -236,6 +279,9 @@ details.hsec[open] > summary::after { content: "–"; }
       <button id="lang-tr" type="button" aria-pressed="true">TR</button>
       <button id="lang-en" type="button" aria-pressed="false">EN</button>
     </div>
+    <a class="icon-btn" id="asst-btn" href="#asistan" aria-label="Asistan ve çevirmen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 9h8M8 12h5"/></svg>
+    </a>
     <a class="icon-btn help-btn" id="help-btn" href="#yardim" aria-label="Yardım ve acil durum">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M5.6 5.6l3.6 3.6M14.8 14.8l3.6 3.6M18.4 5.6l-3.6 3.6M9.2 14.8l-3.6 3.6"/></svg>
     </a>
@@ -293,6 +339,7 @@ details.hsec[open] > summary::after { content: "–"; }
     </section>
 
     <section id="view-ulasim" hidden>
+      <div class="panel rail-panel" id="rail-box"></div>
       <div class="panel">
         <div class="field"><label for="from" id="t-from"></label><select id="from"></select></div>
         <div class="field"><label for="to" id="t-to"></label><select id="to"></select></div>
@@ -313,6 +360,8 @@ details.hsec[open] > summary::after { content: "–"; }
     <section id="view-yer" hidden></section>
 
     <section id="view-yardim" hidden></section>
+
+    <section id="view-asistan" hidden></section>
 
     <section id="view-anilar" hidden></section>
 

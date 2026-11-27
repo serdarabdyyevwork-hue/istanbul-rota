@@ -9,6 +9,8 @@ Telefona yüklenebilen bir web uygulaması (PWA). App Store veya Google Play ger
 - **Pazarlar:** hangi gün nerede pazar kuruluyor. Bugün kurulanlar en üstte.
 - **Dil:** Türkçe ve İngilizce.
 - **Eksik bilgi bildir:** kullanıcı yazar, şimdilik telefonda saklanır.
+- **Cep sözlüğü:** 8 bölüm, 64 cümle (temel, ulaşım, yeme içme, alışveriş, konaklama, sağlık, acil, sayılar), arama kutusu, sesli okuma. İnternetsiz çalışır. Cümleler `data/istanbul.json` → `help.phraseGroups` içinde.
+- **Asistan ve çevirmen (hazırlanıyor):** üst çubuktaki konuşma balonu. Ekran çalışır ama sunucu kurulana kadar "henüz hazır değil" der; çeviride internetsiz olarak sözlükten benzer cümleleri gösterir. Sunucu kodu `server/` klasöründe (Cloudflare Workers); kurulum adımları `server/KURULUM.md` içinde. Sunucu kurulunca `app.js` içindeki `ASSIST_URL` doldurulur. Yapay zekâ anahtarı **asla** uygulamada durmaz, yalnızca sunucuda saklanır.
 - **İnternetsiz:** rotalar, ücretler ve pazarlar ilk açılıştan sonra internetsiz çalışır. Harita, "Haritayı indir" düğmesine bir kez basıldıktan sonra internetsiz çalışır.
 
 ## Bilgisayarında çalıştırmak
@@ -42,6 +44,23 @@ Uygulamanın kodu değişmeden, **sadece `data/istanbul.json` dosyası** düzenl
 - Kendin gördüysen `"verified": true` yap.
 
 `index.html` veya `app.js` dosyasını değiştirirsen `sw.js` içindeki `CACHE = 'rota-v6'` değerini bir artır (`rota-v7`). Böylece telefonlar yeni sürümü alır. Kullanıcının indirdiği harita bu sırada silinmez, ayrı bir yerde (`rota-map-v1`) durur.
+
+## Metro verisini güncellemek (yılda bir yeterli)
+
+**Ulaşım** sekmesindeki "hangi hat, hangi yön" bölümü ve haritadaki renkli hatlar `data/rail.json` dosyasından gelir. Durak sırası, hat rengi ve çalışma saatleri Metro İstanbul'dan, hat çizgileri ve diğer istasyonlar İBB Açık Veri'den alınır. Marmaray, M11, F2 ve Sirkeci–Kazlıçeşme Metro İstanbul listesinde yok: durak sıraları istasyon konumlarından hesaplanır ve uygulamada bu not gösterilir.
+
+1. Bir klasöre şu dört dosyayı indir:
+   - `hatlar.geojson`: data.ibb.gov.tr → "Raylı Sistem Hatları Vektör Verisi"
+   - `istasyon.geojson`: data.ibb.gov.tr → "Raylı Sistem İstasyon Noktaları Verisi"
+   - `GetStations.json`: https://api.ibb.gov.tr/MetroIstanbul/api/MetroMobile/V2/GetStations
+   - `GetLines.json`: https://api.ibb.gov.tr/MetroIstanbul/api/MetroMobile/V2/GetLines
+2. Çalıştır:
+
+```powershell
+node tools/build-rail.mjs <klasörün yolu>
+```
+
+Bu komut `data/rail.json` dosyasını ve `data/istanbul.json` içindeki `metro` bölümünü (Gezi modunun durak tahmini ve asistan bunu kullanır) yeniler. Sonra `sw.js` içindeki `CACHE` değerini bir artır.
 
 ## Haritayı güncellemek (ayda bir yeterli)
 
