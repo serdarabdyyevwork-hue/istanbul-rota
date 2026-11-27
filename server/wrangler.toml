@@ -1,4 +1,4 @@
-# Cloudflare Worker for the İstanbul Rota assistant and translator.
+# Cloudflare Worker for the Rota İstanbul assistant and translator.
 # The AI key is NOT in this file. Add it once with:  npx wrangler secret put ANTHROPIC_API_KEY
 name = "istanbul-rota-asistan"
 main = "src/worker.js"

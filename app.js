@@ -1,5 +1,5 @@
 'use strict';
-// İstanbul Rota: all city content lives in data/istanbul.json. This file only draws it.
+// Rota İstanbul: all city content lives in data/istanbul.json. This file only draws it.
 // Layout: full-screen map + bottom sheet. Palettes and theme are user settings.
 
 var TABS = ['rotalar', 'plan', 'anilar', 'ulasim', 'pazarlar', 'ayarlar'];
@@ -822,7 +822,7 @@ function icsDate(d) { var p = function (n) { return ('0' + n).slice(-2); }; retu
 function icsText(s) { return String(s).replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/,/g, '\\,').replace(/;/g, '\\;'); }
 function downloadIcs() {
   var s = schedule(), stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
-  var lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Istanbul Rota//TR', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  var lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Rota Istanbul//TR', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
   s.items.forEach(function (it, i) {
     lines.push('BEGIN:VEVENT', 'UID:' + stamp + '-' + i + '@istanbul-rota', 'DTSTAMP:' + stamp,
       'DTSTART:' + icsDate(it.arrive), 'DTEND:' + icsDate(it.leave),

@@ -4,7 +4,7 @@ import { deflateSync } from 'node:zlib';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const outDir = join(dirname(fileURLToPath(import.meta.url)), '..', 'icons');
+const outDir = process.argv[3] || join(dirname(fileURLToPath(import.meta.url)), '..', 'icons');
 mkdirSync(outDir, { recursive: true });
 
 const CRC_TABLE = Array.from({ length: 256 }, (_, n) => {
@@ -42,9 +42,17 @@ function png(size, pixel) {
   ]);
 }
 
-const COBALT = [31, 72, 168];
-const WHITE = [255, 255, 255];
-const AMBER = [233, 165, 74];
+// Color sets: background, route line, the two stop dots. Pick one: node tools/make-icons.mjs <name> [outDir]
+const THEMES = {
+  kobalt: { bg: [31, 72, 168], line: [255, 255, 255], dot: [233, 165, 74] },      // the first logo
+  acikmavi: { bg: [91, 141, 224], line: [255, 255, 255], dot: [255, 196, 87] },   // the same blue, lighter
+  gokyuzu: { bg: [143, 201, 240], line: [31, 72, 168], dot: [233, 122, 60] },     // light sky blue
+  bogaz: { bg: [158, 224, 214], line: [11, 85, 99], dot: [224, 122, 95] },        // light Bosphorus turquoise
+  kum: { bg: [246, 231, 200], line: [31, 72, 168], dot: [200, 16, 46] }           // sand / cream
+};
+const theme = THEMES[process.argv[2] || 'acikmavi'];   // acikmavi: chosen 27.11.2026
+if (!theme) { console.error('unknown theme; choose one of: ' + Object.keys(THEMES).join(', ')); process.exit(1); }
+const COBALT = theme.bg, WHITE = theme.line, AMBER = theme.dot;
 
 // A route line from bottom-left to top-right with a stop at each end (same as the prototype logo).
 function curvePoints(s, inset) {

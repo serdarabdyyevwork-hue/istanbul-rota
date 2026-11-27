@@ -1,4 +1,4 @@
-// İstanbul Rota assistant server (Cloudflare Worker).
+// Rota İstanbul assistant server (Cloudflare Worker).
 // The phone never sees the AI key: it only talks to this Worker, which keeps the key as a secret
 // (wrangler secret put ANTHROPIC_API_KEY) and forwards a checked, size-limited request to Claude.
 //
@@ -77,7 +77,7 @@ function json(obj, status, headers) {
 }
 
 // ---------- Chat ----------
-const CHAT_RULES = `You are the travel assistant inside "İstanbul Rota", a phone app for tourists in Istanbul.
+const CHAT_RULES = `You are the travel assistant inside "Rota İstanbul", a phone app for tourists in Istanbul.
 Rules:
 - Help with visiting Istanbul: places, ready routes, getting around and fares, street markets, opening and closed days, practical tips, Turkish phrases, staying safe.
 - Base facts on APP DATA below. Only give prices that are in APP DATA. If a fee has "verified": false, say it is not verified and suggest checking the official source. If a price, opening hour or phone number is not in APP DATA, say you do not have verified information. Never estimate or invent prices, hours or phone numbers.

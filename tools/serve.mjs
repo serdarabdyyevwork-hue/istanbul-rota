@@ -38,4 +38,4 @@ createServer((req, res) => {
     if (req.method === 'HEAD') { res.end(); return; }
     createReadStream(file).pipe(res);
   });
-}).listen(PORT, () => console.log(`İstanbul Rota: http://localhost:${PORT}`));
+}).listen(PORT, () => console.log(`Rota İstanbul: http://localhost:${PORT}`));

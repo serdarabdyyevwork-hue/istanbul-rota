@@ -1,6 +1,6 @@
-// İstanbul Rota service worker: keeps the app and city data working offline.
+// Rota İstanbul service worker: keeps the app and city data working offline.
 // Bump CACHE when you change index.html, app.js or the icons.
-const CACHE = 'rota-v15';
+const CACHE = 'rota-v16';
 // The big map file (maps/istanbul.pmtiles) is NOT in this list. The app saves it in its own
 // cache, 'rota-map-v1', only when the user taps "Download map".
 const MAP_CACHE = 'rota-map-v1';

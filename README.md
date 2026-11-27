@@ -1,4 +1,4 @@
-# İstanbul Rota (deneme sürümü)
+# Rota İstanbul (deneme sürümü)
 
 Telefona yüklenebilen bir web uygulaması (PWA). App Store veya Google Play gerekmez, komisyon yok.
 
