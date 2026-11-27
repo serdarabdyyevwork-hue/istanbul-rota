@@ -235,12 +235,14 @@
   "reportLabel": "Was fehlt oder stimmt nicht? (z. B. „Dieser Markt ist donnerstags“)",
   "reportSend": "Speichern",
   "reportCopy": "Kopieren",
-  "reportSaved": "Gespeichert. Meldungen auf diesem Handy: {n}. Sie werden gesendet, sobald der Server verbunden ist.",
+  "reportSaved": "Gespeichert. Meldungen auf diesem Handy: {n}. Sie werden automatisch gesendet, sobald du online bist.",
   "reportCopied": "Kopiert. Du kannst es per WhatsApp oder E-Mail senden.",
   "reportEmpty": "Schreib zuerst, was fehlt.",
   "about": "Infos geprüft am {d}. Kartendaten: © OpenStreetMap-Mitwirkende, Protomaps.",
   "loadError": "Die Stadtinfos konnten nicht geladen werden. Prüfe die Verbindung und lade neu.",
-  "streetView": "360°-Straßenansicht"
+  "streetView": "360°-Straßenansicht",
+  "reportSent": "Danke! Deine Meldung wurde gesendet.",
+  "reportSending": "Wird gesendet…"
  },
  "content": [
   "Museum",

@@ -14,6 +14,12 @@ ALLOWED_ORIGINS = "https://serdarabdyyevwork-hue.github.io,http://localhost:8080
 # The app's own city data, read by the assistant.
 DATA_URL = "https://serdarabdyyevwork-hue.github.io/istanbul-rota/data/istanbul.json"
 
+# Storage for "report missing or wrong info" (created with: npx wrangler kv namespace create REPORTS).
+# Read them at /yonetim.html with the ADMIN_TOKEN secret.
+[[kv_namespaces]]
+binding = "REPORTS"
+id = "1352bae994964fa99215b48843c66206"
+
 # Per phone: at most 5 questions (and separately 5 translations) per minute.
 [[ratelimits]]
 name = "DEVICE_LIMITER"

@@ -34,14 +34,16 @@ export async function handle(request, env, client) {
   if (!allowed.includes(origin)) return json({ error: 'origin' }, 403);
   const cors = {
     'Access-Control-Allow-Origin': origin,
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, X-Device',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Device, Authorization',
     'Access-Control-Max-Age': '86400',
     Vary: 'Origin'
   };
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
-  if (request.method !== 'POST') return json({ error: 'method' }, 405, cors);
   const path = new URL(request.url).pathname;
+  // "Report missing or wrong info": visitors send, only the app owner (with ADMIN_TOKEN) reads.
+  if (path === '/report' || path === '/reports' || path === '/reports/delete') return reports(request, env, path, cors);
+  if (request.method !== 'POST') return json({ error: 'method' }, 405, cors);
   if (path !== '/chat' && path !== '/translate') return json({ error: 'not_found' }, 404, cors);
   if (!client) {   // the ANTHROPIC_API_KEY secret has not been added yet
     console.log(JSON.stringify({ path, error: 'no_key' }));
@@ -70,6 +72,55 @@ export async function handle(request, env, client) {
     console.log(JSON.stringify({ path, error: err instanceof Anthropic.APIError ? err.status : String(err && err.name) }));
     return json({ error: 'upstream' }, 502, cors);
   }
+}
+
+// ---------- Reports ----------
+// Stored in Workers KV (binding REPORTS) for a year. Only the text, app language, optional place id and time
+// are kept: no device id, no IP. Keys sort newest first.
+const REPORT_MAX = 1000, REPORT_TTL = 365 * 24 * 3600;
+async function reports(request, env, path, cors) {
+  if (!env.REPORTS) return json({ error: 'no_store' }, 503, cors);
+  if (path === '/report') {
+    if (request.method !== 'POST') return json({ error: 'method' }, 405, cors);
+    const device = String(request.headers.get('X-Device') || '').replace(/[^a-zA-Z0-9-]/g, '').slice(0, 64) || 'ip-' + (request.headers.get('CF-Connecting-IP') || 'unknown');
+    if (env.DEVICE_LIMITER && !(await env.DEVICE_LIMITER.limit({ key: '/report:' + device })).success) return json({ error: 'limit' }, 429, cors);
+    const raw = await request.text();
+    if (raw.length > MAX_BODY) return json({ error: 'too_big' }, 413, cors);
+    let b; try { b = JSON.parse(raw); } catch { return json({ error: 'bad_json' }, 400, cors); }
+    const text = b && typeof b.text === 'string' ? b.text.trim() : '';
+    if (!text || text.length > REPORT_MAX) return json({ error: 'bad_text' }, 400, cors);
+    const item = {
+      text,
+      lang: APP_LANGS.includes(b.lang) ? b.lang : 'tr',
+      place: typeof b.place === 'string' && /^[a-z0-9-]{1,40}$/.test(b.place) ? b.place : null,
+      at: typeof b.at === 'string' && /^\d{4}-\d{2}-\d{2}T[\d:.]+Z$/.test(b.at) ? b.at : new Date().toISOString()
+    };
+    const key = 'r:' + String(9999999999999 - Date.now()).padStart(13, '0') + ':' + Math.random().toString(36).slice(2, 8);
+    await env.REPORTS.put(key, JSON.stringify(item), { expirationTtl: REPORT_TTL });
+    return json({ ok: true }, 200, cors);
+  }
+  // Reading and deleting need the owner's password (wrangler secret put ADMIN_TOKEN).
+  const auth = request.headers.get('Authorization') || '';
+  if (!env.ADMIN_TOKEN || !sameText(auth, 'Bearer ' + env.ADMIN_TOKEN)) return json({ error: 'auth' }, 401, cors);
+  if (path === '/reports' && request.method === 'GET') {
+    const list = await env.REPORTS.list({ prefix: 'r:', limit: 200 });
+    const items = await Promise.all(list.keys.map(async (k) => ({ key: k.name, ...JSON.parse((await env.REPORTS.get(k.name)) || '{}') })));
+    return json({ reports: items, more: !list.list_complete }, 200, cors);
+  }
+  if (path === '/reports/delete' && request.method === 'POST') {
+    let b; try { b = JSON.parse(await request.text()); } catch { return json({ error: 'bad_json' }, 400, cors); }
+    const keys = Array.isArray(b && b.keys) ? b.keys.filter((k) => typeof k === 'string' && k.startsWith('r:')).slice(0, 200) : [];
+    await Promise.all(keys.map((k) => env.REPORTS.delete(k)));
+    return json({ deleted: keys.length }, 200, cors);
+  }
+  return json({ error: 'method' }, 405, cors);
+}
+// Compares without stopping at the first different character.
+function sameText(a, b) {
+  if (a.length !== b.length) return false;
+  let d = 0;
+  for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return d === 0;
 }
 
 function json(obj, status, headers) {

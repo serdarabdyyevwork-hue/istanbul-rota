@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Rota İstanbul · Bildirimler</title>
+<style>
+  :root { --bg: #F2F7F6; --card: #FFFFFF; --ink: #0E2A2F; --muted: #557072; --line: #D5E4E1; --primary: #0B5563; color-scheme: light; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #071B1F; --card: #0F2A30; --ink: #E6F2F0; --muted: #8FAEAB; --line: #1E3D43; --primary: #5DCAA5; color-scheme: dark; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 20px; margin: 4px 0 12px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  input[type=password] { flex: 1; min-width: 180px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: inherit; font: inherit; }
+  button { border: 0; border-radius: 10px; padding: 10px 14px; font: inherit; font-weight: 600; background: var(--primary); color: #fff; cursor: pointer; }
+  button.ghost { background: transparent; color: var(--primary); box-shadow: inset 0 0 0 2px var(--primary); }
+  .muted { color: var(--muted); font-size: 14px; }
+  .item { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; }
+  .item input { width: 20px; height: 20px; margin-top: 2px; }
+  .item .meta { color: var(--muted); font-size: 13px; }
+  .item .text { grid-column: 2; white-space: pre-wrap; overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Rota İstanbul · Gelen bildirimler</h1>
+  <p class="muted">Kullanıcıların "Eksik veya yanlış bilgi bildir" kutusuna yazdıkları burada görünür. Şifre sadece bu cihazda saklanır.</p>
+  <div class="row">
+    <input type="password" id="pw" placeholder="Yönetici şifresi (ADMIN_TOKEN)" autocomplete="current-password">
+    <button id="load">Bildirimleri getir</button>
+  </div>
+  <div class="row">
+    <button class="ghost" id="copy">Hepsini kopyala</button>
+    <button class="ghost" id="del">Seçilenleri sil</button>
+    <span class="muted" id="status"></span>
+  </div>
+  <div id="list"></div>
+</main>
+<script>
+  // Same server as the app (app.js → ASSIST_URL).
+  var SERVER = 'https://istanbul-rota-asistan.istanbul-rota.workers.dev';
+  var items = [];
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  try { $('pw').value = localStorage.getItem('rota-admin') || ''; } catch (e) {}
+  function headers() { return { 'Authorization': 'Bearer ' + $('pw').value.trim(), 'Content-Type': 'application/json' }; }
+  function render() {
+    $('list').innerHTML = items.length ? items.map(function (r, i) {
+      var when = r.at ? new Date(r.at).toLocaleString('tr-TR') : '';
+      return '<label class="item"><input type="checkbox" data-i="' + i + '"><span class="meta">' + esc(when) + ' · dil: ' + esc(r.lang || '?') +
+        (r.place ? ' · yer: ' + esc(r.place) : '') + '</span><span class="text">' + esc(r.text || '') + '</span></label>';
+    }).join('') : '<p class="muted">Bildirim yok.</p>';
+  }
+  function load() {
+    try { localStorage.setItem('rota-admin', $('pw').value.trim()); } catch (e) {}
+    $('status').textContent = 'Yükleniyor…';
+    fetch(SERVER + '/reports', { headers: headers() }).then(function (r) {
+      if (r.status === 401) throw new Error('Şifre yanlış.');
+      if (r.status === 503) throw new Error('Sunucuda bildirim deposu henüz kurulmamış.');
+      if (!r.ok) throw new Error('Sunucu hatası (' + r.status + ').');
+      return r.json();
+    }).then(function (d) {
+      items = d.reports || [];
+      $('status').textContent = items.length + ' bildirim' + (d.more ? ' (daha fazlası var; okuduklarını silince görünür)' : '');
+      render();
+    }, function (e) { $('status').textContent = e.message || 'İnternet yok veya sunucuya ulaşılamadı.'; });
+  }
+  $('load').addEventListener('click', load);
+  $('pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') load(); });
+  $('copy').addEventListener('click', function () {
+    var text = items.map(function (r) { return (r.at || '') + ' [' + (r.lang || '') + (r.place ? ', ' + r.place : '') + '] ' + r.text; }).join('\n\n');
+    if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { $('status').textContent = 'Kopyalandı.'; });
+  });
+  $('del').addEventListener('click', function () {
+    var keys = Array.prototype.map.call(document.querySelectorAll('#list input:checked'), function (c) { return items[+c.getAttribute('data-i')].key; });
+    if (!keys.length) { $('status').textContent = 'Önce silinecekleri işaretle.'; return; }
+    if (!confirm(keys.length + ' bildirim kalıcı olarak silinecek. Emin misin?')) return;
+    fetch(SERVER + '/reports/delete', { method: 'POST', headers: headers(), body: JSON.stringify({ keys: keys }) })
+      .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+      .then(function () { load(); }, function () { $('status').textContent = 'Silinemedi.'; });
+  });
+</script>
+</body>
+</html>

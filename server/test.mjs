@@ -152,6 +152,27 @@ await test('a Russian app gets the English data and is named in the context', as
   assert.match(c.calls[0].system[0].text, /Hagia Sophia/);
   assert.match(c.calls[0].system[1].text, /App language: Russian/);
 });
+await test('reports: anyone sends, only the owner reads and deletes; nothing personal is stored', async () => {
+  const store = new Map();
+  const KV = { put: async (k, v) => { store.set(k, v); }, get: async (k) => store.get(k) || null, delete: async (k) => { store.delete(k); },
+    list: async ({ prefix }) => ({ keys: [...store.keys()].filter((k) => k.startsWith(prefix)).sort().map((name) => ({ name })), list_complete: true }) };
+  const e = { ...env, REPORTS: KV, ADMIN_TOKEN: 'gizli-123' };
+  const r1 = await handle(req('/report', { text: 'Bu pazar perşembe kuruluyor', lang: 'tr', place: 'kirazli', device: 'x', ip: 'y' }), e, null);
+  assert.equal(r1.status, 200);
+  const saved = JSON.parse([...store.values()][0]);
+  assert.deepEqual(Object.keys(saved).sort(), ['at', 'lang', 'place', 'text']);
+  assert.equal((await handle(req('/report', { text: 'x'.repeat(1001) }), e, null)).status, 400);
+  const get = (auth) => handle(new Request('https://w.test/reports', { headers: { Origin: ORIGIN, ...(auth ? { Authorization: auth } : {}) } }), e, null);
+  assert.equal((await get()).status, 401);
+  assert.equal((await get('Bearer yanlis')).status, 401);
+  const ok = await (await get('Bearer gizli-123')).json();
+  assert.equal(ok.reports.length, 1);
+  assert.equal(ok.reports[0].text, 'Bu pazar perşembe kuruluyor');
+  const del = await handle(new Request('https://w.test/reports/delete', { method: 'POST', headers: { Origin: ORIGIN, Authorization: 'Bearer gizli-123' }, body: JSON.stringify({ keys: [ok.reports[0].key] }) }), e, null);
+  assert.deepEqual(await del.json(), { deleted: 1 });
+  assert.equal(store.size, 0);
+  assert.equal((await handle(req('/report', { text: 'a' }), { ...env }, null)).status, 503);   // no storage bound yet
+});
 await test('missing API key gives a clear 503, not a crash', async () => {
   const r = await handle(req('/chat', chatBody), env, null);
   assert.equal(r.status, 503);

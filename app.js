@@ -306,7 +306,9 @@ var UI = {
   reportLabel: { tr: 'Ne eksik ya da yanlış? (örnek: "Kirazlı pazarı perşembe kuruluyor")', en: 'What is missing or wrong? (e.g. "This market is on Thursdays")' },
   reportSend: { tr: 'Kaydet', en: 'Save' },
   reportCopy: { tr: 'Kopyala', en: 'Copy' },
-  reportSaved: { tr: 'Kaydedildi. Bu telefonda bekleyen bildirim: {n}. Sunucu bağlanınca otomatik gönderilecek.', en: 'Saved. Reports waiting on this phone: {n}. They will be sent once the server is connected.' },
+  reportSaved: { tr: 'Kaydedildi. Bu telefonda bekleyen bildirim: {n}. İnternet gelince kendiliğinden gönderilecek.', en: 'Saved. Reports waiting on this phone: {n}. They will be sent automatically when you are online.' },
+  reportSent: { tr: 'Teşekkürler! Bildirimin gönderildi.', en: 'Thank you! Your report has been sent.' },
+  reportSending: { tr: 'Gönderiliyor…', en: 'Sending…' },
   reportCopied: { tr: 'Kopyalandı. WhatsApp veya e-postayla gönderebilirsin.', en: 'Copied. You can send it by WhatsApp or email.' },
   reportEmpty: { tr: 'Önce ne eksik olduğunu yaz.', en: 'Write what is missing first.' },
   about: { tr: 'Bilgiler {d} tarihinde kontrol edildi. Harita verisi: © OpenStreetMap katkıcıları, Protomaps.', en: 'Info checked on {d}. Map data: © OpenStreetMap contributors, Protomaps.' },
@@ -460,6 +462,7 @@ function openPlace(id) {
   $('report-place').addEventListener('click', function () {
     location.hash = '#ayarlar'; show();
     $('report-text').value = tx(p.name) + ': ';
+    reportPlaceId = p.id;   // sent with the report so the owner knows which place it is about
     $('report-section').scrollIntoView({ behavior: 'smooth' });
     $('report-text').focus();
   });
@@ -1847,9 +1850,34 @@ function onThemeChange() {
 function readReports() { try { return JSON.parse(localStorage.getItem('rota-reports') || '[]'); } catch (e) { return []; } }
 function saveReport(text) {
   var list = readReports();
-  list.push({ text: text, date: new Date().toISOString() });
+  list.push({ text: text, place: reportPlaceId, at: new Date().toISOString() });
+  reportPlaceId = null;
   try { localStorage.setItem('rota-reports', JSON.stringify(list)); } catch (e) {}
   return list.length;
+}
+var reportPlaceId = null, reportSending = false;
+// Sends the waiting reports to the app's server one by one. What could not be sent stays on the phone
+// and is tried again when the app opens or the internet comes back.
+function sendReports() {
+  var list = readReports();
+  if (!ASSIST_URL || !navigator.onLine || reportSending || !list.length) return Promise.resolve(list.length);
+  reportSending = true;
+  var dev = deviceId(), headers = { 'Content-Type': 'application/json' };
+  if (dev) headers['X-Device'] = dev;
+  function next() {
+    var cur = readReports();
+    if (!cur.length) return Promise.resolve(0);
+    var r = cur[0];
+    return fetch(ASSIST_URL.replace(/\/$/, '') + '/report', { method: 'POST', headers: headers,
+      body: JSON.stringify({ text: String(r.text).slice(0, 1000), lang: lang, place: r.place || undefined, at: r.at || r.date }) })
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.status);
+        cur = readReports(); cur.shift();
+        try { localStorage.setItem('rota-reports', JSON.stringify(cur)); } catch (e) {}
+        return next();
+      });
+  }
+  return next().catch(function () {}).then(function () { reportSending = false; return readReports().length; });
 }
 
 // ---------- Text, language ----------
@@ -1883,7 +1911,7 @@ function setLang(l) {
     if (map) resetMap();   // map labels follow the chosen language
   }, function () { $('lang-sel').value = lang; toast(UI.loadError[lang] || UI.loadError.en); });
 }
-function updateOnline() { $('offline').hidden = navigator.onLine; renderMapStatus(); renderAssistant(); }
+function updateOnline() { $('offline').hidden = navigator.onLine; renderMapStatus(); renderAssistant(); sendReports(); }
 
 function bind() {
   $('lang-sel').innerHTML = APP_LANGS.map(function (c) { return '<option value="' + c + '">' + c.toUpperCase() + ' · ' + LANG_LABEL[c] + '</option>'; }).join('');
@@ -1943,8 +1971,10 @@ function bind() {
     var text = $('report-text').value.trim();
     $('report-ok').hidden = false;
     if (!text) { $('report-ok').textContent = t('reportEmpty'); return; }
-    $('report-ok').textContent = t('reportSaved', { n: saveReport(text) });
+    saveReport(text);
     $('report-text').value = '';
+    $('report-ok').textContent = t('reportSending');
+    sendReports().then(function (left) { $('report-ok').textContent = left ? t('reportSaved', { n: left }) : t('reportSent'); });
   });
   $('report-copy').addEventListener('click', function () {
     var text = $('report-text').value.trim();
@@ -1971,6 +2001,7 @@ function start() {
   // Map first: open it right away (from the saved offline copy when the phone has one).
   loadSavedMap().then(ensureMap, ensureMap);
   loadRail();
+  sendReports();   // reports written earlier while offline
 }
 
 fetch('data/istanbul.json')

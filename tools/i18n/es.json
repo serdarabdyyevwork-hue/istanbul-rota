@@ -235,12 +235,14 @@
   "reportLabel": "¿Qué falta o está mal? (p. ej., «Este mercado es los jueves»)",
   "reportSend": "Guardar",
   "reportCopy": "Copiar",
-  "reportSaved": "Guardado. Avisos pendientes en este teléfono: {n}. Se enviarán cuando el servidor esté conectado.",
+  "reportSaved": "Guardado. Avisos pendientes en este teléfono: {n}. Se enviarán automáticamente cuando tengas conexión.",
   "reportCopied": "Copiado. Puedes enviarlo por WhatsApp o correo.",
   "reportEmpty": "Primero escribe lo que falta.",
   "about": "Información comprobada el {d}. Datos del mapa: © colaboradores de OpenStreetMap, Protomaps.",
   "loadError": "No se pudo cargar la información de la ciudad. Revisa la conexión y recarga.",
-  "streetView": "Vista de calle 360°"
+  "streetView": "Vista de calle 360°",
+  "reportSent": "¡Gracias! Tu aviso se ha enviado.",
+  "reportSending": "Enviando…"
  },
  "content": [
   "Museo",

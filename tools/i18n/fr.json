@@ -235,12 +235,14 @@
   "reportLabel": "Qu'est-ce qui manque ou est faux ? (ex. « Ce marché a lieu le jeudi »)",
   "reportSend": "Enregistrer",
   "reportCopy": "Copier",
-  "reportSaved": "Enregistré. Signalements en attente sur ce téléphone : {n}. Ils seront envoyés quand le serveur sera connecté.",
+  "reportSaved": "Enregistré. Signalements en attente sur ce téléphone : {n}. Ils seront envoyés automatiquement dès que vous serez en ligne.",
   "reportCopied": "Copié. Vous pouvez l'envoyer par WhatsApp ou e-mail.",
   "reportEmpty": "Écrivez d'abord ce qui manque.",
   "about": "Infos vérifiées le {d}. Données cartographiques : © contributeurs OpenStreetMap, Protomaps.",
   "loadError": "Impossible de charger les infos de la ville. Vérifiez la connexion et rechargez.",
-  "streetView": "Vue de la rue à 360°"
+  "streetView": "Vue de la rue à 360°",
+  "reportSent": "Merci ! Votre signalement a été envoyé.",
+  "reportSending": "Envoi…"
  },
  "content": [
   "Musée",
