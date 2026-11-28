@@ -2459,6 +2459,502 @@
         }
       ],
       "visitMin": 90
+    },
+    {
+      "id": "rumelikavagi-plaj",
+      "cat": "plaj",
+      "district": "Sarıyer",
+      "lat": 41.1846,
+      "lng": 29.0764,
+      "name": {
+        "tr": "Rumeli Kavağı Plajı",
+        "en": "Rumeli Kavağı Beach"
+      },
+      "note": {
+        "tr": "Boğaz'ın kuzey ucunda, balıkçı köyünün yanında küçük plaj. Vapurla da gidilir. Yüzme sezonu 15 Haziran–15 Eylül.",
+        "en": "Small beach by the fishing village at the northern end of the Bosphorus. You can also go by ferry. Swimming season 15 June–15 September."
+      },
+      "fees": [
+        {
+          "tr": "Giriş ücreti doğrulanacak",
+          "en": "Entry fee to be verified",
+          "verified": false
+        },
+        {
+          "tr": "Su kalitesi 2026: yeterli (Sağlık Bakanlığı)",
+          "en": "Water quality 2026: sufficient (Ministry of Health)",
+          "verified": true,
+          "info": true,
+          "source": "https://yuzme.saglik.gov.tr/",
+          "checked": "2026-11-27"
+        }
+      ],
+      "visitMin": 180
+    },
+    {
+      "id": "marmaracik",
+      "cat": "plaj",
+      "district": "Sarıyer",
+      "lat": 41.2432,
+      "lng": 29.0906,
+      "name": {
+        "tr": "Marmaracık Koyu",
+        "en": "Marmaracık Cove"
+      },
+      "note": {
+        "tr": "Rumeli Feneri yakınında, Karadeniz kıyısında ormanlı küçük koy; korunan doğa alanı. Yüzme sezonu 15 Haziran–15 Eylül. Karadeniz'de akıntı tehlikeli olabilir: yalnızca cankurtaranlı bölümde, bayraklara uyarak yüz.",
+        "en": "Small wooded cove on the Black Sea near Rumeli Feneri; a protected nature area. Swimming season 15 June–15 September. Black Sea currents can be dangerous: swim only in the lifeguarded part and follow the flags."
+      },
+      "fees": [
+        {
+          "tr": "Tabiat parkı girişi ücretli (2026 tarifesi); tutar doğrulanacak",
+          "en": "Nature park entry is paid (2026 tariff); amount to be verified",
+          "verified": false,
+          "source": "https://www.tarimorman.gov.tr/DKMP/Menu/39/Korunan-Alanlar-Ucret-Tarifesi"
+        },
+        {
+          "tr": "Su kalitesi 2026: yeterli (Sağlık Bakanlığı)",
+          "en": "Water quality 2026: sufficient (Ministry of Health)",
+          "verified": true,
+          "info": true,
+          "source": "https://yuzme.saglik.gov.tr/",
+          "checked": "2026-11-27"
+        }
+      ],
+      "visitMin": 180,
+      "approx": true
+    },
+    {
+      "id": "elmasburnu",
+      "cat": "plaj",
+      "district": "Beykoz",
+      "lat": 41.2283,
+      "lng": 29.2211,
+      "name": {
+        "tr": "Elmasburnu Tabiat Parkı",
+        "en": "Elmasburnu Nature Park"
+      },
+      "note": {
+        "tr": "Riva'nın yanında, Karadeniz kıyısında kumsal ve orman; Beykoz Belediyesi şirketi işletir. Riva Plajı'ndan farklı olarak suyu 2026'da \"iyi\". Yüzme sezonu 15 Haziran–15 Eylül.",
+        "en": "Sandy beach and woods on the Black Sea next to Riva, run by a Beykoz municipal company. Unlike Riva Beach, its water was rated \"good\" in 2026. Swimming season 15 June–15 September."
+      },
+      "fees": [
+        {
+          "tr": "Giriş ücreti doğrulanacak",
+          "en": "Entry fee to be verified",
+          "verified": false
+        },
+        {
+          "tr": "Su kalitesi 2026: iyi (Sağlık Bakanlığı)",
+          "en": "Water quality 2026: good (Ministry of Health)",
+          "verified": true,
+          "info": true,
+          "source": "https://yuzme.saglik.gov.tr/",
+          "checked": "2026-11-27"
+        }
+      ],
+      "visitMin": 240
+    },
+    {
+      "id": "kabakoz",
+      "cat": "plaj",
+      "district": "Şile",
+      "lat": 41.1442,
+      "lng": 29.6887,
+      "name": {
+        "tr": "Kabakoz Plajı",
+        "en": "Kabakoz Beach"
+      },
+      "note": {
+        "tr": "Şile ile Ağva arasında, Karadeniz kıyısında sakin bir koy. Yüzme sezonu 15 Haziran–15 Eylül. Karadeniz'de akıntı tehlikeli olabilir: yalnızca cankurtaranlı bölümde, bayraklara uyarak yüz.",
+        "en": "A quiet Black Sea cove between Şile and Ağva. Swimming season 15 June–15 September. Black Sea currents can be dangerous: swim only in the lifeguarded part and follow the flags."
+      },
+      "fees": [
+        {
+          "tr": "Giriş ücreti doğrulanacak",
+          "en": "Entry fee to be verified",
+          "verified": false
+        },
+        {
+          "tr": "Su kalitesi 2026: mükemmel (Sağlık Bakanlığı)",
+          "en": "Water quality 2026: excellent (Ministry of Health)",
+          "verified": true,
+          "info": true,
+          "source": "https://yuzme.saglik.gov.tr/",
+          "checked": "2026-11-27"
+        }
+      ],
+      "visitMin": 240,
+      "approx": true
+    },
+    {
+      "id": "nakibey",
+      "cat": "plaj",
+      "district": "Adalar",
+      "lat": 40.8664,
+      "lng": 29.135,
+      "name": {
+        "tr": "Nakibey Plajı (Büyükada)",
+        "en": "Nakibey Beach (Büyükada)"
+      },
+      "note": {
+        "tr": "Büyükada'nın doğusunda bir işletmenin çalıştırdığı plaj; denize beton iskeleden girilir. Yüzme sezonu 15 Haziran–15 Eylül.",
+        "en": "Beach on the east of Büyükada run by a business; you enter the sea from a concrete platform. Swimming season 15 June–15 September."
+      },
+      "fees": [
+        {
+          "tr": "Giriş ücreti işletmeye göre değişir (doğrulanacak)",
+          "en": "Entry fee depends on the operator (to be verified)",
+          "verified": false
+        },
+        {
+          "tr": "Su kalitesi 2026: mükemmel (Sağlık Bakanlığı)",
+          "en": "Water quality 2026: excellent (Ministry of Health)",
+          "verified": true,
+          "info": true,
+          "source": "https://yuzme.saglik.gov.tr/",
+          "checked": "2026-11-27"
+        }
+      ],
+      "visitMin": 240,
+      "approx": true
+    },
+    {
+      "id": "sedef",
+      "cat": "plaj",
+      "district": "Adalar",
+      "lat": 40.8514,
+      "lng": 29.1439,
+      "name": {
+        "tr": "Sedef Adası",
+        "en": "Sedef Island"
+      },
+      "note": {
+        "tr": "Büyükada'nın güneydoğusunda küçük ada; halk plajı var. Büyükada'dan tekneyle geçilir (sefer ve ücret doğrulanacak). Yüzme sezonu 15 Haziran–15 Eylül.",
+        "en": "Small island south-east of Büyükada with a public beach. Reached by boat from Büyükada (service and fare to be verified). Swimming season 15 June–15 September."
+      },
+      "fees": [
+        {
+          "tr": "Giriş ücreti doğrulanacak",
+          "en": "Entry fee to be verified",
+          "verified": false
+        },
+        {
+          "tr": "Su kalitesi 2026: mükemmel (Sağlık Bakanlığı)",
+          "en": "Water quality 2026: excellent (Ministry of Health)",
+          "verified": true,
+          "info": true,
+          "source": "https://yuzme.saglik.gov.tr/",
+          "checked": "2026-11-27"
+        }
+      ],
+      "visitMin": 240
+    },
+    {
+      "id": "denizkoskler",
+      "cat": "plaj",
+      "district": "Avcılar",
+      "lat": 40.9765,
+      "lng": 28.733,
+      "name": {
+        "tr": "Denizköşkler Halk Plajı",
+        "en": "Denizköşkler Public Beach"
+      },
+      "note": {
+        "tr": "Avcılar sahilinde İBB'nin halka açık plajı. Yüzme sezonu 15 Haziran–15 Eylül.",
+        "en": "İBB public beach on the Avcılar coast. Swimming season 15 June–15 September."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz giriş (İBB 2025 bilgisi; 2026 doğrulanacak). Duş ve WC az ücretli.",
+          "en": "Free entry (İBB 2025 info; 2026 to be verified). Showers and WC for a small fee.",
+          "verified": false,
+          "source": "https://destekhizmetleri.ibb.istanbul/haberler/ibb-plajlari-3-haziranda-sezona-merhaba-diyor/"
+        },
+        {
+          "tr": "Su kalitesi 2026: iyi (Sağlık Bakanlığı)",
+          "en": "Water quality 2026: good (Ministry of Health)",
+          "verified": true,
+          "info": true,
+          "source": "https://yuzme.saglik.gov.tr/",
+          "checked": "2026-11-27"
+        }
+      ],
+      "visitMin": 180,
+      "approx": true
+    },
+    {
+      "id": "kumburgaz",
+      "cat": "plaj",
+      "district": "Büyükçekmece",
+      "lat": 41.0328,
+      "lng": 28.4458,
+      "name": {
+        "tr": "Kumburgaz Plajı",
+        "en": "Kumburgaz Beach"
+      },
+      "note": {
+        "tr": "Marmara kıyısında, site ve yazlıkların önünde uzun kumsal. Merkezden uzak. Yüzme sezonu 15 Haziran–15 Eylül.",
+        "en": "Long sandy beach in front of holiday homes on the Marmara coast. Far from the centre. Swimming season 15 June–15 September."
+      },
+      "fees": [
+        {
+          "tr": "Giriş ücreti doğrulanacak",
+          "en": "Entry fee to be verified",
+          "verified": false
+        },
+        {
+          "tr": "Su kalitesi 2026: iyi (Sağlık Bakanlığı)",
+          "en": "Water quality 2026: good (Ministry of Health)",
+          "verified": true,
+          "info": true,
+          "source": "https://yuzme.saglik.gov.tr/",
+          "checked": "2026-11-27"
+        }
+      ],
+      "visitMin": 240
+    },
+    {
+      "id": "yalikoy",
+      "cat": "plaj",
+      "district": "Çatalca",
+      "lat": 41.4852,
+      "lng": 28.3002,
+      "name": {
+        "tr": "Karacaköy Yalıköy Plajı",
+        "en": "Karacaköy Yalıköy Beach"
+      },
+      "note": {
+        "tr": "Çatalca'nın Karadeniz kıyısında İBB'nin halka açık plajı. Merkezden çok uzak; araçla gidilir. Yüzme sezonu 15 Haziran–15 Eylül. Karadeniz'de akıntı tehlikeli olabilir: yalnızca cankurtaranlı bölümde, bayraklara uyarak yüz.",
+        "en": "İBB public beach on Çatalca's Black Sea coast. Very far from the centre; go by car. Swimming season 15 June–15 September. Black Sea currents can be dangerous: swim only in the lifeguarded part and follow the flags."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz giriş (İBB 2025 bilgisi; 2026 doğrulanacak). Duş ve WC az ücretli.",
+          "en": "Free entry (İBB 2025 info; 2026 to be verified). Showers and WC for a small fee.",
+          "verified": false,
+          "source": "https://destekhizmetleri.ibb.istanbul/haberler/ibb-plajlari-3-haziranda-sezona-merhaba-diyor/"
+        },
+        {
+          "tr": "Su kalitesi 2026: mükemmel (Sağlık Bakanlığı)",
+          "en": "Water quality 2026: excellent (Ministry of Health)",
+          "verified": true,
+          "info": true,
+          "source": "https://yuzme.saglik.gov.tr/",
+          "checked": "2026-11-27"
+        }
+      ],
+      "visitMin": 300
+    },
+    {
+      "id": "kemerburgaz",
+      "cat": "aktivite",
+      "district": "Eyüpsultan",
+      "lat": 41.1516,
+      "lng": 28.8822,
+      "name": {
+        "tr": "Kemerburgaz Kent Ormanı",
+        "en": "Kemerburgaz City Forest"
+      },
+      "note": {
+        "tr": "Göktürk yakınında büyük kent ormanı: yürüyüş ve bisiklet yolları, piknik alanları. Hafta sonu kalabalık; araçla gitmek kolay.",
+        "en": "Large city forest near Göktürk: walking and cycling paths, picnic areas. Busy at weekends; easiest by car."
+      },
+      "fees": [
+        {
+          "tr": "Giriş ücreti doğrulanacak",
+          "en": "Entry fee to be verified",
+          "verified": false
+        }
+      ],
+      "visitMin": 150
+    },
+    {
+      "id": "kalamis",
+      "cat": "kiralama",
+      "district": "Kadıköy",
+      "lat": 40.9699,
+      "lng": 29.0394,
+      "name": {
+        "tr": "Kalamış ve Fenerbahçe marinaları",
+        "en": "Kalamış and Fenerbahçe marinas"
+      },
+      "note": {
+        "tr": "Anadolu yakasında yat limanları: yelken kulüpleri, tekne kiralayan şirketler; yanında Kalamış Parkı'nda sahil yürüyüşü. Yazılı fiyat al, can yeleği sor.",
+        "en": "Marinas on the Asian side: sailing clubs and boat hire companies, with a seaside walk in Kalamış Park next door. Get the price in writing and ask about life jackets."
+      },
+      "fees": [
+        {
+          "tr": "Fiyat şirkete göre değişir (doğrulanacak)",
+          "en": "Prices vary by company (to be verified)",
+          "verified": false
+        }
+      ],
+      "visitMin": 90,
+      "approx": true
+    },
+    {
+      "id": "atakoy-marina",
+      "cat": "kiralama",
+      "district": "Bakırköy",
+      "lat": 40.9711,
+      "lng": 28.8761,
+      "name": {
+        "tr": "Ataköy Marina",
+        "en": "Ataköy Marina"
+      },
+      "note": {
+        "tr": "Avrupa yakasında büyük yat limanı: tekne kiralama şirketleri, restoranlar ve sahil yürüyüşü. Yazılı fiyat al, can yeleği sor.",
+        "en": "Large marina on the European side: boat hire companies, restaurants and a seaside walk. Get the price in writing and ask about life jackets."
+      },
+      "fees": [
+        {
+          "tr": "Fiyat şirkete göre değişir (doğrulanacak)",
+          "en": "Prices vary by company (to be verified)",
+          "verified": false
+        }
+      ],
+      "visitMin": 90
+    },
+    {
+      "id": "balikekmek",
+      "cat": "yemek",
+      "district": "Fatih",
+      "lat": 41.0184,
+      "lng": 28.9712,
+      "name": {
+        "tr": "Eminönü balık ekmek",
+        "en": "Eminönü fish sandwiches"
+      },
+      "note": {
+        "tr": "Galata Köprüsü'nün Eminönü ucunda balık ekmek satan tekneler ve büfeler; yanında turşu suyu içilir. Fiyatı sipariş vermeden sor.",
+        "en": "Boats and kiosks selling fish sandwiches at the Eminönü end of the Galata Bridge, usually with pickle juice. Ask the price before ordering."
+      },
+      "fees": [
+        {
+          "tr": "Semt ücretsiz; yemek fiyatı mekâna göre değişir",
+          "en": "The area is free; food prices vary by place",
+          "verified": true
+        }
+      ],
+      "visitMin": 30
+    },
+    {
+      "id": "samatya",
+      "cat": "yemek",
+      "district": "Fatih",
+      "lat": 41.0007,
+      "lng": 28.9327,
+      "name": {
+        "tr": "Samatya",
+        "en": "Samatya"
+      },
+      "note": {
+        "tr": "Surların içinde eski bir semt: meydanın çevresinde balık lokantaları ve meyhaneler, sahile yakın. Turistik merkeze göre daha sakin.",
+        "en": "Old neighbourhood inside the city walls: fish restaurants and taverns around the square, near the sea. Calmer than the tourist centre."
+      },
+      "fees": [
+        {
+          "tr": "Semt ücretsiz; yemek fiyatı mekâna göre değişir",
+          "en": "The area is free; food prices vary by place",
+          "verified": true
+        }
+      ],
+      "visitMin": 90
+    },
+    {
+      "id": "salacak",
+      "cat": "sakin",
+      "district": "Üsküdar",
+      "lat": 41.0166,
+      "lng": 29.0118,
+      "name": {
+        "tr": "Salacak sahili",
+        "en": "Salacak seafront"
+      },
+      "note": {
+        "tr": "Üsküdar'ın güneyinde sahil yolu: Kız Kulesi ve tarihi yarımada manzarası, banklar ve çay bahçeleri. Gün batımı için güzel.",
+        "en": "Seafront south of Üsküdar with views of the Maiden's Tower and the old city, benches and tea gardens. Lovely at sunset."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz (açık alan)",
+          "en": "Free (open area)",
+          "verified": true
+        }
+      ],
+      "visitMin": 45,
+      "approx": true
+    },
+    {
+      "id": "validebag",
+      "cat": "sakin",
+      "district": "Üsküdar",
+      "lat": 41.015,
+      "lng": 29.0458,
+      "name": {
+        "tr": "Validebağ Korusu",
+        "en": "Validebağ Grove"
+      },
+      "note": {
+        "tr": "Üsküdar'da tarihi, sessiz koru; ağaçlı yollarda yürüyüş ve kuş sesleri, şehrin ortasında doğa.",
+        "en": "Quiet historic grove in Üsküdar: tree-lined walking paths and birdsong, nature in the middle of the city."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz giriş (doğrulanacak)",
+          "en": "Free entry (to be verified)",
+          "verified": false
+        }
+      ],
+      "visitMin": 45
+    },
+    {
+      "id": "kucukcamlica",
+      "cat": "sakin",
+      "district": "Üsküdar",
+      "lat": 41.0177,
+      "lng": 29.0654,
+      "name": {
+        "tr": "Küçük Çamlıca Korusu",
+        "en": "Küçük Çamlıca Grove"
+      },
+      "note": {
+        "tr": "Anadolu yakasında tepe korusu: Boğaz ve şehir manzarası, çam ağaçları, çay bahçesi. Büyük Çamlıca'dan daha sakin.",
+        "en": "Hilltop grove on the Asian side: Bosphorus and city views, pine trees, a tea garden. Calmer than Büyük Çamlıca."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz giriş (doğrulanacak)",
+          "en": "Free entry (to be verified)",
+          "verified": false
+        }
+      ],
+      "visitMin": 60
+    },
+    {
+      "id": "yesilkoy",
+      "cat": "sakin",
+      "district": "Bakırköy",
+      "lat": 40.959,
+      "lng": 28.8226,
+      "name": {
+        "tr": "Yeşilköy",
+        "en": "Yeşilköy"
+      },
+      "note": {
+        "tr": "Avrupa yakasında sakin sahil semti: eski köşkler, ağaçlı sokaklar, sahil parkı ve kafeler. Marmaray ile gidilir.",
+        "en": "Calm seaside neighbourhood on the European side: old mansions, tree-lined streets, a seaside park and cafés. Reached by Marmaray."
+      },
+      "fees": [
+        {
+          "tr": "Ücretsiz (açık alan)",
+          "en": "Free (open area)",
+          "verified": true
+        }
+      ],
+      "visitMin": 75,
+      "approx": true
     }
   ],
   "routes": [
@@ -3000,6 +3496,55 @@
         {
           "place": "ayazma-sile",
           "time": "16:00"
+        }
+      ]
+    },
+    {
+      "id": "camlica",
+      "name": {
+        "tr": "Üsküdar tepeleri ve gün batımı",
+        "en": "Üsküdar hills and sunset"
+      },
+      "intro": {
+        "tr": "Anadolu yakasında sakin bir öğleden sonra: Küçük Çamlıca'dan manzara, Validebağ'da orman yürüyüşü, Salacak'ta Kız Kulesi'ne karşı gün batımı.",
+        "en": "A calm afternoon on the Asian side: the view from Küçük Çamlıca, a woodland walk in Validebağ and sunset facing the Maiden's Tower in Salacak."
+      },
+      "meta": {
+        "tr": [
+          "Yarım gün",
+          "Üsküdar",
+          "Ücretsiz"
+        ],
+        "en": [
+          "Half day",
+          "Üsküdar",
+          "Free"
+        ]
+      },
+      "stops": [
+        {
+          "place": "kucukcamlica",
+          "time": "15:00"
+        },
+        {
+          "leg": {
+            "tr": "~25 dk yokuş aşağı yürüme veya taksi",
+            "en": "~25 min downhill walk, or taxi"
+          }
+        },
+        {
+          "place": "validebag",
+          "time": "16:15"
+        },
+        {
+          "leg": {
+            "tr": "Otobüs veya taksi ~15 dk",
+            "en": "Bus or taxi ~15 min"
+          }
+        },
+        {
+          "place": "salacak",
+          "time": "17:30"
         }
       ]
     }
